@@ -39,6 +39,8 @@ for f in freqfiles:
 
 legend = sorted(legend)
 hystData = sorted(hystData, key=lambda data: int(data.freq))
+
+legend = [str(x)+' Hz' for x in legend]  
 hd.hystPlot(hystData, legend)
 
 # Following code plots a series of diff temp hystdata files on same plot
@@ -53,4 +55,6 @@ for f in tempfiles:
 
 legend = sorted(legend)
 hystData = sorted(hystData, key=lambda data: int(data.temp))
+
+legend = [str(x)+' K' for x in legend]  
 hd.hystPlot(hystData, legend)

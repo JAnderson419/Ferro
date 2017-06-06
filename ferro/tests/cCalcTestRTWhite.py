@@ -37,5 +37,7 @@ for f in RTfreqData:
     legend.append(int(data.freq))
 
 legend = sorted(legend)
-hystData = sorted(hystData, key=lambda data: int(data.freq))        
+hystData = sorted(hystData, key=lambda data: int(data.freq))  
+
+legend = [str(x)+' Hz' for x in legend]      
 hd.hystPlot(hystData, legend)
