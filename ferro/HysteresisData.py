@@ -47,7 +47,7 @@ def hystPlot(data, legend = None, plotE = False):
     ax2 = fig1.add_subplot(212)
     
     # creates unique color for each item
-    # colormap = plt.cm.viridis # uniform greyscale for printing
+#    colormap = plt.cm.viridis # uniform greyscale for printing
     colormap = plt.cm.nipy_spectral # diverse color for colorblindness
     ax1.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,1,len(data))])
     ax2.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,1,len(data))])

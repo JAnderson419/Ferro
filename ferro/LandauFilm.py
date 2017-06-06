@@ -695,19 +695,7 @@ class LandauDomain():
 def main():
     plt.close('all')
 
-    freqdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_freq"
-    freqfiles = hd.dirRead(freqdir)
-    hfo2 = LandauFull()
-    
-    hfo2.c = hfo2.cCalc(freqfiles, plot=1)
-#    hfo2.rhoCalc(freqfiles)
-    
-#    tempdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_S3_temps"
-#    tempfiles = hd.dirRead(tempdir)
-#    templkgdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_S3_tempslkg"
-#    templkgfiles = hd.dirRead(tempdir)
-    
-#    hfo2.a0 = hfo2.a0Calc(tempfiles, 0, templkgfiles)
+
     
 #    RTfreqDir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\RT WhiteA\RTWhiteAFreq"
 #    RTfreqData = hd.dirRead(RTfreqDir)

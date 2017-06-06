@@ -34,6 +34,8 @@ for f in RTfreqData:
     data.tsvRead(f)
     data.dvdtPlot() # plots dvdt for analysis - unrelated to freq hystPlot
     hystData.append(data)
-    legend.append(str(data.freq)+' Hz') 
-    
+    legend.append(int(data.freq))
+
+legend = sorted(legend)
+hystData = sorted(hystData, key=lambda data: int(data.freq))        
 hd.hystPlot(hystData, legend)
