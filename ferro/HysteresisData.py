@@ -77,7 +77,7 @@ def hystPlot(data, legend = None, plotE = False):
         ax1.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         box2 = ax2.get_position()
         ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
-        fig1.legend(lines,legend)
+        fig1.legend(lines,legend,loc='center right')
         
 
 class HysteresisData:
