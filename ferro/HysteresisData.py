@@ -78,23 +78,23 @@ def hystPlot(data, legend = None, plotE = False):
         box2 = ax2.get_position()
         ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
         fig1.legend(lines,legend,loc='center right')
-        
 
-class HysteresisData:
-    def __init__(self, thickness=13E-7, area=6606E-8, temperature=300, freq=100):
+class SampleData:
+    def __init__(self, thickness=13E-7, area=6606E-8, temperature=300): 
         self.fileName = ''
+        self.thickness = thickness # cm
+        self.area = area # cm^2
+        self.temp = temperature # K
+
+class HysteresisData(SampleData):
+    def __init__(self, freq=100, **kwargs):
+        SampleData.__init__(self,**kwargs)
         self.time = []
         self.voltage = []
         self.current = []
         self.polarization = []
         self.capacitance = []
-        self.lcmVoltage = []
-        self.lcmCurrent = []
-        self.lcmParms = []
-        self.thickness = thickness # cm
-        self.area = area # cm^2
         self.freq = freq # Hz
-        self.temp = temperature # K
         self.dt = 0
         
     def tsvRead(self, filename):
@@ -150,72 +150,26 @@ class HysteresisData:
         self.field = self.voltage/(self.thickness) # V/cm
         self.dt = self.time[1]-self.time[0]  # s
         
-    def lcmRead(self, filename):
-        """
-        Imports TSV measurement data previously parsed by tfDataTSV_v5.pl
-        For use with TF-1000 leakage current measurement data
-        
-        Parameters
-        ----------
-        filename: tsv file (with path) to open and parse. Stores data as 
-        the associated HysteresisData object's attributes
-        
-        Returns
-        -------
-        n/a
-        """
-        with open(filename, 'r') as data:
-            headerLine = data.readline() #skips first line and saves for later
-            data = csv.reader(data, delimiter='\t')
-            
-            for row in data:
-                if row: #ignores blank lines
-                    self.lcmVoltage.append(row[0])
-                    self.lcmCurrent.append(row[1])
-                    
-        self.lcmVoltage = np.asfarray(self.lcmVoltage) # V
-        self.lcmCurrent = self.area * 1E-6 * np.asfarray(self.lcmCurrent) # A
-        
-    def lcmFit(self):
-        """
-        EXPERIMENTAL
-        
-        Attempts to fit parameters to leakage current, stores in hd object
-        
-        Parameters
-        ----------
-        n/a
-        
-        Returns
-        -------
-        n/a
-        """
-        # FIXME: curve_fit has trouble converging with some data
-        guess = np.array([2E-10, 2, .8, -1, 1])
-        self.lcmParms, pcov = curve_fit(leakageFunc, self.lcmVoltage, 
-                                        self.lcmCurrent, p0=guess)
-        print('Fit Parms:',self.lcmParms)
-        print('Std Dev:',np.sqrt(np.diag(pcov)))#/self.lcmParms)
-        
-    def leakageCompensation(self):
+       
+    def leakageCompensation(self, leakageData):
         """
         Removes leakage current contribution from hysteresis data using 
         model fit to lcm data.
 
         Parameters
         ----------
-        n/a
+        leakageData: LeakageData object to use in compensation
         
         Returns
         -------
         n/a
         """
+        ld = leakageData
         #TODO: add in compensation for polarization measurement
         # using deep copy perhaps (see cComp in LandauFilm)
-        dT = np.abs(self.time[1]-self.time[0])
               
         for i,x in enumerate(self.current):            
-            self.current[i] = x - leakageFunc(self.voltage[i],*self.lcmParms)
+            self.current[i] = x - leakageFunc(self.voltage[i],*ld.lcmParms)
                     
 
 
@@ -331,23 +285,6 @@ class HysteresisData:
     #        ax3.set_xlabel('Time (s)')
     #        ax3.set_ylabel('Voltage (V)')
 
-
-
-    def lcmPlot(self):
-        """ 
-        Plots measured leakage current with fit data.
-        """
-        fig = plt.figure()
-        fig.set_facecolor('white')
-        plt.cla()
-        ax = fig.add_subplot(111)
-#        datacursor(ax.plot(self.lcmVoltage,np.log(np.abs(self.lcmCurrent))))
-        datacursor(ax.plot(self.lcmVoltage,1E6*self.lcmCurrent))
-        if self.lcmParms != []:
-#            ax.plot(self.lcmVoltage,np.log(np.abs(leakageFunc(self.lcmVoltage,*self.lcmParms))))
-            ax.plot(self.lcmVoltage,1E6*leakageFunc(self.lcmVoltage,*self.lcmParms))
-        ax.set_xlabel('Voltage (V)')
-        ax.set_ylabel('Leakage Current ($\mu{}A$)')
 
     def dvdtPlot(self):
         """
@@ -468,7 +405,77 @@ class HysteresisData:
         
         return uniformE, uniformEr, prob
     
-
+class LeakageData(SampleData):
+    def __init__(self, **kwargs):
+        SampleData.__init__(self,**kwargs)
+        self.lcmVoltage = []
+        self.lcmCurrent = []
+        self.lcmParms = []
+        
+    def lcmRead(self, filename):
+        """
+        Imports TSV measurement data previously parsed by tfDataTSV_v5.pl
+        For use with TF-1000 leakage current measurement data
+        
+        Parameters
+        ----------
+        filename: tsv file (with path) to open and parse. Stores data as 
+        the associated HysteresisData object's attributes
+        
+        Returns
+        -------
+        n/a
+        """
+        self.fileName = filename
+        
+        with open(filename, 'r') as data:
+            headerLine = data.readline() #skips first line and saves for later
+            data = csv.reader(data, delimiter='\t')
+            
+            for row in data:
+                if row: #ignores blank lines
+                    self.lcmVoltage.append(row[0])
+                    self.lcmCurrent.append(row[1])
+                    
+        self.lcmVoltage = np.asfarray(self.lcmVoltage) # V
+        self.lcmCurrent = self.area * 1E-6 * np.asfarray(self.lcmCurrent) # A
+        
+    def lcmFit(self):
+        """
+        EXPERIMENTAL
+        
+        Attempts to fit parameters to leakage current, stores in hd object
+        
+        Parameters
+        ----------
+        n/a
+        
+        Returns
+        -------
+        n/a
+        """
+        # FIXME: curve_fit has trouble converging with some data
+        guess = np.array([2E-10, 2, .8, -1, 1])
+        self.lcmParms, pcov = curve_fit(leakageFunc, self.lcmVoltage, 
+                                        self.lcmCurrent, p0=guess)
+        print('Fit Parms:',self.lcmParms)
+        print('Std Dev:',np.sqrt(np.diag(pcov)))#/self.lcmParms)
+ 
+    def lcmPlot(self):
+        """ 
+        Plots measured leakage current with fit data.
+        """
+        fig = plt.figure()
+        fig.set_facecolor('white')
+        plt.cla()
+        ax = fig.add_subplot(111)
+#        datacursor(ax.plot(self.lcmVoltage,np.log(np.abs(self.lcmCurrent))))
+        datacursor(ax.plot(self.lcmVoltage,1E6*self.lcmCurrent))
+        if self.lcmParms != []:
+#            ax.plot(self.lcmVoltage,np.log(np.abs(leakageFunc(self.lcmVoltage,*self.lcmParms))))
+            ax.plot(self.lcmVoltage,1E6*leakageFunc(self.lcmVoltage,*self.lcmParms))
+        ax.set_xlabel('Voltage (V)')
+        ax.set_ylabel('Leakage Current ($\mu{}A$)')
 
 def main():
     plt.close("all")
