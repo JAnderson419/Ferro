@@ -119,7 +119,7 @@ class HysteresisData(SampleData):
                 r = re.compile('.* (\d+)K.*')
                 self.temp = int(r.match(filename).group(1))
             except AttributeError:
-#                print("No temperature specified. Defaulting to 300K")
+                print("No temperature specified. Defaulting to 300K")
                 next
         
         r = re.compile('.* (\d+)Hz.*')
@@ -173,8 +173,10 @@ class HysteresisData(SampleData):
                     
 
 
-    def lpFilter(self, y):
+    def bandstopFilter(self, y, freqs = [50,70], plot = False):
         """
+        Experimental
+        
         Removes high freq noise from measurement data.
         Filter edge set to 2 times measurement switching frequency.
         Includes some code from scipy.signal.iirfilter example code.
@@ -182,36 +184,36 @@ class HysteresisData(SampleData):
         
         Parameters
         ----------
-        y : array_like
-        The data to be filtered.
+        y : array_like - The data to be filtered.
+        freqs: list - the two freqs defining the edge of the bandstop filter.
+        plot: bool - if True, plots filter response
         
         Returns
         -------
-        y : complex ndarray
-        The filtered input data (y). Returned in time domain.
+        y : complex ndarray 
+            The filtered input data (y). Returned in time domain.
         """
         N = len(y)
         
         f = np.fft.fftfreq(N,self.dt) # cycles/sec
         f = 2*np.pi*self.dt*f # rad/sample
-        pf = np.fft.fft(y)
-
-        b, a = signal.iirfilter(1,[0,2*int(self.freq)]/(0.5/self.dt))
+        
+        print((0.5/self.dt))
+        b, a = signal.butter(1,freqs/(0.5/self.dt),btype='bandstop')
         w, h = signal.freqz(b,a,f)
         
-        pf = h*pf
-        p = np.fft.ifft(pf)
+        p = signal.filtfilt(b,a, y)
 
-
-#        fig = plt.figure()
-#        ax = fig.add_subplot(111)
-#        ax.plot(w, 20 * np.log10(abs(h)),'o')
-#        ax.set_xscale('log')
-#        ax.set_xlabel('Frequency [radians / second]')
-#        ax.set_ylabel('Amplitude [dB]')
-#        ax.axis((.01, 1000, -100, 10))
-#        ax.grid(which='both', axis='both')
-#        plt.show()
+        if plot:
+            fig = plt.figure()
+            fig.set_facecolor('white') 
+            ax = fig.add_subplot(111)
+            ax.plot(w/np.pi*(0.5/self.dt), 20 * np.log10(abs(h)),'o')
+            ax.set_xscale('log')
+            ax.set_xlabel('Frequency [radians / second]')
+            ax.set_ylabel('Amplitude [dB]')
+            ax.axis((.1, 1000, -100, 10))
+            ax.grid(which='both', axis='both')
         
         return p
         
