@@ -433,7 +433,7 @@ class LandauFull(LandauFilm):
 #                    print (d.polarization[j-1],p,q, '    ',d.field[j-1],e[i],d.field[j])
                     break
 #            d.hystPlot()
-            dvdt_filtered = d.lpFilter(np.diff(d.voltage)/d.dt)
+#            dvdt_filtered = d.bandstopFilter(np.diff(d.voltage)/d.dt)
 #            d.fftPlot(np.diff(d.voltage)/d.dt)
 #            d.fftPlot(dvdt_filtered)
 
@@ -524,7 +524,7 @@ class LandauFull(LandauFilm):
 #                    print (d.polarization[j-1],p,q, '    ',d.field[j-1],e[i],d.field[j])
                     break
 #            d.hystPlot()
-            dvdt_filtered = d.lpFilter(np.diff(d.voltage)/d.dt)
+#            dvdt_filtered = d.bandstopFilter(np.diff(d.voltage)/d.dt)
 #            d.fftPlot(np.diff(d.voltage)/d.dt)
 #            d.fftPlot(dvdt_filtered)
 

@@ -78,6 +78,45 @@ def hystPlot(data, legend = None, plotE = False):
         box2 = ax2.get_position()
         ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
         fig1.legend(lines,legend,loc='center right')
+        
+def lcmPlot(data, legend = None):
+    """
+    Plots leakage current as a function of voltage for a list of LeakageData.
+    If parameters have been fit to data, will plot modeled leakage as well.
+    
+    Parameters
+    ----------
+    data: list of LeakageData objects to plot
+    legend: list of str labels corresponding to data
+    
+    Returns
+    -------
+    n/a
+    """
+    
+    fig = plt.figure()
+    fig.set_facecolor('white')
+    plt.cla()
+    ax = fig.add_subplot(111)
+    
+    # creates unique color for each item
+#    colormap = plt.cm.viridis # uniform greyscale for printing
+    colormap = plt.cm.nipy_spectral # diverse color for colorblindness
+    ax.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,1,len(data))])
+    
+    lines = []    
+    for d in data:
+        line = ax.plot(d.lcmVoltage,1E6*d.lcmCurrent)
+        lines.append(line[0])
+        if d.lcmParms != []:
+            ax.plot(d.lcmVoltage,1E6*leakageFunc(d.lcmVoltage,*d.lcmParms))
+    ax.set_xlabel('Voltage (V)')
+    ax.set_ylabel('Leakage Current ($\mu{}A$)')
+    
+    if legend:
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        fig.legend(lines,legend,loc='center right')
 
 class SampleData:
     def __init__(self, thickness=13E-7, area=6606E-8, temperature=300): 
@@ -111,6 +150,8 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
+        self.fileName = filename
+
         r = re.compile('.* (\d+)C.*')
         try:
             self.temp = int(r.match(filename).group(1))+273
@@ -128,8 +169,6 @@ class HysteresisData(SampleData):
         except AttributeError:
             print("No frequency specified. Defaulting to 100Hz")
             next
-        
-        self.fileName = filename
         
         with open(filename, 'r') as data:
             headerLine = data.readline() #skips first line and saves it for later
@@ -428,6 +467,17 @@ class LeakageData(SampleData):
         n/a
         """
         self.fileName = filename
+        
+        r = re.compile('.* (\d+)C.*')
+        try:
+            self.temp = int(r.match(filename).group(1))+273
+        except AttributeError:
+            try:
+                r = re.compile('.* (\d+)K.*')
+                self.temp = int(r.match(filename).group(1))
+            except AttributeError:
+                print("No temperature specified. Defaulting to 300K")
+                next
         
         with open(filename, 'r') as data:
             headerLine = data.readline() #skips first line and saves for later

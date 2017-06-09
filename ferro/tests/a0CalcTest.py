@@ -11,17 +11,17 @@ from context import HysteresisData as hd
 
 plt.close('all')
 
-freqdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_freq"
+freqdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_freq"
 freqfiles = hd.dirRead(freqdir)
 hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
 
 hfo2.c = hfo2.cCalc(freqfiles, plot=1)
 hfo2.rhoCalc(freqfiles)
 
-tempdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_S3_temps"
+tempdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
 tempfiles = hd.dirRead(tempdir)
-templkgdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_S3_tempslkg"
-templkgfiles = hd.dirRead(tempdir)
+templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
+templkgfiles = hd.dirRead(templkgdir)
 
 hfo2.a0 = hfo2.a0Calc(tempfiles, 0, templkgfiles)
 
@@ -58,3 +58,18 @@ hystData = sorted(hystData, key=lambda data: int(data.temp))
 
 legend = [str(x)+' K' for x in legend]  
 hd.hystPlot(hystData, legend)
+
+# Following code plots a series of diff temp leakagedata files on same plot
+
+leakageData = []
+legend = []
+for f in templkgfiles:
+    data = hd.LeakageData()
+    data.lcmRead(f)
+    leakageData.append(data)
+    legend.append(int(data.temp))
+
+legend = sorted(legend)
+leakageData = sorted(leakageData, key=lambda data: int(data.temp))
+legend = [str(x)+' K' for x in legend]  
+hd.lcmPlot(leakageData, legend)
