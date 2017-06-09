@@ -7,6 +7,7 @@ TODO: move TF-1000 parsing into python, auto-read thickness & freq from metadata
 @author: Jackson Anderson, Rochester Institute of Technology jda4923@rit.edu
 """
 import re
+import copy # used for creating Ilkg compensated copies of exp data
 from os import listdir
 from os.path import join, isfile
 import matplotlib.pyplot as plt
@@ -17,9 +18,9 @@ from scipy.optimize import curve_fit
 from scipy import signal
 #matplotlib.rcParams.update({'font.size': 16})
 
-def leakageFunc(x,a,b,c,d,e):
-#    return a*(x-d)**3+b*(x-d)**2+c*(x-d)+e
-    return np.sign(x-d)*a*(np.exp(b*(np.abs(x-d))**c)-1)+np.log(e)
+def leakageFunc(x,a,b,c,d,e,f,g):
+    return a*(x-g)**5+b*(x-g)**4+c*(x-g)**3+d*(x-g)**2+e*(x-g)+f
+#    return np.sign(x-d)*a*(np.exp(b*(np.abs(x-d))**c)-1)+np.log(e)
 
 def dirRead(path):
     files = []
@@ -119,7 +120,7 @@ def lcmPlot(data, legend = None):
         fig.legend(lines,legend,loc='center right')
 
 class SampleData:
-    def __init__(self, thickness=13E-7, area=6606E-8, temperature=300): 
+    def __init__(self, thickness=13E-7, area=1E-4, temperature=300): 
         self.fileName = ''
         self.thickness = thickness # cm
         self.area = area # cm^2
@@ -201,16 +202,38 @@ class HysteresisData(SampleData):
         
         Returns
         -------
-        n/a
+        compData: deep copy of self with leakage current removed
         """
-        ld = leakageData
-        #TODO: add in compensation for polarization measurement
-        # using deep copy perhaps (see cComp in LandauFilm)
-              
-        for i,x in enumerate(self.current):            
-            self.current[i] = x - leakageFunc(self.voltage[i],*ld.lcmParms)
-                    
-
+        ld = leakageData           
+        compData = copy.deepcopy(self) # 
+        
+        
+        for j, i in enumerate(compData.current):
+            ilkg = leakageFunc(self.voltage[j],*ld.lcmParms)
+            compData.current[j] = i-ilkg
+#            if abs(i) >= ilkg:
+#                compData.current[j] = i-ilkg
+#            else:
+#                compData.current[j] = 0
+                
+        compData.current = compData.current - np.mean(compData.current)
+        
+        testpol = np.zeros(len(compData.current))
+        for i in range(np.size(testpol)):
+            if i == 0:
+                next
+            else:
+#                testpol[i] = testpol[i-1] + self.current[i]*self.dt/self.area
+                testpol[i] = testpol[i-1] + compData.current[i]*self.dt/self.area
+        print (np.mean(self.current*1E6),np.mean(compData.current*1E6),
+               np.trapz(self.current*1E6),np.trapz(compData.current*1E6))        
+        pr = (max(testpol)-min(testpol))/2
+        offset = max(testpol)-(max(testpol)-min(testpol))/2
+        
+        testpol = testpol-offset
+        compData.polarization = testpol
+        
+        return compData
 
     def bandstopFilter(self, y, freqs = [50,70], plot = False):
         """
@@ -491,7 +514,8 @@ class LeakageData(SampleData):
         self.lcmVoltage = np.asfarray(self.lcmVoltage) # V
         self.lcmCurrent = self.area * 1E-6 * np.asfarray(self.lcmCurrent) # A
         
-    def lcmFit(self):
+    def lcmFit(self, func=leakageFunc, 
+               initGuess = np.array([2E-10, 2E-10, .8E-6, -1E-6,1E-6, 0, -1])):
         """
         EXPERIMENTAL
         
@@ -499,18 +523,18 @@ class LeakageData(SampleData):
         
         Parameters
         ----------
-        n/a
-        
+        func: function - defines eqn to be used to fit data
+        initGuess: np array of appropriate length to match func -            
+            provides initial values for curve_fit
         Returns
         -------
         n/a
         """
         # FIXME: curve_fit has trouble converging with some data
-        guess = np.array([2E-10, 2, .8, -1, 1])
         self.lcmParms, pcov = curve_fit(leakageFunc, self.lcmVoltage, 
-                                        self.lcmCurrent, p0=guess)
+                                        self.lcmCurrent, p0=initGuess)
         print('Fit Parms:',self.lcmParms)
-        print('Std Dev:',np.sqrt(np.diag(pcov)))#/self.lcmParms)
+        print('Std Dev:',np.sqrt(np.diag(pcov)))
  
     def lcmPlot(self):
         """ 
@@ -521,7 +545,7 @@ class LeakageData(SampleData):
         plt.cla()
         ax = fig.add_subplot(111)
 #        datacursor(ax.plot(self.lcmVoltage,np.log(np.abs(self.lcmCurrent))))
-        datacursor(ax.plot(self.lcmVoltage,1E6*self.lcmCurrent))
+        datacursor(ax.plot(self.lcmVoltage,1E6*self.lcmCurrent,'o'))
         if self.lcmParms != []:
 #            ax.plot(self.lcmVoltage,np.log(np.abs(leakageFunc(self.lcmVoltage,*self.lcmParms))))
             ax.plot(self.lcmVoltage,1E6*leakageFunc(self.lcmVoltage,*self.lcmParms))

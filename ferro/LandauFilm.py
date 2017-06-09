@@ -5,6 +5,7 @@ Created on Mon Apr 10 14:53:15 2017
 @author: Jackson Anderson, Rochester Institute of Technology jda4923@rit.edu
 """
 
+import re
 import copy # used for creating C/Ilkg compensated copies of exp data
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
@@ -29,7 +30,7 @@ class LandauFilm:
     LandauFull implements rho, Tc, and a0 for more detailed analysis.
     """
     
-    def __init__(self, thickness = 13E-7, area = 1E-4, c = 0, pr= 0):
+    def __init__(self, thickness = 13E-7, area = 6606E-8, c = 0, pr= 0):
         self.thickness = thickness # cm
         self.area = area # cm^2
         self.c = c # F
@@ -475,12 +476,16 @@ class LandauFull(LandauFilm):
             data.tsvRead(f)
             if leakageComp: # matches LCM to DHM if leakage comp to be done
                 if leakagefiles:
-                    r = re.compile('.* '+re.escape(data.temp)+'C.*')
+                    r = re.compile('.* '+re.escape(str(data.temp))+'K.*')
+                    tempC = str(data.temp - 273)
+                    r2 = re.compile('.* '+re.escape(tempC)+'C.*')
                     for j in leakagefiles:
                         match = r.match(j)
-                        if match:
-                            data.lcmRead(j)
-                            data.lcmFit()
+                        match2 = r2.match(j)
+                        if match or match2:
+                            ldata = hd.LeakageData()
+                            ldata.lcmRead(j)
+                            ldata.lcmFit()
                             data.leakageCompensation()
                         else:
                             next

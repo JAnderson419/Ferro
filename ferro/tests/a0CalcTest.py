@@ -23,7 +23,7 @@ tempfiles = hd.dirRead(tempdir)
 templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
 templkgfiles = hd.dirRead(templkgdir)
 
-hfo2.a0 = hfo2.a0Calc(tempfiles, 0, templkgfiles)
+hfo2.a0 = hfo2.a0Calc(tempfiles, False, templkgfiles)
 
 
 # Following code plots a series of diff freq hystdata files on same plot

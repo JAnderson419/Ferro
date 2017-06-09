@@ -13,34 +13,22 @@ from context import HysteresisData as hd
 
 plt.close('all')
 
+tempdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
+tempfiles = hd.dirRead(tempdir)
+templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
+templkgfiles = hd.dirRead(templkgdir)
 
+datafile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps\H9 die (9,4) S3 79C 100Hz 3V 1Average Table3.tsv"
+lkgfile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg\H9 die (9,4) S3 79C 2s step Table2.tsv"
 
-RTfreq1000hz = r".\testData\RT WhiteA\RT WhiteA 1Hz 8V 1Average Table3.tsv"
+data = hd.HysteresisData()
+data.tsvRead(datafile)
 
-RTdata = hd.HysteresisData()
-RTdata.tsvRead(RTfreq1000hz)
-RTdata.hystPlot()
+ldata = hd.LeakageData()
+ldata.lcmRead(lkgfile)
 
-RTdata.fftPlot(RTdata.current)
-RTdata.current = RTdata.bandstopFilter(RTdata.current, plot = True)
-RTdata.polarization = RTdata.bandstopFilter(RTdata.polarization)
-RTdata.fftPlot(RTdata.current)
-#RTdata.lpFilter(RTdata.polarization)
-RTdata.hystPlot()
-
-
-# Following code plots a series of diff temp hystdata files on same plot
-
-hystData = []
-legend = []
-for f in tempfiles:
-    data = hd.HysteresisData()
-    data.tsvRead(f)
-    hystData.append(data)
-    legend.append(int(data.temp))
-
-legend = sorted(legend)
-hystData = sorted(hystData, key=lambda data: int(data.temp))
-
-legend = [str(x)+' K' for x in legend]  
-hd.hystPlot(hystData, legend)
+data.hystPlot()
+ldata.lcmFit()
+ldata.lcmPlot()
+compData = data.leakageCompensation(ldata)
+compData.hystPlot()
