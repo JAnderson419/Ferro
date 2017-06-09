@@ -22,7 +22,7 @@ RTdata.tsvRead(RTfreq1000hz)
 RTdata.hystPlot()
 
 RTdata.fftPlot(RTdata.current)
-RTdata.current = RTdata.bandstopFilter(RTdata.current)
+RTdata.current = RTdata.bandstopFilter(RTdata.current, plot = True)
 RTdata.polarization = RTdata.bandstopFilter(RTdata.polarization)
 RTdata.fftPlot(RTdata.current)
 #RTdata.lpFilter(RTdata.polarization)

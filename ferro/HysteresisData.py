@@ -198,7 +198,6 @@ class HysteresisData(SampleData):
         f = np.fft.fftfreq(N,self.dt) # cycles/sec
         f = 2*np.pi*self.dt*f # rad/sample
         
-        print((0.5/self.dt))
         b, a = signal.butter(1,freqs/(0.5/self.dt),btype='bandstop')
         w, h = signal.freqz(b,a,f)
         
@@ -212,7 +211,7 @@ class HysteresisData(SampleData):
             ax.set_xscale('log')
             ax.set_xlabel('Frequency [radians / second]')
             ax.set_ylabel('Amplitude [dB]')
-            ax.axis((.1, 1000, -100, 10))
+            ax.axis((float(self.freq), 0.5/self.dt, -100, 10))
             ax.grid(which='both', axis='both')
         
         return p
@@ -238,7 +237,7 @@ class HysteresisData(SampleData):
         fig1.set_facecolor('white')
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        ax1.set_title(self.freq)
+        ax1.set_title(str(self.freq)+' Hz '+str(self.temp)+' K')
         datacursor(ax1.plot(tf, 2.0/N * np.abs(pf[0:N//2])))
         ax1.set_xlabel('frequency')
 #        ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
