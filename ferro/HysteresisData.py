@@ -211,11 +211,7 @@ class HysteresisData(SampleData):
         for j, i in enumerate(compData.current):
             ilkg = leakageFunc(self.voltage[j],*ld.lcmParms)
             compData.current[j] = i-ilkg
-#            if abs(i) >= ilkg:
-#                compData.current[j] = i-ilkg
-#            else:
-#                compData.current[j] = 0
-                
+      
         compData.current = compData.current - np.mean(compData.current)
         
         testpol = np.zeros(len(compData.current))
@@ -223,11 +219,8 @@ class HysteresisData(SampleData):
             if i == 0:
                 next
             else:
-#                testpol[i] = testpol[i-1] + self.current[i]*self.dt/self.area
-                testpol[i] = testpol[i-1] + compData.current[i]*self.dt/self.area
-        print (np.mean(self.current*1E6),np.mean(compData.current*1E6),
-               np.trapz(self.current*1E6),np.trapz(compData.current*1E6))        
-        pr = (max(testpol)-min(testpol))/2
+                testpol[i] = testpol[i-1] + compData.current[i]*self.dt/self.area    
+
         offset = max(testpol)-(max(testpol)-min(testpol))/2
         
         testpol = testpol-offset
