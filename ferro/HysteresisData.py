@@ -6,6 +6,7 @@ TODO: move TF-1000 parsing into python, auto-read thickness & freq from metadata
 
 @author: Jackson Anderson, Rochester Institute of Technology jda4923@rit.edu
 """
+from warnings import warn
 import re
 import copy # used for creating Ilkg compensated copies of exp data
 from os import listdir
@@ -204,9 +205,14 @@ class HysteresisData(SampleData):
         -------
         compData: deep copy of self with leakage current removed
         """
-        ld = leakageData           
+        ld = leakageData  
+
+        if ld.lcmParms == []: 
+            warn("Please run lcmFit on the Leakage Data before attempting compensation.",
+                 RuntimeWarning)
+            return self
+            
         compData = copy.deepcopy(self) # 
-        
         
         for j, i in enumerate(compData.current):
             ilkg = leakageFunc(self.voltage[j],*ld.lcmParms)
