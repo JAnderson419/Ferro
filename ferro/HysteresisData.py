@@ -381,11 +381,13 @@ class HysteresisData(SampleData):
         
         You can also use linear interpolation instead.
         
-        Inputs:
+        Parameters
+        ----------
             plot: bool, turns plotting of results on if set to True
             linear: bool, switches to linear interpolation
             
-        Returns:
+        Returns
+        ----------
             uniformE: 1d np array, E values that correspond to prob
             uniformEr: 1d np array, Er values that correspond to prob
             prob: 2d numpy array, prob distribution of grains for given E,Er
@@ -514,8 +516,6 @@ class LeakageData(SampleData):
     def lcmFit(self, func=leakageFunc, 
                initGuess = np.array([2E-10, 2E-10, .8E-6, -1E-6,1E-6, 0, -1])):
         """
-        EXPERIMENTAL
-        
         Attempts to fit parameters to leakage current, stores in hd object
         
         Parameters
@@ -528,12 +528,12 @@ class LeakageData(SampleData):
         n/a
         """
         # FIXME: curve_fit has trouble converging with some data
-        self.lcmParms, pcov = curve_fit(leakageFunc, self.lcmVoltage, 
+        self.lcmParms, pcov = curve_fit(func, self.lcmVoltage, 
                                         self.lcmCurrent, p0=initGuess)
         print('Fit Parms:',self.lcmParms)
         print('Std Dev:',np.sqrt(np.diag(pcov)))
  
-    def lcmPlot(self):
+    def lcmPlot(self, func=leakageFunc):
         """ 
         Plots measured leakage current with fit data.
         """
@@ -545,7 +545,7 @@ class LeakageData(SampleData):
         datacursor(ax.plot(self.lcmVoltage,1E6*self.lcmCurrent,'o'))
         if self.lcmParms != []:
 #            ax.plot(self.lcmVoltage,np.log(np.abs(leakageFunc(self.lcmVoltage,*self.lcmParms))))
-            ax.plot(self.lcmVoltage,1E6*leakageFunc(self.lcmVoltage,*self.lcmParms))
+            ax.plot(self.lcmVoltage,1E6*func(self.lcmVoltage,*self.lcmParms))
         ax.set_xlabel('Voltage (V)')
         ax.set_ylabel('Leakage Current ($\mu{}A$)')
 
