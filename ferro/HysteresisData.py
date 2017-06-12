@@ -368,7 +368,7 @@ class HysteresisData(SampleData):
         ax1.set_ylabel('abs(dv/dt) (V/s)')
 
 
-    def forcCalc(self,plot = False):
+    def forcCalc(self,plot = False, linear = True):
         """
         Finds minima/maxima in voltage data, cuts down data to only reversal 
         curves, interpolates data onto a linear grid using griddata, and 
@@ -380,8 +380,10 @@ class HysteresisData(SampleData):
         (pip install the wheel file directly).
         
         You can also use linear interpolation instead.
+        
         Inputs:
             plot: bool, turns plotting of results on if set to True
+            linear: bool, switches to linear interpolation
             
         Returns:
             uniformE: 1d np array, E values that correspond to prob
@@ -421,8 +423,10 @@ class HysteresisData(SampleData):
         uniformV = np.linspace(np.asfarray(vFORC).min(),np.asfarray(vFORC).max(),200)
         uniformVr = np.unique(np.sort(np.asfarray(vrFORC)))
         
-        # add 'linear' arguement at end of griddata for linear interpolation
-        grid = plt.mlab.griddata(eFORC,erFORC,pFORC,uniformE,uniformEr) 
+        if linear:
+            grid = plt.mlab.griddata(eFORC,erFORC,pFORC,uniformE,uniformEr, 'linear') 
+        else:
+            grid = plt.mlab.griddata(eFORC,erFORC,pFORC,uniformE,uniformEr) 
         dE, dEr = np.gradient(grid,uniformVr[1]-uniformVr[0],uniformV[1]-uniformV[0])
         dEdE, dEdEr = np.gradient(dE,uniformVr[1]-uniformVr[0],uniformV[1]-uniformV[0])
         
@@ -457,13 +461,7 @@ class HysteresisData(SampleData):
             cb = plt.colorbar(ax5)
             cb.set_label('$V_r$')
             plt.title('$\\rho{}^-$ as Used for FORC Plot')
-    #        ax6 = fig5.add_subplot(122)
-    #        ax6= plt.scatter(np.repeat(uniformV,len(uniformVr)),1E6*np.matrix.flatten(grid,'F'),c=np.tile(uniformVr,len(uniformV)))
-    #        plt.xlabel("$V (V)$")
-    #        plt.ylabel('$P_r (\mu{}C/cm^2)$')
-    #        cb = plt.colorbar(ax6)
-    #        cb.set_label('$V_r$')
-    #        plt.title('$\\rho{}^-$ after grid interpolation')        
+       
         
         return uniformE, uniformEr, prob
     

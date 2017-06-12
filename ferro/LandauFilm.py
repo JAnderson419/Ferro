@@ -97,8 +97,7 @@ class LandauFilm:
             datacursor(ax2.plot(dvdt,medI*1E6,'o',dvdt,1E6*iFit_fn(dvdt),'--k'))
             ax2.set_xlabel('dV/dt (V/s)')
             ax2.set_ylabel('Current ($\mu{}A$)')
-        
-        print (iFit[0])  
+          
         return iFit[0]
     
     def cCompensation(self, data, plot = False):
@@ -150,7 +149,7 @@ class LandauFilm:
         if plot:
             data.hystPlot()
             compData.hystPlot()
-        
+
         return compData, pr
 
     def domainGen(self, e, er, prob,n=100, plot = False, retParms = False):
@@ -710,43 +709,8 @@ def main():
 #    RT100data.tsvRead(RTfreq100hz)
 #    RT100data.hystPlot
 #    
-#    RTWhiteFilm = LandauSimple(thickness = 255E-7, area=1E-4)
-#    RTWhiteFilm.c = RTWhiteFilm.cCalc(RTfreqData, plot = 1)
-#    RT100compensated, RTWhiteFilm.pr = RTWhiteFilm.cCompensation(RT100data, plot = 1)
-#
-#    forcFile = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\FORC\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table7.tsv"
-#    RTWhiteAFORC = hd.HysteresisData(area=1E-4, thickness=255E-7)
-#    RTWhiteAFORC.tsvRead(forcFile)
-#    RTWhiteAFORC.hystPlot(plotE=1)
-##    RTWhiteA.lcmPlot()
-#    e, er, probs = RTWhiteAFORC.forcCalc(plot = False)
-#    
-#    # 1:1 grain aspect ratio
-#    nDomains = int(RTWhiteAFORC.area/RTWhiteAFORC.thickness**2)
-#    
-#    domains = RTWhiteFilm.domainGen(e, er, probs, n=100, plot = False)
-#    for i in domains:
-#        i.parmCalc()
-#    pvals = np.linspace(-32E-6,32E-6,100)
-##    u = domains[0].getUfe(pvals)
-##    u1 = RTWhiteFilm.getUfe(pvals,domains)
-##    RTWhiteFilm.uPlot(pvals,u1)
-#    e1 = domains[0].getEfe(pvals)
-#    
-#    esweep = np.linspace(-0.3E6,0.3E6,num=1000)
-#    esweep = np.append(esweep,esweep[::-1])
-#    RTWhiteFilm.calcEfePreisach(esweep, domains, plot=1)
 
-
-#    RTWhiteFilm.ePlot(pvals,e1,domains[0].ec,domains[0].ebias)
-#    RTWhiteFilm.ePlot(pvals,e2)
-    
-#    RTWhiteFilm.rhoCalc(RTfreqData)
-    
-
-
-
-#    #filename = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\FORC\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table7.tsv"
+    #filename = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\FORC\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table7.tsv"
 #    filename = freqfiles[1]
 #    print(filename)
 ##    filename = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table6.tsv"
