@@ -698,32 +698,6 @@ class LandauDomain():
 
 def main():
     plt.close('all')
-
-
-    
-#    RTfreqDir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\RT WhiteA\RTWhiteAFreq"
-#    RTfreqData = hd.dirRead(RTfreqDir)
-#    RTfreq100hz = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Table1.tsv"
-#
-#    RT100data = hd.HysteresisData()
-#    RT100data.tsvRead(RTfreq100hz)
-#    RT100data.hystPlot
-#    
-
-    #filename = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\FORC\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table7.tsv"
-#    filename = freqfiles[1]
-#    print(filename)
-##    filename = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table6.tsv"
-##    lcmfile = "D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\Karine NaMLab MFM samples\H9\H9_x9y4_1e4sq\H9 die (9,4) 2s step Table3.tsv"
-#    RTWhiteA = hd.HysteresisData()
-#    RTWhiteA.tsvRead(filename)
-#    RTWhiteA.lcmRead(lcmfile)
-#    RTWhiteA.lcmFit()
-#    RTWhiteA.leakageCompensation()
-#    RTWhiteA.hystPlot()
-#    RTWhiteA.fftPlot(RTWhiteA.dt,RTWhiteA.polarization)
-#    RTWhiteA.lcmPlot()
-#    RTWhiteA.forcPlot()
     
 #    FeFETD2 = HysteresisData()
 #    FeFETD2.tsvRead(r'D:\Google Drive\Ferroelectric Research\FE_20152016\SeniorDesign\Testing\FETester\NaMLab_FeFETD2_die24_100x100_450V_data.csv')
