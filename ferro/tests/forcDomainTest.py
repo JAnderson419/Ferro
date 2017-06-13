@@ -19,6 +19,7 @@ RTfreq100hz = r".\testData\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Ta
 
 RT100data = hd.HysteresisData()
 RT100data.tsvRead(RTfreq100hz)
+RT100data.hystPlot()
 
 RTWhiteFilm = lf.LandauSimple(thickness = 255E-7, area=1E-4)
 RTWhiteFilm.c = RTWhiteFilm.cCalc(RTfreqData)

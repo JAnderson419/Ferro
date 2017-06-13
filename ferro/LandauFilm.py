@@ -59,13 +59,14 @@ class LandauFilm:
         hystData = []
 
         for f in files:
-            data = hd.HysteresisData(area=1E-4)
+            data = hd.HysteresisData(area=self.area, thickness = self.thickness)
             data.tsvRead(f)
             hystData.append(data)
         
         medI = np.zeros(len(hystData))
         freqs = np.zeros(len(hystData))
         dvdt = np.zeros(len(hystData))
+        
 
         for i, d in enumerate(hystData):
             freqs[i] = d.freq
@@ -244,7 +245,8 @@ class LandauFilm:
             
         return u
 
-    def calcEfePreisach(self, esweep, domains, initState = None, plot = False):
+    def calcEfePreisach(self, esweep, domains, initState = None,
+                        plot = False, cAdd = False):
         """
         Models domains as simple hystereons using ec, pr
         
@@ -279,9 +281,11 @@ class LandauFilm:
                 # Need to sum actual charge rather than charge density
                 p[j] = p[j] + d.pr*d.area*state[i] 
         
-        # convert back into charge density        
-#        p = (p+ esweep*self.thickness*self.c)/self.area
-        p = p/self.area
+        # convert back into charge density
+        if cAdd:        
+            p = (p+ esweep*self.thickness*self.c)/self.area
+        else:
+            p = p/self.area
         
         if plot:
             fig1 = plt.figure()
