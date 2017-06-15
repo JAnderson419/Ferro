@@ -14,7 +14,8 @@ plt.close('all')
 
 
 RTfreqDir = r".\testData\RT WhiteA\RTWhiteAFreq"
-RTfreqData = hd.dirRead(RTfreqDir)
+RTfreqFiles = hd.dirRead(RTfreqDir)
+RTfreqData = hd.listRead(RTfreqFiles)
 RTfreq100hz = r".\testData\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Table1.tsv"
 
 RT100data = hd.HysteresisData()

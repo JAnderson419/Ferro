@@ -29,15 +29,68 @@ def dirRead(path):
     files = [join(path,f) for f in listdir(path) if (isfile(join(path,f)) and r.match(f))]
     return files
 
+def listRead(files, leakagefiles = None, **kwargs):
+    """
+    Reads in several hysteresis measurements and creates objects for them.
+    
+    
+    Parameters
+    ----------
+    
+    files : list
+        Paths to tsv data files of hysteresis measurements
+    
+    leakagefiles : list 
+        Paths to leakage data for files.
+        If none, leakage compensation is not performed.
+        
+    kwargs: args
+        Arguements to pass to HysteresisData()
+    
+    Returns
+    -------
+    
+    dataList : list
+        HysteresisData objects created from files.
+    """
+    dataList = []
+    for f in files:
+        data = HysteresisData(**kwargs)
+        data.tsvRead(f)
+        if leakagefiles:
+            r = re.compile('.* '+re.escape(str(data.temp))+'K.*')
+            tempC = str(data.temp - 273)
+            r2 = re.compile('.* '+re.escape(tempC)+'C.*')
+            noMatch = True
+            for j in leakagefiles:
+                match = r.match(j)
+                match2 = r2.match(j)
+                if match or match2:
+                    noMatch = False
+                    ldata = LeakageData()
+                    ldata.lcmRead(j)
+                    ldata.lcmFit()
+                    data = data.leakageCompensation(ldata)
+                else:
+                    next
+            if noMatch:
+                raise UserWarning('No leakage file found to match data. Compensation cannot be performed.')
+        dataList.append(data)
+
+    return dataList
+
 def hystPlot(data, legend = None, plotE = False):
     """
     Plots V vs P, V vs I, and time vs V given hysteresis measurement data.
     
     Parameters
     ----------
-    data: list of HysteresisData objects to plot
-    legend: list of str labels corresponding to data
-    plotE: bool, if True plots E instead of P
+    data : list 
+        HysteresisData objects to plot.
+    legend : list 
+        str labels corresponding to data.
+    plotE : bool 
+        If True plots E instead of P.
     
     Returns
     -------
@@ -88,8 +141,10 @@ def lcmPlot(data, legend = None):
     
     Parameters
     ----------
-    data: list of LeakageData objects to plot
-    legend: list of str labels corresponding to data
+    data : list 
+        LeakageData objects to plot
+    legend : list 
+        Str labels corresponding to data
     
     Returns
     -------
@@ -145,8 +200,9 @@ class HysteresisData(SampleData):
         
         Parameters
         ----------
-        filename: tsv file (with path) to open and parse. Stores data as 
-        the associated HysteresisData object's attributes
+        filename : str
+            tsv file (with path) to open and parse. Stores data as 
+            the associated HysteresisData object's attributes
         
         Returns
         -------
@@ -199,11 +255,13 @@ class HysteresisData(SampleData):
 
         Parameters
         ----------
-        leakageData: LeakageData object to use in compensation
+        leakageData: LeakageData 
+            Object to use in compensation.
         
         Returns
         -------
-        compData: deep copy of self with leakage current removed
+        compData: HysteresisData
+            Deep copy of self with leakage current removed.
         """
         ld = leakageData  
 
@@ -245,9 +303,12 @@ class HysteresisData(SampleData):
         
         Parameters
         ----------
-        y : array_like - The data to be filtered.
-        freqs: list - the two freqs defining the edge of the bandstop filter.
-        plot: bool - if True, plots filter response
+        y : array_like 
+            The data to be filtered.
+        freqs : list 
+            The two freqs defining the edge of the bandstop filter.
+        plot : bool
+            If True, plots filter response
         
         Returns
         -------
@@ -283,7 +344,8 @@ class HysteresisData(SampleData):
          
         Parameters
         ----------
-        y : np array - data to be plotted
+        y : np array 
+            Data to be plotted
         
         Returns
         -------
@@ -309,7 +371,8 @@ class HysteresisData(SampleData):
         
         Parameters
         ----------
-        plotE: bool, if True plots E instead of P
+        plotE : bool
+            If True plots E instead of P
         """
         if plotE:
             fig1 = plt.figure()
@@ -383,14 +446,19 @@ class HysteresisData(SampleData):
         
         Parameters
         ----------
-            plot: bool, turns plotting of results on if set to True
-            linear: bool, switches to linear interpolation
+            plot : bool
+                Turns plotting of results on if set to True
+            linear : bool 
+                Switches to linear interpolation
             
         Returns
         ----------
-            uniformE: 1d np array, E values that correspond to prob
-            uniformEr: 1d np array, Er values that correspond to prob
-            prob: 2d numpy array, prob distribution of grains for given E,Er
+            uniformE: 1d np array 
+                E values that correspond to prob
+            uniformEr: 1d np array
+                Er values that correspond to prob
+            prob: 2d numpy array
+                Prob distribution of grains for given E,Er
         """     
 
         minimaIndex = []
@@ -445,7 +513,7 @@ class HysteresisData(SampleData):
     #        cbar.formatter.set_scientific(True) 
     #        cbar.formatter.set_powerlimits((-2,3))
             cbar.update_ticks() 
-            cbar.set_label(r'$\frac{d}{dV_r} \frac{d}{dV} \rho{}^-$')
+            cbar.set_label(r'Probability')
             plt.ticklabel_format(style='sci',axis='x', scilimits=(-2,3))
             plt.ticklabel_format(style='sci',axis='y', scilimits=(-2,3))
             ax4.set_xlabel("E (MV/cm)")
@@ -481,8 +549,9 @@ class LeakageData(SampleData):
         
         Parameters
         ----------
-        filename: tsv file (with path) to open and parse. Stores data as 
-        the associated HysteresisData object's attributes
+        filename : str
+            tsv file (with path) to open and parse. Stores data as 
+            the associated HysteresisData object's attributes
         
         Returns
         -------
@@ -520,9 +589,10 @@ class LeakageData(SampleData):
         
         Parameters
         ----------
-        func: function - defines eqn to be used to fit data
-        initGuess: np array of appropriate length to match func -            
-            provides initial values for curve_fit
+        func : function 
+            Defines eqn to be used to fit data
+        initGuess : np array of appropriate length to match func            
+            Provides initial values for curve_fit
         Returns
         -------
         n/a

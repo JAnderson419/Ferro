@@ -11,5 +11,6 @@ from context import HysteresisData as hd
 plt.close('all')
 discretecapdir = r'.\testData\2pt2nF_discrete_freqs'
 dcfiles = hd.dirRead(discretecapdir)
+data = hd.listRead(dcfiles)
 testfilm = lf.LandauFilm()   
-cde = testfilm.cCalc(dcfiles, plot=1)
+cde = testfilm.cCalc(data, plot=1)

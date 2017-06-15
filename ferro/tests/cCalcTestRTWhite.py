@@ -13,7 +13,8 @@ plt.close('all')
 
 
 RTfreqDir = r".\testData\RT WhiteA\RTWhiteAFreq"
-RTfreqData = hd.dirRead(RTfreqDir)
+RTfreqFiles = hd.dirRead(RTfreqDir)
+RTfreqData = hd.listRead(RTfreqFiles)
 RTfreq100hz = r".\testData\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Table1.tsv"
 
 RT100data = hd.HysteresisData()
@@ -29,7 +30,7 @@ RT100compensated, RTWhiteFilm.pr = RTWhiteFilm.cCompensation(RT100data, plot = 1
 
 hystData = []
 legend = []
-for f in RTfreqData:
+for f in RTfreqFiles:
     data = hd.HysteresisData()
     data.tsvRead(f)
     data.dvdtPlot() # plots dvdt for analysis - unrelated to freq hystPlot

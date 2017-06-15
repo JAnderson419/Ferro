@@ -36,7 +36,7 @@ class LandauFilm:
         self.c = c # F
         self.pr = pr
         
-    def cCalc(self,files, plot = False):
+    def cCalc(self,hystData, plot = False):
         """
         Calculates non-ferroelectric sample capacitance for the landau film 
         given a list of tf1000 DHM measurement CSV files, 
@@ -53,15 +53,8 @@ class LandauFilm:
         Returns
         -------
         iFit[0] : float
-        Capacitance in farads
+            Capacitance in farads
         """
-        
-        hystData = []
-
-        for f in files:
-            data = hd.HysteresisData(area=self.area, thickness = self.thickness)
-            data.tsvRead(f)
-            hystData.append(data)
         
         medI = np.zeros(len(hystData))
         freqs = np.zeros(len(hystData))
@@ -71,25 +64,13 @@ class LandauFilm:
         for i, d in enumerate(hystData):
             freqs[i] = d.freq
             
-            dt = d.time[1]-d.time[0]
             dvdt[i] = np.mean(np.abs(np.diff(d.voltage)/d.dt))
             medI[i] = np.median(np.abs(d.current))
-#            if plot:
-#                fig = plt.figure()
-#                fig.set_facecolor('white')
-#                ax = fig.add_subplot(111)
-#                ax.set_xlabel('Current (uA)')
-#                ax.set_ylabel('Count')
-#                binData = ax.hist(np.abs(d.current)*1E6, bins=20,alpha = 0.6)
-#            else:
-#                binData = np.histogram(np.abs(d.current)*1E6, bins=20)
-#            index = np.where(binData[0] == max(binData[0]))
-#            medI[i] = (binData[1][index] + binData[1][index])/2 * 1E-6
 
         iFit = np.polyfit(dvdt,medI,1)
         iFit_fn = np.poly1d(iFit)
         er = iFit[0]*hystData[0].thickness/(hystData[0].area*sc.epsilon_0*1E-2)
-#        print (iFit,er)
+
         if plot:
             fig2 = plt.figure()
             fig2.set_facecolor('white')       
@@ -379,7 +360,7 @@ class LandauFull(LandauFilm):
         self.T0 = T0
         self.rho = rho
         
-    def rhoCalc(self, files):
+    def rhoCalc(self, hystData):
         """
         IN DEVELOPMENT - needs further testing
         
@@ -397,18 +378,14 @@ class LandauFull(LandauFilm):
         """
         # TODO: work on improving rho calculation (noise from C, leakage I)
         cComp = 0
-        hystData = []
         pmax = []
-        for f in files:
-            data = hd.HysteresisData()
-            data.tsvRead(f)
-            hystData.append(data)
-            pmax.append(np.max(data.polarization))
-#            print (data.freq)
+        for f in hystData:
+            pmax.append(np.max(f.polarization))
+
         
         pmax = np.asfarray(pmax)
         p = np.min(pmax)
-#        print(p)
+
         dpdt = np.zeros(len(hystData))
         e = np.zeros(len(hystData))
 
@@ -450,7 +427,7 @@ class LandauFull(LandauFilm):
         ax1.set_xlabel('dP/dt')
         ax1.set_ylabel('dE')   
 
-    def a0Calc(self, files, leakageComp=False, leakagefiles= None):
+    def a0Calc(self, hystData):
         """
         IN DEVELOPMENT - needs further testing
         
@@ -461,47 +438,20 @@ class LandauFull(LandauFilm):
         Parameters
         ----------
         files : array_like of HysteresisData files.
-        leakageComp: bool, tell whether to subtract leakage current from
-            data before performing analysis. Experimental feature
-        leakagefiles: array_like of leakage current data. 
-            Must have a leakage file for each temperature represented in files.
         
         Returns
         -------
         n/a - not implemented yet       
         """
-        #FIXME: a0 is an order of magnitude too high - need better temp data
+        #FIXME: a0 is an order of magnitude too high - need better temp data?
         cComp = 0
-        hystData = []
         pmax = []
-        for f in files:
-            data = hd.HysteresisData()
-            data.tsvRead(f)
-            if leakageComp: # matches LCM to DHM if leakage comp to be done
-                if leakagefiles:
-                    r = re.compile('.* '+re.escape(str(data.temp))+'K.*')
-                    tempC = str(data.temp - 273)
-                    r2 = re.compile('.* '+re.escape(tempC)+'C.*')
-                    for j in leakagefiles:
-                        match = r.match(j)
-                        match2 = r2.match(j)
-                        if match or match2:
-                            ldata = hd.LeakageData()
-                            ldata.lcmRead(j)
-                            ldata.lcmFit()
-                            data.leakageCompensation()
-                        else:
-                            next
-                else:
-                    raise UserWarning('Leakage compensation selected but no leakage files defined. Compensation cannot be performed.')
-            
-            
-            hystData.append(data)
-            pmax.append(np.max(data.polarization))
+        for f in hystData:
+            pmax.append(np.max(f.polarization))
         
         pmax = np.asfarray(pmax)
         p = np.min(pmax)
-#        print(p)
+
         dpdt = np.zeros(len(hystData))
         e = np.zeros(len(hystData))
         temp = np.zeros(len(hystData))
@@ -680,11 +630,13 @@ class LandauDomain():
         """
         Parameters
         ----------
-        pvals: np array of p values for which to solve ufe
+        pvals: np array 
+            p values for which to solve ufe
         
         Returns
         -------
-        np array of ufe values
+        np array
+            ufe values
         """
         return self.a*pvals**2+self.b*pvals**4+self.g*pvals**6-self.ebias*pvals
     
@@ -692,11 +644,13 @@ class LandauDomain():
         """
         Parameters
         ----------
-        pvals: np array of p values for which to solve efe
+        pvals: np array 
+            p values for which to solve efe
         
         Returns
         -------
-        np array of efe values
+        np array 
+            efe values
         """
         return 2*self.a*pvals+4*self.b*pvals**3+6*self.g*pvals**5-self.ebias
 
