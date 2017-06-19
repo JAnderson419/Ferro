@@ -6,29 +6,34 @@ Created on Fri May 26 12:50:08 2017
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
 plt.close('all')
 
-freqdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_freq"
-tempdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
-templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
-forcFile = r".\testData\hfo2_MFM\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table1.tsv"
+freqdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_freqs"
+tempdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_temps"
+templkgdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_lkg"
+forcFile = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_forc\FeFETD1_die68_MFS+_100_10x10 0Hz 5V 1Average Table1.tsv"
 
-templkgfiles = hd.dirRead(templkgdir)
+
 
 tempfiles = hd.dirRead(tempdir)
-tempData = hd.listRead(tempfiles, templkgfiles)
+templkgfiles = hd.dirRead(templkgdir)
+tempData = hd.listRead(tempfiles, templkgfiles, plot = False,
+                       thickness = 10E-7, area=1E-4)
 
 freqfiles = hd.dirRead(freqdir)
 freqData = hd.listRead(freqfiles)
-hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
-cCompData = freqData[0]
+hfo2 = lf.LandauFull(thickness = 10E-7, area=1E-4)
+cCompData = freqData[1]
 
 hfo2.c = hfo2.cCalc(freqData, plot=1)
 compensatedData, hfo2.pr = hfo2.cCompensation(cCompData)
-compensatedData.hystPlot(plotE=True)
+hd.hystPlot([cCompData,compensatedData],
+            ['Before Capacitance Compensation', 'After Compensation'],
+            plotE=False)
 hfo2.rhoCalc(freqData)
 
 hfo2.a0 = hfo2.a0Calc(tempData)
@@ -36,15 +41,15 @@ hfo2.a0 = hfo2.a0Calc(tempData)
 freqDataLkgComp = hd.listRead(freqfiles, templkgfiles)
 cCompDataLkgComp = freqDataLkgComp[0]
 hd.hystPlot([cCompData,cCompDataLkgComp],
-            ["With Leakage","Without Leakage"],plotE=1)
+            ["With Leakage","Without Leakage"],plotE=False)
 
 ### FORC Calculation
 
 
-hfo2_forc = hd.HysteresisData(area=6579E-8, thickness=13E-7)
+hfo2_forc = hd.HysteresisData(thickness = 10E-7, area=1E-4)
 hfo2_forc.tsvRead(forcFile)
 hfo2_forc.hystPlot(plotE=1)
-e, er, probs = hfo2_forc.forcCalc(plot = False)
+e, er, probs = hfo2_forc.forcCalc(plot = True)
     
 domains = hfo2.domainGen(e, er, probs, n=100, plot = False)
 

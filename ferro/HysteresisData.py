@@ -29,7 +29,7 @@ def dirRead(path):
     files = [join(path,f) for f in listdir(path) if (isfile(join(path,f)) and r.match(f))]
     return files
 
-def listRead(files, leakagefiles = None, **kwargs):
+def listRead(files, leakagefiles = None, plot = False, **kwargs):
     """
     Reads in several hysteresis measurements and creates objects for them.
     
@@ -43,6 +43,9 @@ def listRead(files, leakagefiles = None, **kwargs):
     leakagefiles : list 
         Paths to leakage data for files.
         If none, leakage compensation is not performed.
+        
+    plot: bool
+        Triggers plotting of leakage data with fit.
         
     kwargs: args
         Arguements to pass to HysteresisData()
@@ -58,9 +61,9 @@ def listRead(files, leakagefiles = None, **kwargs):
         data = HysteresisData(**kwargs)
         data.tsvRead(f)
         if leakagefiles:
-            r = re.compile('.* '+re.escape(str(data.temp))+'K.*')
+            r = re.compile('.*(_| )'+re.escape(str(data.temp))+'K.*')
             tempC = str(data.temp - 273)
-            r2 = re.compile('.* '+re.escape(tempC)+'C.*')
+            r2 = re.compile('.*(_| )'+re.escape(tempC)+'C.*')
             noMatch = True
             for j in leakagefiles:
                 match = r.match(j)
@@ -70,6 +73,7 @@ def listRead(files, leakagefiles = None, **kwargs):
                     ldata = LeakageData()
                     ldata.lcmRead(j)
                     ldata.lcmFit()
+                    if plot: ldata.lcmPlot()
                     data = data.leakageCompensation(ldata)
                 else:
                     next
@@ -210,20 +214,20 @@ class HysteresisData(SampleData):
         """
         self.fileName = filename
 
-        r = re.compile('.* (\d+)C.*')
+        r = re.compile('.*(_| )(\d+)C.*')
         try:
-            self.temp = int(r.match(filename).group(1))+273
+            self.temp = int(r.match(filename).group(2))+273
         except AttributeError:
             try:
-                r = re.compile('.* (\d+)K.*')
-                self.temp = int(r.match(filename).group(1))
+                r = re.compile('.*(\d+)K.*')
+                self.temp = int(r.match(filename).group(2))
             except AttributeError:
                 print("No temperature specified. Defaulting to 300K")
                 next
         
-        r = re.compile('.* (\d+)Hz.*')
+        r = re.compile('.*(_| )(\d+)Hz.*')
         try:
-            self.freq = r.match(filename).group(1) 
+            self.freq = r.match(filename).group(2) 
         except AttributeError:
             print("No frequency specified. Defaulting to 100Hz")
             next
@@ -559,13 +563,13 @@ class LeakageData(SampleData):
         """
         self.fileName = filename
         
-        r = re.compile('.* (\d+)C.*')
+        r = re.compile('.*(_| )(\d+)C.*')
         try:
-            self.temp = int(r.match(filename).group(1))+273
+            self.temp = int(r.match(filename).group(2))+273
         except AttributeError:
             try:
-                r = re.compile('.* (\d+)K.*')
-                self.temp = int(r.match(filename).group(1))
+                r = re.compile('.*(_| )(\d+)K.*')
+                self.temp = int(r.match(filename).group(2))
             except AttributeError:
                 print("No temperature specified. Defaulting to 300K")
                 next
