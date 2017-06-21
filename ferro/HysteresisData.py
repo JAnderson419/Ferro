@@ -115,7 +115,6 @@ def hystPlot(data, legend = None, plotE = False):
         if plotE:
             line = ax1.plot(1E-6*d.field, 1E6* d.polarization,linewidth=1.5)
             lines.append(line[0])
-            ax1.set_xlabel('Electric Field (MV/cm)')
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
             ax2.plot(1E-6*d.field, 1E6* d.current,linewidth=1.5)
@@ -125,7 +124,6 @@ def hystPlot(data, legend = None, plotE = False):
         else:
             line = ax1.plot(d.voltage, 1E6* d.polarization,linewidth=1.5)
             lines.append(line[0])
-            ax1.set_xlabel('Voltage (V)')
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
             ax2.plot(d.voltage, 1E6* d.current,linewidth=1.5)
@@ -384,7 +382,6 @@ class HysteresisData(SampleData):
             ax1 = fig1.add_subplot(211)
             ax1.set_title(str(self.freq)+' Hz '+str(self.temp)+' K')
             datacursor(ax1.plot(1E-6*self.field, 1E6* self.polarization))
-            ax1.set_xlabel('Electric Field (MV/cm)')
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
             ax2 = fig1.add_subplot(212)
@@ -398,7 +395,6 @@ class HysteresisData(SampleData):
             ax1 = fig1.add_subplot(211)
             ax1.set_title(str(self.freq)+' Hz '+str(self.temp)+' K')
             datacursor(ax1.plot(self.voltage, 1E6* self.polarization))
-            ax1.set_xlabel('Voltage (V)')
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
             ax2 = fig1.add_subplot(212)

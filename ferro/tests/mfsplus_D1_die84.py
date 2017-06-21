@@ -12,69 +12,44 @@ from context import HysteresisData as hd
 
 plt.close('all')
 
-leakageComp = False
-device = 1
-
-### FeFETD1 - FE ###
-if device == 0:
-    freqdir = r".\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs"
-    tempdir = r".\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_temps"
-    templkgdir = r".\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg"
-    forcFile = r".\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_forc\FeFETD1_die84_MFS+_100_10x10 0Hz 5V 1Average Table1.tsv"
-    t = 10E-7 
-    a = 1E-4 # mask defined area that was used in measurement 
-    aReal = 8.1E3 # includes effect of undercut during M1 etch
-###############
-
-#### FeFETD5 - AFE ###
-if device == 1:
-    freqdir = r".\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_freqs"
-    tempdir = r".\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_temps"
-    templkgdir = r".\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_lkg"
-    forcFile = r".\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_FORC\FeFETD5_die68_MFS+_60_20x20_FORC_5V 0Hz 5V 1Average Table2.tsv"
-    t = 10E-7
-    a = 2.4E-4
-    aReal = 2.166E4 # includes effect of undercut during M1 etch
-################
+freqdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_freqs"
+tempdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_temps"
+templkgdir = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_lkg"
+forcFile = r"D:\Google Drive\Ferroelectric Research\FE_20162017\Testing\JFM FeFET\FeFETD1\FeFETD1_die68_MFS+_100_10x10_forc\FeFETD1_die68_MFS+_100_10x10 0Hz 5V 1Average Table1.tsv"
 
 
 
 tempfiles = hd.dirRead(tempdir)
 templkgfiles = hd.dirRead(templkgdir)
-if leakageComp:
-    tempData = hd.listRead(tempfiles, templkgfiles, plot = False,
-                           thickness = t, area = a)
-else:
-    tempData = hd.listRead(tempfiles, plot = False,
-                            thickness = t, area = a)     
+tempData = hd.listRead(tempfiles, templkgfiles, plot = False,
+                       thickness = 10E-7, area=1E-4)
 
 freqfiles = hd.dirRead(freqdir)
 freqData = hd.listRead(freqfiles)
-hfo2 = lf.LandauFull(thickness = t, area = aReal)
+hfo2 = lf.LandauFull(thickness = 10E-7, area=1E-4)
 cCompData = freqData[1]
 
 hfo2.c = hfo2.cCalc(freqData, plot=1)
 compensatedData, hfo2.pr = hfo2.cCompensation(cCompData)
 hd.hystPlot([cCompData,compensatedData],
-            ['Before C Compensation', 'After Compensation'],
+            ['Before Capacitance Compensation', 'After Compensation'],
             plotE=False)
-freqCompData = list(map(lambda x:hfo2.cCompensation(x)[0],freqData))
 hfo2.rhoCalc(freqData)
 
 hfo2.a0 = hfo2.a0Calc(tempData)
 
 freqDataLkgComp = hd.listRead(freqfiles, templkgfiles)
-cCompDataLkgComp = freqDataLkgComp[1]
+cCompDataLkgComp = freqDataLkgComp[0]
 hd.hystPlot([cCompData,cCompDataLkgComp],
             ["With Leakage","Without Leakage"],plotE=False)
 
 ### FORC Calculation
 
 
-hfo2_forc = hd.HysteresisData(thickness = t, area = a)
+hfo2_forc = hd.HysteresisData(thickness = 10E-7, area=1E-4)
 hfo2_forc.tsvRead(forcFile)
 hfo2_forc.hystPlot(plotE=1)
-e, er, probs = hfo2_forc.forcCalc(plot = False)
+e, er, probs = hfo2_forc.forcCalc(plot = True)
     
 domains = hfo2.domainGen(e, er, probs, n=100, plot = False)
 
@@ -114,25 +89,6 @@ hystData = sorted(hystData, key=lambda data: int(data.temp))
 
 legend = [str(x)+' K' for x in legend]  
 hd.hystPlot(hystData, legend)
-
-# Following code plots a series of diff temp hystdata files on same plot
-# with leakage current subtraction
-
-if leakageComp:
-    hystData = []
-    legend = []
-    for f in tempfiles:
-        data = hd.HysteresisData()
-        data.tsvRead(f)
-        hystData.append(data)
-        legend.append(int(data.temp))
-    
-    legend = sorted(legend)
-    hystData = sorted(hystData, key=lambda data: int(data.temp))
-    tempData = sorted(tempData, key=lambda data: int(data.temp))
-    
-    legend = [str(x)+' K' for x in legend]  
-    hd.hystPlot(tempData, legend)
 
 # Following code plots a series of diff temp leakagedata files on same plot
 
