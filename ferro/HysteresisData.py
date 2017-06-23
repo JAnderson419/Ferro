@@ -507,6 +507,7 @@ class HysteresisData(SampleData):
             fig4.set_facecolor('white')
             plt.clf()
             ax4 = fig4.add_subplot(111)
+            plt.set_cmap('jet')
     #        FORCplot = ax4.contourf(uniformV,uniformVr,1E6*-dEdEr,75)
             FORCplot = ax4.contourf(1E-6*uniformE,1E-6*uniformEr,prob,75)
             cbar = plt.colorbar(FORCplot)
