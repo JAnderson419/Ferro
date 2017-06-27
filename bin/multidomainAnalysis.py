@@ -29,7 +29,7 @@ if device == 0:
 if device == 1:
     freqdir = r"..\ferro\tests\testData\RT WhiteA\RTWhiteAFreq"
     tempdir = None
-    templkgdir = r"..\ferro\tests\testData\RTWhiteB\RTWHITEB_lkg"
+    templkgdir = r"..\ferro\tests\testData\RTWhiteB\RTWHITEB_lkg" 
     forcFile = r"..\ferro\tests\testData\\RT WhiteA\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table2.tsv"
     t = 255E-7 
     a = 1E-4 # mask defined area that was used in measurement 
@@ -73,21 +73,21 @@ if tempdir != None:
     landau.a0 = landau.a0Calc(tempData)
 
 freqfiles = hd.dirRead(freqdir)
-freqData = hd.listRead(freqfiles)
+freqData = hd.listRead(freqfiles, thickness = t, area = a)
 
 cCompData = freqData[1]
 
 landau.c = landau.cCalc(freqData, plot=1)
 compensatedData, landau.pr = landau.cCompensation(cCompData)
 hd.hystPlot([cCompData,compensatedData],
-            ['Before C Compensation', 'After Compensation'],
+            ['Before', 'After'],
             plotE=False)
 freqCompData = list(map(lambda x:landau.cCompensation(x)[0],freqData))
 landau.rhoCalc(freqData)
 
 
 
-freqDataLkgComp = hd.listRead(freqfiles, templkgfiles)
+freqDataLkgComp = hd.listRead(freqfiles, templkgfiles, thickness = t, area = a)
 cCompDataLkgComp = freqDataLkgComp[1]
 hd.hystPlot([cCompData,cCompDataLkgComp],
             ["With Leakage","Without Leakage"],plotE=False)
@@ -106,7 +106,18 @@ elimit = 1.1*max(cCompData.voltage)/t
 
 esweep = np.linspace(-elimit,elimit,num=1000)
 esweep = np.append(esweep,esweep[::-1])
-landau.calcEfePreisach(esweep, domains, plot=1)
+res = landau.calcEfePreisach(esweep, domains, cAdd = True, plot=0)
+
+# Plots FORC results vs actual hysteresis measurement ##
+fig = plt.figure()
+fig.clf()
+fig.set_facecolor('white')
+ax = fig.add_subplot(111)
+ax.plot(cCompData.field*1E-6,cCompData.polarization*1E6,esweep*1E-6,res[0]*1E6)
+ax.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
+ax.set_xlabel('Electric Field (MV/cm)')
+
+
 
 # Following code plots a series of diff freq hystdata files on same plot
 

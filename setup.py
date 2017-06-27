@@ -9,11 +9,11 @@ from distutils.core import setup
 
 setup(
     name='Ferro',
-    version='0.1dev',
+    version='0.1.0-dev1',
     author='Jackson Anderson',
     author_email='jda4923@rit.edu',
     packages=['ferro',],
-    license='',
+    license='Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International',
     description='Manipulation and Modeling of Ferroelectric Test Data',
     long_description=open('README.txt').read(),
     install_requires=[
@@ -21,9 +21,9 @@ setup(
         'numpy',
         'matplotlib',
         'mpldatacursor',
-        'copy',
-        're',
-        'os',
-        'csv',
+#        'copy',
+#        're',
+#        'os',
+#        'csv',
     ],
 )
