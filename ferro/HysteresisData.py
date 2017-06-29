@@ -17,6 +17,7 @@ import csv
 from mpldatacursor import datacursor
 from scipy.optimize import curve_fit
 from scipy import signal
+from scipy.ndimage import filters as flt
 #matplotlib.rcParams.update({'font.size': 16})
 
 def leakageFunc(x,a,b,c,d,e,f,g):
@@ -431,7 +432,8 @@ class HysteresisData(SampleData):
         ax1.set_ylabel('abs(dv/dt) (V/s)')
 
 
-    def forcCalc(self,plot = False, linear = True):
+    def forcCalc(self,plot = False, linear = True,
+                 filtIter = None, filtDim = [1,1]):
         """
         Finds minima/maxima in voltage data, cuts down data to only reversal 
         curves, interpolates data onto a linear grid using griddata, and 
@@ -450,14 +452,19 @@ class HysteresisData(SampleData):
                 Turns plotting of results on if set to True
             linear : bool 
                 Switches to linear interpolation
+            filtIter : int
+                Number of rolling average filter iterations to apply to the 
+                mixed partial derivative of p.
+            filtDim : len 2 sequence of ints
+                Size of filter for E & Er axes.
             
         Returns
         ----------
-            uniformE: 1d np array 
+            uniformE : 1d np array 
                 E values that correspond to prob
-            uniformEr: 1d np array
+            uniformEr : 1d np array
                 Er values that correspond to prob
-            prob: 2d numpy array
+            prob : 2d numpy array
                 Prob distribution of grains for given E,Er
         """     
 
@@ -499,7 +506,11 @@ class HysteresisData(SampleData):
             grid = plt.mlab.griddata(eFORC,erFORC,pFORC,uniformE,uniformEr) 
         dE, dEr = np.gradient(grid,uniformVr[1]-uniformVr[0],uniformV[1]-uniformV[0])
         dEdE, dEdEr = np.gradient(dE,uniformVr[1]-uniformVr[0],uniformV[1]-uniformV[0])
-        
+        if filtIter != None:
+            mask = np.ma.getmask(dEdEr) # store mask for later
+            dEdEr = dEdEr.filled(0) # fill mask to prevent filter NaN errors
+            for i in range(filtIter): dEdEr = flt.uniform_filter(dEdEr, filtDim)
+            dEdEr = np.ma.masked_where(mask,dEdEr) # reapply mask
         prob = abs(dEdEr)/np.sum(abs(dEdEr)) # normalize for prob dist
         
         if plot:            
@@ -508,7 +519,7 @@ class HysteresisData(SampleData):
             plt.clf()
             ax4 = fig4.add_subplot(111)
             plt.set_cmap('jet')
-    #        FORCplot = ax4.contourf(uniformV,uniformVr,1E6*-dEdEr,75)
+#            FORCplot = ax4.contourf(uniformV,uniformVr,1E6*-dEdEr,75)
             FORCplot = ax4.contourf(1E-6*uniformE,1E-6*uniformEr,prob,75)
             cbar = plt.colorbar(FORCplot)
     #        cbar.formatter.set_scientific(True) 
@@ -531,6 +542,17 @@ class HysteresisData(SampleData):
             plt.ylabel('$P_r (\mu{}C/cm^2)$')
             cb = plt.colorbar(ax5)
             cb.set_label('$V_r$')
+            plt.title('$\\rho{}^-$ as Used for FORC Plot')
+            
+            fig5 = plt.figure()
+            fig5.set_facecolor('white')
+            plt.clf()
+            ax5 = fig5.add_subplot(111)
+            ax5 = plt.scatter(eFORC*1E-6,np.asfarray(pFORC)*1E6,c=erFORC*1E-6, alpha = 0.25)
+            plt.xlabel("E (MV/cm)")
+            plt.ylabel('$P_r (\mu{}C/cm^2)$')
+            cb = plt.colorbar(ax5)
+            cb.set_label("$E_r$ (MV/cm)")
             plt.title('$\\rho{}^-$ as Used for FORC Plot')
        
         

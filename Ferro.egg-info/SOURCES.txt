@@ -1,6 +1,8 @@
 CHANGES.txt
+LICENSE.txt
 MANIFEST.in
 README.txt
+setup.cfg
 Ferro.egg-info/PKG-INFO
 Ferro.egg-info/SOURCES.txt
 Ferro.egg-info/dependency_links.txt

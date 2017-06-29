@@ -9,7 +9,7 @@ from distutils.core import setup
 
 setup(
     name='Ferro',
-    version='0.1.1-dev1',
+    version='0.1.1-dev2',
     author='Jackson Anderson',
     author_email='jda4923@rit.edu',
 	url = 'https://github.com/JAnderson419/Ferro',
