@@ -9,11 +9,11 @@ from distutils.core import setup
 
 setup(
     name='Ferro',
-    version='0.1.1-dev2',
+    version='0.2.0-dev1',
     author='Jackson Anderson',
     author_email='jda4923@rit.edu',
 	url = 'https://github.com/JAnderson419/Ferro',
-	download_url = 'https://github.com/JAnderson419/Ferro/archive/0.1.1-dev.tar.gz',
+	download_url = 'https://github.com/JAnderson419/Ferro/archive/0.2.0-dev1.tar.gz',
     packages=['ferro',],
     license='Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International',
     description='Manipulation and Modeling of Ferroelectric Test Data',
