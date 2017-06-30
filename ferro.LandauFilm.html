@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module LandauFilm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>LandauFilm</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgoogle%20drive%5Cmodeling%5Cferro%5Cferro%5Clandaufilm.py">d:\google drive\modeling\ferro\ferro\landaufilm.py</a></font></td></tr></table>
+    <p><tt>Created&nbsp;on&nbsp;Mon&nbsp;Apr&nbsp;10&nbsp;14:53:15&nbsp;2017<br>
+&nbsp;<br>
+@author:&nbsp;Jackson&nbsp;Anderson,&nbsp;Rochester&nbsp;Institute&nbsp;of&nbsp;Technology&nbsp;jda4923@rit.edu</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="copy.html">copy</a><br>
+<a href="ferro.HysteresisData.html">ferro.HysteresisData</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+<a href="scipy.constants.html">scipy.constants</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="LandauFilm.html#LandauDomain">LandauDomain</a>
+</font></dt><dt><font face="helvetica, arial"><a href="LandauFilm.html#LandauFilm">LandauFilm</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="LandauFilm.html#LandauFull">LandauFull</a>
+</font></dt><dt><font face="helvetica, arial"><a href="LandauFilm.html#LandauSimple">LandauSimple</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LandauDomain">class <strong>LandauDomain</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>IN&nbsp;DEVELOPMENT&nbsp;-&nbsp;includes&nbsp;different&nbsp;experimental&nbsp;solving&nbsp;methods&nbsp;for&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;landau&nbsp;parameters<br>
+&nbsp;<br>
+Represents&nbsp;individual&nbsp;ferroelectric&nbsp;domains&nbsp;in&nbsp;the&nbsp;film.<br>
+Used&nbsp;to&nbsp;calculate&nbsp;domain-specific&nbsp;beta&nbsp;parameter&nbsp;for&nbsp;multidomain&nbsp;simulation.<br>
+aTerm&nbsp;is&nbsp;alpha&nbsp;or&nbsp;alpha*(T-Tc)&nbsp;coefficient,&nbsp;depending&nbsp;on&nbsp;film&nbsp;model&nbsp;used.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="LandauDomain-__init__"><strong>__init__</strong></a>(self, landau, area, ec, ebias, aTerm=0, b=0, g=0)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LandauDomain-con"><strong>con</strong></a>(self, p)</dt><dd><tt>Defines&nbsp;parameter&nbsp;constraints.</tt></dd></dl>
+
+<dl><dt><a name="LandauDomain-eqns"><strong>eqns</strong></a>(self, p)</dt></dl>
+
+<dl><dt><a name="LandauDomain-eqns1"><strong>eqns1</strong></a>(self, p)</dt></dl>
+
+<dl><dt><a name="LandauDomain-getEfe"><strong>getEfe</strong></a>(self, pvals)</dt><dd><tt>Parameters<br>
+----------<br>
+pvals:&nbsp;np&nbsp;array&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;values&nbsp;for&nbsp;which&nbsp;to&nbsp;solve&nbsp;efe<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+np&nbsp;array&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;efe&nbsp;values</tt></dd></dl>
+
+<dl><dt><a name="LandauDomain-getUfe"><strong>getUfe</strong></a>(self, pvals)</dt><dd><tt>Parameters<br>
+----------<br>
+pvals:&nbsp;np&nbsp;array&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;values&nbsp;for&nbsp;which&nbsp;to&nbsp;solve&nbsp;ufe<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+np&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ufe&nbsp;values</tt></dd></dl>
+
+<dl><dt><a name="LandauDomain-parmCalc"><strong>parmCalc</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="LandauDomain-parmFit"><strong>parmFit</strong></a>(self, plot=False)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LandauFilm">class <strong>LandauFilm</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;Landau&nbsp;Modeling&nbsp;of&nbsp;ferroelectric&nbsp;thin&nbsp;films&nbsp;using&nbsp;alpha<br>
+and&nbsp;beta&nbsp;parameters.&nbsp;<br>
+&nbsp;<br>
+<a href="#LandauSimple">LandauSimple</a>&nbsp;models&nbsp;behaviour&nbsp;at&nbsp;one&nbsp;temperature&nbsp;(solves&nbsp;for&nbsp;alpha&nbsp;rather<br>
+than&nbsp;alpha0&nbsp;and&nbsp;Curie&nbsp;Temperature).&nbsp;It&nbsp;also&nbsp;asumes&nbsp;a&nbsp;viscosity&nbsp;coefficient<br>
+of&nbsp;0.<br>
+&nbsp;<br>
+<a href="#LandauFull">LandauFull</a>&nbsp;implements&nbsp;rho,&nbsp;Tc,&nbsp;and&nbsp;a0&nbsp;for&nbsp;more&nbsp;detailed&nbsp;analysis.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="LandauFilm-__init__"><strong>__init__</strong></a>(self, thickness=1.3e-06, area=6.606e-05, c=0, pr=0)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-cCalc"><strong>cCalc</strong></a>(self, hystData, plot=False)</dt><dd><tt>Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;for&nbsp;the&nbsp;landau&nbsp;film&nbsp;<br>
+given&nbsp;a&nbsp;list&nbsp;of&nbsp;tf1000&nbsp;DHM&nbsp;measurement&nbsp;CSV&nbsp;files,&nbsp;<br>
+with&nbsp;the&nbsp;DHM&nbsp;measurements&nbsp;taken&nbsp;at&nbsp;different&nbsp;frequencies<br>
+&nbsp;<br>
+Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;from&nbsp;the&nbsp;slope&nbsp;of&nbsp;<br>
+i&nbsp;=&nbsp;C&nbsp;dV/dt&nbsp;using&nbsp;the&nbsp;median&nbsp;abs(current)&nbsp;value&nbsp;at&nbsp;different&nbsp;freq<br>
+(will&nbsp;give&nbsp;non-switching&nbsp;current&nbsp;value)<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+files&nbsp;:&nbsp;array_like&nbsp;of&nbsp;HysteresisData&nbsp;files.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+iFit[0]&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Capacitance&nbsp;in&nbsp;farads</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-cCompensation"><strong>cCompensation</strong></a>(self, data, plot=False)</dt><dd><tt>Calculates&nbsp;Pr&nbsp;value&nbsp;by&nbsp;subtracting&nbsp;out&nbsp;effect&nbsp;of&nbsp;capacitance&nbsp;in&nbsp;PV&nbsp;curve<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+compData:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;identical&nbsp;to&nbsp;input&nbsp;but&nbsp;with&nbsp;C*dv/dt&nbsp;current&nbsp;subtracted&nbsp;out<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;polarization&nbsp;recalculated&nbsp;from&nbsp;new&nbsp;current<br>
+pr:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;remnant&nbsp;polarization&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-calcEfePreisach"><strong>calcEfePreisach</strong></a>(self, esweep, domains, initState=None, plot=False, cAdd=False)</dt><dd><tt>Models&nbsp;domains&nbsp;as&nbsp;simple&nbsp;hystereons&nbsp;using&nbsp;ec,&nbsp;pr<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+esweep:&nbsp;np&nbsp;array&nbsp;of&nbsp;field&nbsp;values&nbsp;for&nbsp;which&nbsp;to&nbsp;calculate&nbsp;Pr<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+initState:&nbsp;np&nbsp;array&nbsp;containing&nbsp;initial&nbsp;state&nbsp;of&nbsp;hysterons&nbsp;(-1&nbsp;or&nbsp;1)<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;hysteresis&nbsp;curve<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+p:&nbsp;np&nbsp;array,&nbsp;polarization&nbsp;charge&nbsp;values&nbsp;for&nbsp;film&nbsp;(C/cm^2)<br>
+state:&nbsp;np&nbsp;array,&nbsp;final&nbsp;state&nbsp;of&nbsp;hysterons</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-domainGen"><strong>domainGen</strong></a>(self, e, er, prob, n=100, plot=False, retParms=False)</dt><dd><tt>Creates&nbsp;N&nbsp;ferroelectric&nbsp;domains&nbsp;with&nbsp;Ebias&nbsp;and&nbsp;Ec&nbsp;based&nbsp;on&nbsp;the&nbsp;given<br>
+FORC&nbsp;probability&nbsp;distribution.<br>
+&nbsp;<br>
+Gd:&nbsp;HfO2&nbsp;forms&nbsp;columnar&nbsp;grains&nbsp;roughly&nbsp;1:1&nbsp;aspect&nbsp;ratio:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;Area/thickness^2<br>
+(See&nbsp;Hoffmann&nbsp;et&nbsp;al.,&nbsp;2016,&nbsp;DOI:&nbsp;10.1002/adfm.201602869)<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+e:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;<br>
+er:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;reverse&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+prob:&nbsp;2d&nbsp;array&nbsp;of&nbsp;probabilities&nbsp;(0&nbsp;to&nbsp;1)&nbsp;from&nbsp;FORC&nbsp;calculation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+n:&nbsp;int,&nbsp;number&nbsp;of&nbsp;domains&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;parms&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+retParms:&nbsp;bool,&nbsp;triggers&nbsp;return&nbsp;of&nbsp;array&nbsp;of&nbsp;domain&nbsp;parms<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+domainList:&nbsp;list&nbsp;containing&nbsp;domain&nbsp;objects&nbsp;created&nbsp;from&nbsp;generated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters.<br>
+&nbsp;<br>
+domains:&nbsp;2d&nbsp;array&nbsp;of&nbsp;length&nbsp;n&nbsp;by&nbsp;4&nbsp;containing&nbsp;domain&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,0]&nbsp;=&nbsp;E&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,1]&nbsp;=&nbsp;Er&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,2]&nbsp;=&nbsp;Ec<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,3]&nbsp;=&nbsp;Ebias</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-ePlot"><strong>ePlot</strong></a>(self, pVals, eFe, ec=None, ebias=0)</dt><dd><tt>Plots&nbsp;E&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+eFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;electric&nbsp;field&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+ec:&nbsp;float,&nbsp;overlays&nbsp;dotted&nbsp;line&nbsp;at&nbsp;ec+ebias&nbsp;and&nbsp;-ec+ebias&nbsp;on&nbsp;plot<br>
+ebias:&nbsp;float,&nbsp;defines&nbsp;ebias.&nbsp;Used&nbsp;only&nbsp;if&nbsp;ec&nbsp;defined<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-getUfe"><strong>getUfe</strong></a>(self, pvals, domains)</dt><dd><tt>Sums&nbsp;potential&nbsp;energy&nbsp;of&nbsp;all&nbsp;ferroelectric&nbsp;domains&nbsp;in&nbsp;a&nbsp;film&nbsp;to&nbsp;get<br>
+the&nbsp;overall&nbsp;energy&nbsp;landscape.<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+pvals:&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;values&nbsp;at&nbsp;which&nbsp;to&nbsp;solve&nbsp;Ufe<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uFE:&nbsp;potential&nbsp;energy&nbsp;density&nbsp;landscape&nbsp;of&nbsp;film</tt></dd></dl>
+
+<dl><dt><a name="LandauFilm-uPlot"><strong>uPlot</strong></a>(self, pVals, uFe)</dt><dd><tt>Plots&nbsp;U&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+uFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;energy&nbsp;densities&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LandauFull">class <strong>LandauFull</strong></a>(<a href="LandauFilm.html#LandauFilm">LandauFilm</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Full&nbsp;implementation&nbsp;of&nbsp;Landau&nbsp;model.&nbsp;See&nbsp;LandauBase&nbsp;for&nbsp;more&nbsp;info.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="LandauFilm.html#LandauFull">LandauFull</a></dd>
+<dd><a href="LandauFilm.html#LandauFilm">LandauFilm</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="LandauFull-__init__"><strong>__init__</strong></a>(self, a0=0, T0=0, rho=0, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-a0Calc"><strong>a0Calc</strong></a>(self, hystData)</dt><dd><tt>IN&nbsp;DEVELOPMENT&nbsp;-&nbsp;needs&nbsp;further&nbsp;testing<br>
+&nbsp;<br>
+Calculates&nbsp;an&nbsp;a0&nbsp;for&nbsp;the&nbsp;landau&nbsp;film&nbsp;given&nbsp;a&nbsp;list<br>
+of&nbsp;tf1000&nbsp;DHM&nbsp;measurement&nbsp;CSV&nbsp;files,&nbsp;with&nbsp;the&nbsp;DHM&nbsp;measurements&nbsp;<br>
+taken&nbsp;at&nbsp;different&nbsp;frequencies&nbsp;&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+files&nbsp;:&nbsp;array_like&nbsp;of&nbsp;HysteresisData&nbsp;files.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a&nbsp;-&nbsp;not&nbsp;implemented&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-rhoCalc"><strong>rhoCalc</strong></a>(self, hystData)</dt><dd><tt>IN&nbsp;DEVELOPMENT&nbsp;-&nbsp;needs&nbsp;further&nbsp;testing<br>
+&nbsp;<br>
+Calculates&nbsp;a&nbsp;viscosity&nbsp;coefficient&nbsp;for&nbsp;the&nbsp;landau&nbsp;film&nbsp;given&nbsp;a&nbsp;list<br>
+of&nbsp;tf1000&nbsp;DHM&nbsp;measurement&nbsp;CSV&nbsp;files,&nbsp;with&nbsp;the&nbsp;DHM&nbsp;measurements&nbsp;<br>
+taken&nbsp;at&nbsp;different&nbsp;frequencies<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+files&nbsp;:&nbsp;array_like&nbsp;of&nbsp;HysteresisData&nbsp;files.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a&nbsp;-&nbsp;not&nbsp;implemented&nbsp;yet</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="LandauFilm.html#LandauFilm">LandauFilm</a>:<br>
+<dl><dt><a name="LandauFull-cCalc"><strong>cCalc</strong></a>(self, hystData, plot=False)</dt><dd><tt>Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;for&nbsp;the&nbsp;landau&nbsp;film&nbsp;<br>
+given&nbsp;a&nbsp;list&nbsp;of&nbsp;tf1000&nbsp;DHM&nbsp;measurement&nbsp;CSV&nbsp;files,&nbsp;<br>
+with&nbsp;the&nbsp;DHM&nbsp;measurements&nbsp;taken&nbsp;at&nbsp;different&nbsp;frequencies<br>
+&nbsp;<br>
+Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;from&nbsp;the&nbsp;slope&nbsp;of&nbsp;<br>
+i&nbsp;=&nbsp;C&nbsp;dV/dt&nbsp;using&nbsp;the&nbsp;median&nbsp;abs(current)&nbsp;value&nbsp;at&nbsp;different&nbsp;freq<br>
+(will&nbsp;give&nbsp;non-switching&nbsp;current&nbsp;value)<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+files&nbsp;:&nbsp;array_like&nbsp;of&nbsp;HysteresisData&nbsp;files.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+iFit[0]&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Capacitance&nbsp;in&nbsp;farads</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-cCompensation"><strong>cCompensation</strong></a>(self, data, plot=False)</dt><dd><tt>Calculates&nbsp;Pr&nbsp;value&nbsp;by&nbsp;subtracting&nbsp;out&nbsp;effect&nbsp;of&nbsp;capacitance&nbsp;in&nbsp;PV&nbsp;curve<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+compData:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;identical&nbsp;to&nbsp;input&nbsp;but&nbsp;with&nbsp;C*dv/dt&nbsp;current&nbsp;subtracted&nbsp;out<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;polarization&nbsp;recalculated&nbsp;from&nbsp;new&nbsp;current<br>
+pr:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;remnant&nbsp;polarization&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-calcEfePreisach"><strong>calcEfePreisach</strong></a>(self, esweep, domains, initState=None, plot=False, cAdd=False)</dt><dd><tt>Models&nbsp;domains&nbsp;as&nbsp;simple&nbsp;hystereons&nbsp;using&nbsp;ec,&nbsp;pr<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+esweep:&nbsp;np&nbsp;array&nbsp;of&nbsp;field&nbsp;values&nbsp;for&nbsp;which&nbsp;to&nbsp;calculate&nbsp;Pr<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+initState:&nbsp;np&nbsp;array&nbsp;containing&nbsp;initial&nbsp;state&nbsp;of&nbsp;hysterons&nbsp;(-1&nbsp;or&nbsp;1)<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;hysteresis&nbsp;curve<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+p:&nbsp;np&nbsp;array,&nbsp;polarization&nbsp;charge&nbsp;values&nbsp;for&nbsp;film&nbsp;(C/cm^2)<br>
+state:&nbsp;np&nbsp;array,&nbsp;final&nbsp;state&nbsp;of&nbsp;hysterons</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-domainGen"><strong>domainGen</strong></a>(self, e, er, prob, n=100, plot=False, retParms=False)</dt><dd><tt>Creates&nbsp;N&nbsp;ferroelectric&nbsp;domains&nbsp;with&nbsp;Ebias&nbsp;and&nbsp;Ec&nbsp;based&nbsp;on&nbsp;the&nbsp;given<br>
+FORC&nbsp;probability&nbsp;distribution.<br>
+&nbsp;<br>
+Gd:&nbsp;HfO2&nbsp;forms&nbsp;columnar&nbsp;grains&nbsp;roughly&nbsp;1:1&nbsp;aspect&nbsp;ratio:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;Area/thickness^2<br>
+(See&nbsp;Hoffmann&nbsp;et&nbsp;al.,&nbsp;2016,&nbsp;DOI:&nbsp;10.1002/adfm.201602869)<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+e:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;<br>
+er:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;reverse&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+prob:&nbsp;2d&nbsp;array&nbsp;of&nbsp;probabilities&nbsp;(0&nbsp;to&nbsp;1)&nbsp;from&nbsp;FORC&nbsp;calculation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+n:&nbsp;int,&nbsp;number&nbsp;of&nbsp;domains&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;parms&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+retParms:&nbsp;bool,&nbsp;triggers&nbsp;return&nbsp;of&nbsp;array&nbsp;of&nbsp;domain&nbsp;parms<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+domainList:&nbsp;list&nbsp;containing&nbsp;domain&nbsp;objects&nbsp;created&nbsp;from&nbsp;generated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters.<br>
+&nbsp;<br>
+domains:&nbsp;2d&nbsp;array&nbsp;of&nbsp;length&nbsp;n&nbsp;by&nbsp;4&nbsp;containing&nbsp;domain&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,0]&nbsp;=&nbsp;E&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,1]&nbsp;=&nbsp;Er&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,2]&nbsp;=&nbsp;Ec<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,3]&nbsp;=&nbsp;Ebias</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-ePlot"><strong>ePlot</strong></a>(self, pVals, eFe, ec=None, ebias=0)</dt><dd><tt>Plots&nbsp;E&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+eFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;electric&nbsp;field&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+ec:&nbsp;float,&nbsp;overlays&nbsp;dotted&nbsp;line&nbsp;at&nbsp;ec+ebias&nbsp;and&nbsp;-ec+ebias&nbsp;on&nbsp;plot<br>
+ebias:&nbsp;float,&nbsp;defines&nbsp;ebias.&nbsp;Used&nbsp;only&nbsp;if&nbsp;ec&nbsp;defined<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-getUfe"><strong>getUfe</strong></a>(self, pvals, domains)</dt><dd><tt>Sums&nbsp;potential&nbsp;energy&nbsp;of&nbsp;all&nbsp;ferroelectric&nbsp;domains&nbsp;in&nbsp;a&nbsp;film&nbsp;to&nbsp;get<br>
+the&nbsp;overall&nbsp;energy&nbsp;landscape.<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+pvals:&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;values&nbsp;at&nbsp;which&nbsp;to&nbsp;solve&nbsp;Ufe<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uFE:&nbsp;potential&nbsp;energy&nbsp;density&nbsp;landscape&nbsp;of&nbsp;film</tt></dd></dl>
+
+<dl><dt><a name="LandauFull-uPlot"><strong>uPlot</strong></a>(self, pVals, uFe)</dt><dd><tt>Plots&nbsp;U&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+uFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;energy&nbsp;densities&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="LandauFilm.html#LandauFilm">LandauFilm</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LandauSimple">class <strong>LandauSimple</strong></a>(<a href="LandauFilm.html#LandauFilm">LandauFilm</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Simplified&nbsp;implementation&nbsp;of&nbsp;Landau&nbsp;model.&nbsp;See&nbsp;LandauBase&nbsp;for&nbsp;more&nbsp;info.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="LandauFilm.html#LandauSimple">LandauSimple</a></dd>
+<dd><a href="LandauFilm.html#LandauFilm">LandauFilm</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="LandauSimple-__init__"><strong>__init__</strong></a>(self, a=0, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-aCalc"><strong>aCalc</strong></a>(self, c=None, t=None)</dt></dl>
+
+<hr>
+Methods inherited from <a href="LandauFilm.html#LandauFilm">LandauFilm</a>:<br>
+<dl><dt><a name="LandauSimple-cCalc"><strong>cCalc</strong></a>(self, hystData, plot=False)</dt><dd><tt>Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;for&nbsp;the&nbsp;landau&nbsp;film&nbsp;<br>
+given&nbsp;a&nbsp;list&nbsp;of&nbsp;tf1000&nbsp;DHM&nbsp;measurement&nbsp;CSV&nbsp;files,&nbsp;<br>
+with&nbsp;the&nbsp;DHM&nbsp;measurements&nbsp;taken&nbsp;at&nbsp;different&nbsp;frequencies<br>
+&nbsp;<br>
+Calculates&nbsp;non-ferroelectric&nbsp;sample&nbsp;capacitance&nbsp;from&nbsp;the&nbsp;slope&nbsp;of&nbsp;<br>
+i&nbsp;=&nbsp;C&nbsp;dV/dt&nbsp;using&nbsp;the&nbsp;median&nbsp;abs(current)&nbsp;value&nbsp;at&nbsp;different&nbsp;freq<br>
+(will&nbsp;give&nbsp;non-switching&nbsp;current&nbsp;value)<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+files&nbsp;:&nbsp;array_like&nbsp;of&nbsp;HysteresisData&nbsp;files.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+iFit[0]&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Capacitance&nbsp;in&nbsp;farads</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-cCompensation"><strong>cCompensation</strong></a>(self, data, plot=False)</dt><dd><tt>Calculates&nbsp;Pr&nbsp;value&nbsp;by&nbsp;subtracting&nbsp;out&nbsp;effect&nbsp;of&nbsp;capacitance&nbsp;in&nbsp;PV&nbsp;curve<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+compData:&nbsp;HysteresisData&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;identical&nbsp;to&nbsp;input&nbsp;but&nbsp;with&nbsp;C*dv/dt&nbsp;current&nbsp;subtracted&nbsp;out<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;polarization&nbsp;recalculated&nbsp;from&nbsp;new&nbsp;current<br>
+pr:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;remnant&nbsp;polarization&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-calcEfePreisach"><strong>calcEfePreisach</strong></a>(self, esweep, domains, initState=None, plot=False, cAdd=False)</dt><dd><tt>Models&nbsp;domains&nbsp;as&nbsp;simple&nbsp;hystereons&nbsp;using&nbsp;ec,&nbsp;pr<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+esweep:&nbsp;np&nbsp;array&nbsp;of&nbsp;field&nbsp;values&nbsp;for&nbsp;which&nbsp;to&nbsp;calculate&nbsp;Pr<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+initState:&nbsp;np&nbsp;array&nbsp;containing&nbsp;initial&nbsp;state&nbsp;of&nbsp;hysterons&nbsp;(-1&nbsp;or&nbsp;1)<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;hysteresis&nbsp;curve<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+p:&nbsp;np&nbsp;array,&nbsp;polarization&nbsp;charge&nbsp;values&nbsp;for&nbsp;film&nbsp;(C/cm^2)<br>
+state:&nbsp;np&nbsp;array,&nbsp;final&nbsp;state&nbsp;of&nbsp;hysterons</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-domainGen"><strong>domainGen</strong></a>(self, e, er, prob, n=100, plot=False, retParms=False)</dt><dd><tt>Creates&nbsp;N&nbsp;ferroelectric&nbsp;domains&nbsp;with&nbsp;Ebias&nbsp;and&nbsp;Ec&nbsp;based&nbsp;on&nbsp;the&nbsp;given<br>
+FORC&nbsp;probability&nbsp;distribution.<br>
+&nbsp;<br>
+Gd:&nbsp;HfO2&nbsp;forms&nbsp;columnar&nbsp;grains&nbsp;roughly&nbsp;1:1&nbsp;aspect&nbsp;ratio:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;=&nbsp;Area/thickness^2<br>
+(See&nbsp;Hoffmann&nbsp;et&nbsp;al.,&nbsp;2016,&nbsp;DOI:&nbsp;10.1002/adfm.201602869)<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+e:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;<br>
+er:&nbsp;1d&nbsp;array&nbsp;of&nbsp;uniformly&nbsp;spaced&nbsp;reverse&nbsp;field&nbsp;values&nbsp;from&nbsp;FORC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+prob:&nbsp;2d&nbsp;array&nbsp;of&nbsp;probabilities&nbsp;(0&nbsp;to&nbsp;1)&nbsp;from&nbsp;FORC&nbsp;calculation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+n:&nbsp;int,&nbsp;number&nbsp;of&nbsp;domains&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+plot:&nbsp;bool,&nbsp;triggers&nbsp;plotting&nbsp;of&nbsp;generated&nbsp;parms&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+retParms:&nbsp;bool,&nbsp;triggers&nbsp;return&nbsp;of&nbsp;array&nbsp;of&nbsp;domain&nbsp;parms<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+domainList:&nbsp;list&nbsp;containing&nbsp;domain&nbsp;objects&nbsp;created&nbsp;from&nbsp;generated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters.<br>
+&nbsp;<br>
+domains:&nbsp;2d&nbsp;array&nbsp;of&nbsp;length&nbsp;n&nbsp;by&nbsp;4&nbsp;containing&nbsp;domain&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,0]&nbsp;=&nbsp;E&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,1]&nbsp;=&nbsp;Er&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,2]&nbsp;=&nbsp;Ec<br>
+&nbsp;&nbsp;&nbsp;&nbsp;domains[:,3]&nbsp;=&nbsp;Ebias</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-ePlot"><strong>ePlot</strong></a>(self, pVals, eFe, ec=None, ebias=0)</dt><dd><tt>Plots&nbsp;E&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+eFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;electric&nbsp;field&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+ec:&nbsp;float,&nbsp;overlays&nbsp;dotted&nbsp;line&nbsp;at&nbsp;ec+ebias&nbsp;and&nbsp;-ec+ebias&nbsp;on&nbsp;plot<br>
+ebias:&nbsp;float,&nbsp;defines&nbsp;ebias.&nbsp;Used&nbsp;only&nbsp;if&nbsp;ec&nbsp;defined<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-getUfe"><strong>getUfe</strong></a>(self, pvals, domains)</dt><dd><tt>Sums&nbsp;potential&nbsp;energy&nbsp;of&nbsp;all&nbsp;ferroelectric&nbsp;domains&nbsp;in&nbsp;a&nbsp;film&nbsp;to&nbsp;get<br>
+the&nbsp;overall&nbsp;energy&nbsp;landscape.<br>
+&nbsp;&nbsp;<br>
+Parameters<br>
+----------<br>
+pvals:&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;values&nbsp;at&nbsp;which&nbsp;to&nbsp;solve&nbsp;Ufe<br>
+domains:&nbsp;list&nbsp;containing&nbsp;all&nbsp;domain&nbsp;objects&nbsp;in&nbsp;the&nbsp;film<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uFE:&nbsp;potential&nbsp;energy&nbsp;density&nbsp;landscape&nbsp;of&nbsp;film</tt></dd></dl>
+
+<dl><dt><a name="LandauSimple-uPlot"><strong>uPlot</strong></a>(self, pVals, uFe)</dt><dd><tt>Plots&nbsp;U&nbsp;vs&nbsp;P&nbsp;for&nbsp;landau&nbsp;film.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+pVals:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;polarization&nbsp;charge&nbsp;values<br>
+uFe:&nbsp;1d&nbsp;np&nbsp;array&nbsp;of&nbsp;energy&nbsp;densities&nbsp;calculated&nbsp;at&nbsp;xVals.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="LandauFilm.html#LandauFilm">LandauFilm</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-main"><strong>main</strong></a>()</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>skewnorm</strong> = &lt;scipy.stats._continuous_distns.skew_norm_gen object&gt;</td></tr></table>
+</body></html>

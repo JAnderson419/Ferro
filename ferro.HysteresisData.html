@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module HysteresisData</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>HysteresisData</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cgoogle%20drive%5Cmodeling%5Cferro%5Cferro%5Chysteresisdata.py">d:\google drive\modeling\ferro\ferro\hysteresisdata.py</a></font></td></tr></table>
+    <p><tt><a href="#HysteresisData">HysteresisData</a>&nbsp;class&nbsp;with&nbsp;functions&nbsp;for&nbsp;reading&nbsp;in&nbsp;and&nbsp;plotting&nbsp;hysteresis&nbsp;data.<br>
+&nbsp;<br>
+TODO:&nbsp;move&nbsp;TF-1000&nbsp;parsing&nbsp;into&nbsp;python,&nbsp;auto-read&nbsp;thickness&nbsp;&amp;&nbsp;freq&nbsp;from&nbsp;metadata<br>
+&nbsp;<br>
+@author:&nbsp;Jackson&nbsp;Anderson,&nbsp;Rochester&nbsp;Institute&nbsp;of&nbsp;Technology&nbsp;jda4923@rit.edu</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="copy.html">copy</a><br>
+<a href="csv.html">csv</a><br>
+</td><td width="25%" valign=top><a href="scipy.ndimage.filters.html">scipy.ndimage.filters</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="scipy.signal.html">scipy.signal</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="HysteresisData.html#SampleData">SampleData</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="HysteresisData.html#HysteresisData">HysteresisData</a>
+</font></dt><dt><font face="helvetica, arial"><a href="HysteresisData.html#LeakageData">LeakageData</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="HysteresisData">class <strong>HysteresisData</strong></a>(<a href="HysteresisData.html#SampleData">SampleData</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="HysteresisData.html#HysteresisData">HysteresisData</a></dd>
+<dd><a href="HysteresisData.html#SampleData">SampleData</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="HysteresisData-__init__"><strong>__init__</strong></a>(self, freq=100, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-bandstopFilter"><strong>bandstopFilter</strong></a>(self, y, freqs=[50, 70], plot=False)</dt><dd><tt>Experimental<br>
+&nbsp;<br>
+Removes&nbsp;high&nbsp;freq&nbsp;noise&nbsp;from&nbsp;measurement&nbsp;data.<br>
+Filter&nbsp;edge&nbsp;set&nbsp;to&nbsp;2&nbsp;times&nbsp;measurement&nbsp;switching&nbsp;frequency.<br>
+Includes&nbsp;some&nbsp;code&nbsp;from&nbsp;scipy.signal.iirfilter&nbsp;example&nbsp;code.<br>
+&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+y&nbsp;:&nbsp;array_like&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;data&nbsp;to&nbsp;be&nbsp;filtered.<br>
+freqs&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;two&nbsp;freqs&nbsp;defining&nbsp;the&nbsp;edge&nbsp;of&nbsp;the&nbsp;bandstop&nbsp;filter.<br>
+plot&nbsp;:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;True,&nbsp;plots&nbsp;filter&nbsp;response<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+y&nbsp;:&nbsp;complex&nbsp;ndarray&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;filtered&nbsp;input&nbsp;data&nbsp;(y).&nbsp;Returned&nbsp;in&nbsp;time&nbsp;domain.</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-dvdtPlot"><strong>dvdtPlot</strong></a>(self)</dt><dd><tt>Plots&nbsp;abs(dvdt)&nbsp;of&nbsp;a&nbsp;measurement.&nbsp;<br>
+Can&nbsp;be&nbsp;used&nbsp;to&nbsp;investigate&nbsp;noise&nbsp;in&nbsp;capacitance&nbsp;extraction.</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-fftPlot"><strong>fftPlot</strong></a>(self, y)</dt><dd><tt>Takes&nbsp;fft&nbsp;of&nbsp;data&nbsp;and&nbsp;plots&nbsp;in&nbsp;frequency&nbsp;domain.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+y&nbsp;:&nbsp;np&nbsp;array&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Data&nbsp;to&nbsp;be&nbsp;plotted<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-forcCalc"><strong>forcCalc</strong></a>(self, plot=False, linear=True, filtIter=None, filtDim=[1, 1])</dt><dd><tt>Finds&nbsp;minima/maxima&nbsp;in&nbsp;voltage&nbsp;data,&nbsp;cuts&nbsp;down&nbsp;data&nbsp;to&nbsp;only&nbsp;reversal&nbsp;<br>
+curves,&nbsp;interpolates&nbsp;data&nbsp;onto&nbsp;a&nbsp;linear&nbsp;grid&nbsp;using&nbsp;griddata,&nbsp;and&nbsp;<br>
+makes&nbsp;contour&nbsp;plot&nbsp;for&nbsp;FORC&nbsp;measurements.&nbsp;<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;griddata&nbsp;uses&nbsp;the&nbsp;natgrid&nbsp;library.&nbsp;If&nbsp;you&nbsp;are&nbsp;on&nbsp;windows&nbsp;and<br>
+don't&nbsp;have&nbsp;a&nbsp;visual&nbsp;studio&nbsp;c++&nbsp;compiler&nbsp;for&nbsp;setup.py,&nbsp;pre-built&nbsp;wheels&nbsp;<br>
+found&nbsp;at&nbsp;<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#natgrid">http://www.lfd.uci.edu/~gohlke/pythonlibs/#natgrid</a>.<br>
+(pip&nbsp;install&nbsp;the&nbsp;wheel&nbsp;file&nbsp;directly).<br>
+&nbsp;<br>
+You&nbsp;can&nbsp;also&nbsp;use&nbsp;linear&nbsp;interpolation&nbsp;instead.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;plot&nbsp;:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turns&nbsp;plotting&nbsp;of&nbsp;results&nbsp;on&nbsp;if&nbsp;set&nbsp;to&nbsp;True<br>
+&nbsp;&nbsp;&nbsp;&nbsp;linear&nbsp;:&nbsp;bool&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Switches&nbsp;to&nbsp;linear&nbsp;interpolation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filtIter&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number&nbsp;of&nbsp;rolling&nbsp;average&nbsp;filter&nbsp;iterations&nbsp;to&nbsp;apply&nbsp;to&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mixed&nbsp;partial&nbsp;derivative&nbsp;of&nbsp;p.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filtDim&nbsp;:&nbsp;len&nbsp;2&nbsp;sequence&nbsp;of&nbsp;ints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Size&nbsp;of&nbsp;filter&nbsp;for&nbsp;E&nbsp;&amp;&nbsp;Er&nbsp;axes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns<br>
+----------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uniformE&nbsp;:&nbsp;1d&nbsp;np&nbsp;array&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E&nbsp;values&nbsp;that&nbsp;correspond&nbsp;to&nbsp;prob<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uniformEr&nbsp;:&nbsp;1d&nbsp;np&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Er&nbsp;values&nbsp;that&nbsp;correspond&nbsp;to&nbsp;prob<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prob&nbsp;:&nbsp;2d&nbsp;numpy&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prob&nbsp;distribution&nbsp;of&nbsp;grains&nbsp;for&nbsp;given&nbsp;E,Er</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-hystPlot"><strong>hystPlot</strong></a>(self, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+plotE&nbsp;:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;True&nbsp;plots&nbsp;E&nbsp;instead&nbsp;of&nbsp;P</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-leakageCompensation"><strong>leakageCompensation</strong></a>(self, leakageData)</dt><dd><tt>Removes&nbsp;leakage&nbsp;current&nbsp;contribution&nbsp;from&nbsp;hysteresis&nbsp;data&nbsp;using&nbsp;<br>
+model&nbsp;fit&nbsp;to&nbsp;lcm&nbsp;data.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+leakageData:&nbsp;<a href="#LeakageData">LeakageData</a>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Object&nbsp;to&nbsp;use&nbsp;in&nbsp;compensation.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+compData:&nbsp;<a href="#HysteresisData">HysteresisData</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Deep&nbsp;copy&nbsp;of&nbsp;self&nbsp;with&nbsp;leakage&nbsp;current&nbsp;removed.</tt></dd></dl>
+
+<dl><dt><a name="HysteresisData-tsvRead"><strong>tsvRead</strong></a>(self, filename)</dt><dd><tt>Imports&nbsp;TSV&nbsp;measurement&nbsp;data&nbsp;previously&nbsp;parsed&nbsp;by&nbsp;tfDataTSV_v4.pl.&nbsp;<br>
+For&nbsp;use&nbsp;with&nbsp;TF-1000&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+filename&nbsp;:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tsv&nbsp;file&nbsp;(with&nbsp;path)&nbsp;to&nbsp;open&nbsp;and&nbsp;parse.&nbsp;Stores&nbsp;data&nbsp;as&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;associated&nbsp;<a href="#HysteresisData">HysteresisData</a>&nbsp;<a href="builtins.html#object">object</a>'s&nbsp;attributes<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="HysteresisData.html#SampleData">SampleData</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LeakageData">class <strong>LeakageData</strong></a>(<a href="HysteresisData.html#SampleData">SampleData</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="HysteresisData.html#LeakageData">LeakageData</a></dd>
+<dd><a href="HysteresisData.html#SampleData">SampleData</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="LeakageData-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="LeakageData-lcmFit"><strong>lcmFit</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;, initGuess=array([  2.00000000e-10,   2.00000000e-10,   8.00000000e-07,
+        -1.00000000e-06,   1.00000000e-06,   0.00000000e+00,
+        -1.00000000e+00]))</dt><dd><tt>Attempts&nbsp;to&nbsp;fit&nbsp;parameters&nbsp;to&nbsp;leakage&nbsp;current,&nbsp;stores&nbsp;in&nbsp;hd&nbsp;<a href="builtins.html#object">object</a><br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+func&nbsp;:&nbsp;function&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Defines&nbsp;eqn&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;fit&nbsp;data<br>
+initGuess&nbsp;:&nbsp;np&nbsp;array&nbsp;of&nbsp;appropriate&nbsp;length&nbsp;to&nbsp;match&nbsp;func&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Provides&nbsp;initial&nbsp;values&nbsp;for&nbsp;curve_fit<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<dl><dt><a name="LeakageData-lcmPlot"><strong>lcmPlot</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;)</dt><dd><tt>Plots&nbsp;measured&nbsp;leakage&nbsp;current&nbsp;with&nbsp;fit&nbsp;data.</tt></dd></dl>
+
+<dl><dt><a name="LeakageData-lcmRead"><strong>lcmRead</strong></a>(self, filename)</dt><dd><tt>Imports&nbsp;TSV&nbsp;measurement&nbsp;data&nbsp;previously&nbsp;parsed&nbsp;by&nbsp;tfDataTSV_v5.pl<br>
+For&nbsp;use&nbsp;with&nbsp;TF-1000&nbsp;leakage&nbsp;current&nbsp;measurement&nbsp;data<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+filename&nbsp;:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tsv&nbsp;file&nbsp;(with&nbsp;path)&nbsp;to&nbsp;open&nbsp;and&nbsp;parse.&nbsp;Stores&nbsp;data&nbsp;as&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;associated&nbsp;<a href="#HysteresisData">HysteresisData</a>&nbsp;<a href="builtins.html#object">object</a>'s&nbsp;attributes<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="HysteresisData.html#SampleData">SampleData</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SampleData">class <strong>SampleData</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="SampleData-__init__"><strong>__init__</strong></a>(self, thickness=1.3e-06, area=0.0001, temperature=300)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-dirRead"><strong>dirRead</strong></a>(path)</dt></dl>
+ <dl><dt><a name="-hystPlot"><strong>hystPlot</strong></a>(data, legend=None, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#HysteresisData">HysteresisData</a>&nbsp;objects&nbsp;to&nbsp;plot.<br>
+legend&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str&nbsp;labels&nbsp;corresponding&nbsp;to&nbsp;data.<br>
+plotE&nbsp;:&nbsp;bool&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;True&nbsp;plots&nbsp;E&nbsp;instead&nbsp;of&nbsp;P.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+ <dl><dt><a name="-lcmPlot"><strong>lcmPlot</strong></a>(data, legend=None)</dt><dd><tt>Plots&nbsp;leakage&nbsp;current&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;voltage&nbsp;for&nbsp;a&nbsp;list&nbsp;of&nbsp;<a href="#LeakageData">LeakageData</a>.<br>
+If&nbsp;parameters&nbsp;have&nbsp;been&nbsp;fit&nbsp;to&nbsp;data,&nbsp;will&nbsp;plot&nbsp;modeled&nbsp;leakage&nbsp;as&nbsp;well.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#LeakageData">LeakageData</a>&nbsp;objects&nbsp;to&nbsp;plot<br>
+legend&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Str&nbsp;labels&nbsp;corresponding&nbsp;to&nbsp;data<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+n/a</tt></dd></dl>
+ <dl><dt><a name="-leakageFunc"><strong>leakageFunc</strong></a>(x, a, b, c, d, e, f, g)</dt></dl>
+ <dl><dt><a name="-listRead"><strong>listRead</strong></a>(files, leakagefiles=None, plot=False, **kwargs)</dt><dd><tt>Reads&nbsp;in&nbsp;several&nbsp;hysteresis&nbsp;measurements&nbsp;and&nbsp;creates&nbsp;objects&nbsp;for&nbsp;them.<br>
+&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+&nbsp;<br>
+files&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Paths&nbsp;to&nbsp;tsv&nbsp;data&nbsp;files&nbsp;of&nbsp;hysteresis&nbsp;measurements<br>
+&nbsp;<br>
+leakagefiles&nbsp;:&nbsp;list&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Paths&nbsp;to&nbsp;leakage&nbsp;data&nbsp;for&nbsp;files.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;none,&nbsp;leakage&nbsp;compensation&nbsp;is&nbsp;not&nbsp;performed.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+plot:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Triggers&nbsp;plotting&nbsp;of&nbsp;leakage&nbsp;data&nbsp;with&nbsp;fit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+kwargs:&nbsp;args<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Arguements&nbsp;to&nbsp;pass&nbsp;to&nbsp;<a href="#HysteresisData">HysteresisData</a>()<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;<br>
+dataList&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#HysteresisData">HysteresisData</a>&nbsp;objects&nbsp;created&nbsp;from&nbsp;files.</tt></dd></dl>
+ <dl><dt><a name="-listdir"><strong>listdir</strong></a>(path=None)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;containing&nbsp;the&nbsp;names&nbsp;of&nbsp;the&nbsp;files&nbsp;in&nbsp;the&nbsp;directory.<br>
+&nbsp;<br>
+path&nbsp;can&nbsp;be&nbsp;specified&nbsp;as&nbsp;either&nbsp;str&nbsp;or&nbsp;bytes.&nbsp;&nbsp;If&nbsp;path&nbsp;is&nbsp;bytes,<br>
+&nbsp;&nbsp;the&nbsp;filenames&nbsp;returned&nbsp;will&nbsp;also&nbsp;be&nbsp;bytes;&nbsp;in&nbsp;all&nbsp;other&nbsp;circumstances<br>
+&nbsp;&nbsp;the&nbsp;filenames&nbsp;returned&nbsp;will&nbsp;be&nbsp;str.<br>
+If&nbsp;path&nbsp;is&nbsp;None,&nbsp;uses&nbsp;the&nbsp;path='.'.<br>
+On&nbsp;some&nbsp;platforms,&nbsp;path&nbsp;may&nbsp;also&nbsp;be&nbsp;specified&nbsp;as&nbsp;an&nbsp;open&nbsp;file&nbsp;descriptor;\<br>
+&nbsp;&nbsp;the&nbsp;file&nbsp;descriptor&nbsp;must&nbsp;refer&nbsp;to&nbsp;a&nbsp;directory.<br>
+&nbsp;&nbsp;If&nbsp;this&nbsp;functionality&nbsp;is&nbsp;unavailable,&nbsp;using&nbsp;it&nbsp;raises&nbsp;NotImplementedError.<br>
+&nbsp;<br>
+The&nbsp;list&nbsp;is&nbsp;in&nbsp;arbitrary&nbsp;order.&nbsp;&nbsp;It&nbsp;does&nbsp;not&nbsp;include&nbsp;the&nbsp;special<br>
+entries&nbsp;'.'&nbsp;and&nbsp;'..'&nbsp;even&nbsp;if&nbsp;they&nbsp;are&nbsp;present&nbsp;in&nbsp;the&nbsp;directory.</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt></dl>
+ <dl><dt><a name="-warn"><strong>warn</strong></a>(...)</dt><dd><tt>Issue&nbsp;a&nbsp;warning,&nbsp;or&nbsp;maybe&nbsp;ignore&nbsp;it&nbsp;or&nbsp;raise&nbsp;an&nbsp;exception.</tt></dd></dl>
+</td></tr></table>
+</body></html>

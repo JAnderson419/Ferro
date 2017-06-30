@@ -412,6 +412,21 @@ class HysteresisData(SampleData):
     #        ax3.set_ylabel('Voltage (V)')
 
 
+    def timePlot(self):
+        """
+        Plots forced voltage and measured current vs. time on same plot
+        """
+        fig2 = plt.figure()
+        fig2.set_facecolor('white')
+        plt.clf()
+        ax4 = fig2.add_subplot(111)
+        ax4.plot(self.time, self.voltage,'--')
+        ax4.set_xlabel("time (s)")
+        ax4.set_ylabel("Voltage (V)")
+        ax41 = ax4.twinx()
+        ax41.plot(self.time, self.current*1E6)
+        ax41.set_ylabel("Current ($\mu{}A$)")
+
     def dvdtPlot(self):
         """
         Plots abs(dvdt) of a measurement. 

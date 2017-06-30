@@ -70,7 +70,7 @@ class LandauFilm:
 
         iFit = np.polyfit(dvdt,medI,1)
         iFit_fn = np.poly1d(iFit)
-        er = iFit[0]*hystData[0].thickness/(hystData[0].area*sc.epsilon_0*1E-2)
+        er = iFit[0]*self.thickness/(self.area*sc.epsilon_0*1E-2)
 
         if plot:
             fig2 = plt.figure()
