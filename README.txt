@@ -6,4 +6,4 @@ Ferro aims to be a python package to ease manipulation of ferroelectric (and per
 
 Docstrings are in numpy style. For an example of a complete device analysis, see Ferro/bin/multidomainAnalysis.py
 
-Developed on python 3.5 and 3.6. Here are the installed versions of packages on my development computer:
+Developed on python 3.5 and 3.6.
