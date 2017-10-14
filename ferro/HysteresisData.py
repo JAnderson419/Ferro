@@ -34,7 +34,6 @@ def listRead(files, leakagefiles = None, plot = False, **kwargs):
     """
     Reads in several hysteresis measurements and creates objects for them.
     
-    
     Parameters
     ----------
     
@@ -180,6 +179,23 @@ def lcmPlot(data, legend = None):
 
 class SampleData:
     def __init__(self, thickness=13E-7, area=1E-4, temperature=300): 
+        """
+        Parameters
+        ----------
+        thickness : float
+            Thickness of the sample in cm (used to calculate field)
+            
+        area: float
+            Area of the sample in cm^2. This should match the area that was
+            used to calculate polarization charge per unit area for the data.
+            
+        temperature: int
+            Temperature (in Kelvin) at which the measurement was taken.
+        
+        Returns
+        -------
+        n/a
+        """
         self.fileName = ''
         self.thickness = thickness # cm
         self.area = area # cm^2
@@ -187,6 +203,26 @@ class SampleData:
 
 class HysteresisData(SampleData):
     def __init__(self, freq=100, **kwargs):
+        """
+        Inherits SampleData. See that class for info on thickness, area, 
+        and temperature
+        
+        Parameters
+        ----------
+        thickness : float
+            Thickness of the sample in cm (used to calculate field)
+            
+        area: float
+            Area of the sample in cm^2. This should match the area that was
+            used to calculate polarization charge per unit area for the data.
+            
+        temperature: int
+            Temperature (in Kelvin) at which the measurement was taken.
+        
+        Returns
+        -------
+        n/a
+        """
         SampleData.__init__(self,**kwargs)
         self.time = []
         self.voltage = []
