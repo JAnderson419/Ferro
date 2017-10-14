@@ -6,6 +6,7 @@ Ferro aims to be a python package to ease manipulation of ferroelectric (and per
 
 Docstrings are in numpy style. For an example of a complete device analysis, see Ferro/bin/multidomainAnalysis.py
 
+Additional documentation can be found at https://janderson419.github.io/
 For an overview of the role of each function beyond the docstrings, see chapter 3 of "Measurement of Ferroelectric Films in MFM and MFIS Structures" by J. Anderson, available online: http://scholarworks.rit.edu/theses/9547/
 
 Developed on python 3.5 and 3.6 using Anaconda. If downloading from Github, be sure to use pip to install the package to ensure you have the proper prerequisites. If you have any questions, please contact me. 
