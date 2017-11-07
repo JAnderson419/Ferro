@@ -106,27 +106,27 @@ def hystPlot(data, legend = None, plotE = False):
     ax2 = fig1.add_subplot(212)
     
     # creates unique color for each item
-#    colormap = plt.cm.viridis # uniform greyscale for printing
-    colormap = plt.cm.nipy_spectral # diverse color for colorblindness
-    ax1.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,1,len(data))])
-    ax2.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,1,len(data))])
+    colormap = plt.cm.viridis # uniform greyscale for printing
+#    colormap = plt.cm.nipy_spectral # diverse color for colorblindness
+    ax1.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,.6,len(data))])
+    ax2.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,.6,len(data))])
     lines = []    
     for d in data:
         if plotE:
-            line = ax1.plot(1E-6*d.field, 1E6* d.polarization,linewidth=1.5)
+            line = ax1.plot(1E-6*d.field, 1E6* d.polarization)
             lines.append(line[0])
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
-            ax2.plot(1E-6*d.field, 1E6* d.current,linewidth=1.5)
+            ax2.plot(1E-6*d.field, 1E6* d.current)
             ax2.set_xlabel('Electric Field (MV/cm)')
             ax2.set_ylabel('Current ($\mu{}A$)')    
     
         else:
-            line = ax1.plot(d.voltage, 1E6* d.polarization,linewidth=1.5)
+            line = ax1.plot(d.voltage, 1E6* d.polarization)
             lines.append(line[0])
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
             
-            ax2.plot(d.voltage, 1E6* d.current,linewidth=1.5)
+            ax2.plot(d.voltage, 1E6* d.current)
             ax2.set_xlabel('Voltage (V)')
             ax2.set_ylabel('Current ($\mu{}A$)')
     if legend:
@@ -134,6 +134,53 @@ def hystPlot(data, legend = None, plotE = False):
         ax1.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         box2 = ax2.get_position()
         ax2.set_position([box2.x0, box2.y0, box2.width * 0.8, box2.height])
+        fig1.legend(lines,legend,loc='center right')
+        
+def ncvPlot(data, legend = None, plotE = False):
+    """
+    Plots V vs P, V vs I, and time vs V given hysteresis measurement data.
+    
+    Parameters
+    ----------
+    data : list 
+        HysteresisData objects to plot.
+    legend : list 
+        str labels corresponding to data.
+    plotE : bool 
+        If True plots E instead of P.
+    
+    Returns
+    -------
+    n/a
+    """
+    fig1 = plt.figure()
+    fig1.set_facecolor('white')  
+    ax1 = fig1.add_subplot(111)
+    
+    # creates unique color for each item
+    colormap = plt.cm.viridis # uniform greyscale for printing
+#    colormap = plt.cm.nipy_spectral # diverse color for colorblindness
+    ax1.set_prop_cycle('c',[colormap(i) for i in np.linspace(0,.6,len(data))])
+    lines = []    
+    for d in data:
+        ncv = np.diff(d.polarization)/np.diff(d.voltage)
+        ncv_v = 0.5 * (d.voltage[1:] + d.voltage [:-1])
+        if plotE:
+            line = ax1.plot(1E-6*ncv_v/d.thickness, 1E6* ncv)
+            lines.append(line[0])
+            ax1.set_xlabel('Electric Field (MV/cm)')
+            ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
+              
+    
+        else:
+            line = ax1.plot(ncv_v, 1E6* ncv)
+            lines.append(line[0])
+            ax1.set_xlabel('Voltage (V)')
+            ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
+            
+    if legend:
+        box = ax1.get_position()
+        ax1.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         fig1.legend(lines,legend,loc='center right')
         
 def lcmPlot(data, legend = None):
@@ -438,15 +485,6 @@ class HysteresisData(SampleData):
             datacursor(ax2.plot(self.voltage, 1E6* self.current))
             ax2.set_xlabel('Voltage (V)')
             ax2.set_ylabel('Current ($\mu{}A$)')
-            
-    #        fig3 = plt.figure()
-    #        fig3.set_facecolor('white')
-    #        plt.cla()
-    #        ax3 = fig3.add_subplot(111)
-    #        datacursor(ax3.plot(self.time,self.voltage))
-    #        ax3.set_xlabel('Time (s)')
-    #        ax3.set_ylabel('Voltage (V)')
-
 
     def timePlot(self):
         """

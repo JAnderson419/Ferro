@@ -64,7 +64,6 @@ class LandauFilm:
 
         for i, d in enumerate(hystData):
             freqs[i] = d.freq
-            
             dvdt[i] = np.mean(np.abs(np.diff(d.voltage)/d.dt))
             medI[i] = np.median(np.abs(d.current))
 
