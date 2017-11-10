@@ -138,7 +138,7 @@ def hystPlot(data, legend = None, plotE = False):
         
 def ncvPlot(data, legend = None, plotE = False):
     """
-    Plots V vs P, V vs I, and time vs V given hysteresis measurement data.
+    Plots dP/dV (capacitance) of PV data.
     
     Parameters
     ----------
@@ -520,6 +520,36 @@ class HysteresisData(SampleData):
         ax1.set_xlabel('count')
         ax1.set_ylabel('abs(dv/dt) (V/s)')
 
+    def ncvPlot(self, plotE = False):
+        """
+        Plots dP/dV (capacitance) of PV data.
+        
+        Parameters
+        ----------
+        plotE : bool 
+            If True plots E instead of P.
+        
+        Returns
+        -------
+        n/a
+        """
+        fig1 = plt.figure()
+        fig1.set_facecolor('white')  
+        ax1 = fig1.add_subplot(111)
+        
+        ncv = np.diff(self.polarization)/np.diff(self.voltage)
+        ncv_v = 0.5 * (self.voltage[1:] + self.voltage [:-1])
+        if plotE:
+            ax1.plot(1E-6*ncv_v/d.thickness, 1E6* ncv)
+            ax1.set_xlabel('Electric Field (MV/cm)')
+            ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
+              
+    
+        else:
+            ax1.plot(ncv_v, 1E6* ncv)
+            ax1.set_xlabel('Voltage (V)')
+            ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
+                
 
     def forcCalc(self,plot = False, linear = True,
                  filtIter = None, filtDim = [1,1]):
