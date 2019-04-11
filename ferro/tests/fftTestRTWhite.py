@@ -4,7 +4,7 @@ Created on Fri May 26 12:50:08 2017
 
 @author: Jackson
 
-Tests fftPlot and bandstopFilter functions of HysteresisData
+Tests fft_plot and bandstop_filter functions of HysteresisData
 """
 
 import matplotlib.pyplot as plt
@@ -18,12 +18,12 @@ plt.close('all')
 RTfreq1000hz = r".\testData\RT WhiteA\RT WhiteA 1Hz 8V 1Average Table3.tsv"
 
 RTdata = hd.HysteresisData()
-RTdata.tsvRead(RTfreq1000hz)
-RTdata.hystPlot()
+RTdata.tsv_read(RTfreq1000hz)
+RTdata.hyst_plot()
 
-RTdata.fftPlot(RTdata.current)
-RTdata.current = RTdata.bandstopFilter(RTdata.current, plot = True)
-RTdata.polarization = RTdata.bandstopFilter(RTdata.polarization)
-RTdata.fftPlot(RTdata.current)
+RTdata.fft_plot(RTdata.current)
+RTdata.current = RTdata.bandstop_filter(RTdata.current, plot = True)
+RTdata.polarization = RTdata.bandstop_filter(RTdata.polarization)
+RTdata.fft_plot(RTdata.current)
 #RTdata.lpFilter(RTdata.polarization)
-RTdata.hystPlot()
+RTdata.hyst_plot()

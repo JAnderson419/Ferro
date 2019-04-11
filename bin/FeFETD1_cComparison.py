@@ -67,10 +67,10 @@ c = []
 for i,f in enumerate(freqdirs):
     dcfiles = hd.dirRead(f)    
     lkgfile = hd.dirRead(lkgdirs[i])
-#    data = hd.listRead(dcfiles, lkgfile)
+#    data = hd.list_read(dcfiles, lkgfile)
     data = hd.listRead(dcfiles)
     testfilm = lf.LandauFilm()   
-    cde = testfilm.cCalc(data, plot=1)
+    cde = testfilm.c_calc(data, plot=1)
     c.append(cde)
 
 c = np.asarray(c)

@@ -14,4 +14,4 @@ discretecapdir = r'.\testData\MDCref\mdc100pf'
 files = hd.dirRead(discretecapdir)
 data = hd.listRead(files)
 testfilm = lf.LandauFilm()
-cde = testfilm.cCalc(data, plot=1)
+cde = testfilm.c_calc(data, plot=1)

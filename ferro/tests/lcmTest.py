@@ -4,7 +4,7 @@ Created on Fri May 26 12:50:08 2017
 
 @author: Jackson
 
-Tests fftPlot and bandstopFilter functions of HysteresisData
+Tests fft_plot and bandstop_filter functions of HysteresisData
 """
 
 import matplotlib.pyplot as plt
@@ -22,13 +22,13 @@ datafile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps\H9 die (9,4) S3 79C 100Hz 
 lkgfile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg\H9 die (9,4) S3 79C 2s step Table2.tsv"
 
 data = hd.HysteresisData()
-data.tsvRead(datafile)
+data.tsv_read(datafile)
 
 ldata = hd.LeakageData()
-ldata.lcmRead(lkgfile)
+ldata.lcm_read(lkgfile)
 
-data.hystPlot()
-ldata.lcmFit()
-ldata.lcmPlot()
-compData = data.leakageCompensation(ldata)
-compData.hystPlot()
+data.hyst_plot()
+ldata.lcm_fit()
+ldata.lcm_plot()
+compData = data.leakage_compensation(ldata)
+compData.hyst_plot()

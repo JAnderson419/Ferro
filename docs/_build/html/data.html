@@ -56,7 +56,7 @@
 <p>&#64;author: Jackson Anderson, Rochester Institute of Technology <a class="reference external" href="mailto:jda4923&#37;&#52;&#48;rit&#46;edu">jda4923<span>&#64;</span>rit<span>&#46;</span>edu</a></p>
 <dl class="function">
 <dt id="ferro.HysteresisData.hystPlot">
-<code class="descclassname">ferro.HysteresisData.</code><code class="descname">hystPlot</code><span class="sig-paren">(</span><em>data</em>, <em>legend=None</em>, <em>plotE=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.hystPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ferro.HysteresisData.</code><code class="descname">hyst_plot</code><span class="sig-paren">(</span><em>data</em>, <em>legend=None</em>, <em>plotE=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.hystPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots V vs P, V vs I, and time vs V given hysteresis measurement data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -81,7 +81,7 @@
 
 <dl class="function">
 <dt id="ferro.HysteresisData.lcmPlot">
-<code class="descclassname">ferro.HysteresisData.</code><code class="descname">lcmPlot</code><span class="sig-paren">(</span><em>data</em>, <em>legend=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.lcmPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ferro.HysteresisData.</code><code class="descname">lcm_plot</code><span class="sig-paren">(</span><em>data</em>, <em>legend=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.lcmPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots leakage current as a function of voltage for a list of LeakageData.
 If parameters have been fit to data, will plot modeled leakage as well.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -175,14 +175,14 @@ Includes some code from scipy.signal.iirfilter example code.</p>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.HysteresisData.dvdtPlot">
-<code class="descname">dvdtPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.dvdtPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">dvdt_plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.dvdtPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots abs(dvdt) of a measurement.
 Can be used to investigate noise in capacitance extraction.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.HysteresisData.fftPlot">
-<code class="descname">fftPlot</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.fftPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fft_plot</code><span class="sig-paren">(</span><em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.fftPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes fft of data and plots in frequency domain.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -200,7 +200,7 @@ Can be used to investigate noise in capacitance extraction.</p>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.HysteresisData.forcCalc">
-<code class="descname">forcCalc</code><span class="sig-paren">(</span><em>plot=False, linear=True, filtIter=None, filtDim=[1, 1]</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.forcCalc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">forc_calc</code><span class="sig-paren">(</span><em>plot=False, linear=True, filtIter=None, filtDim=[1, 1]</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.forcCalc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds minima/maxima in voltage data, cuts down data to only reversal
 curves, interpolates data onto a linear grid using griddata, and
 makes contour plot for FORC measurements.</p>
@@ -236,7 +236,7 @@ mixed partial derivative of p.</li>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.HysteresisData.hystPlot">
-<code class="descname">hystPlot</code><span class="sig-paren">(</span><em>plotE=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.hystPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hyst_plot</code><span class="sig-paren">(</span><em>plotE=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.hystPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots V vs P, V vs I, and time vs V given hysteresis measurement data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -269,7 +269,7 @@ model fit to lcm data.</p>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.HysteresisData.timePlot">
-<code class="descname">timePlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.timePlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">time_plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.HysteresisData.timePlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots forced voltage and measured current vs. time on same plot</p>
 </dd></dl>
 
@@ -303,7 +303,7 @@ the associated HysteresisData object&#8217;s attributes</td>
 <em class="property">class </em><code class="descclassname">ferro.HysteresisData.</code><code class="descname">LeakageData</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="ferro.HysteresisData.LeakageData.lcmFit">
-<code class="descname">lcmFit</code><span class="sig-paren">(</span><em>func=&lt;function leakageFunc&gt;</em>, <em>initGuess=array([  2.00000000e-10</em>, <em>2.00000000e-10</em>, <em>8.00000000e-07</em>, <em>-1.00000000e-06</em>, <em>1.00000000e-06</em>, <em>0.00000000e+00</em>, <em>-1.00000000e+00])</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmFit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lcm_fit</code><span class="sig-paren">(</span><em>func=&lt;function leakageFunc&gt;</em>, <em>initGuess=array([  2.00000000e-10</em>, <em>2.00000000e-10</em>, <em>8.00000000e-07</em>, <em>-1.00000000e-06</em>, <em>1.00000000e-06</em>, <em>0.00000000e+00</em>, <em>-1.00000000e+00])</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmFit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempts to fit parameters to leakage current, stores in hd object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -327,13 +327,13 @@ the associated HysteresisData object&#8217;s attributes</td>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.LeakageData.lcmPlot">
-<code class="descname">lcmPlot</code><span class="sig-paren">(</span><em>func=&lt;function leakageFunc&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lcm_plot</code><span class="sig-paren">(</span><em>func=&lt;function leakageFunc&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots measured leakage current with fit data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ferro.HysteresisData.LeakageData.lcmRead">
-<code class="descname">lcmRead</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmRead" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lcm_read</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.HysteresisData.LeakageData.lcmRead" title="Permalink to this definition">¶</a></dt>
 <dd><p>Imports TSV measurement data previously parsed by tfDataTSV_v5.pl
 For use with TF-1000 leakage current measurement data</p>
 <table class="docutils field-list" frame="void" rules="none">

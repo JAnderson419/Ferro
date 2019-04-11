@@ -70,43 +70,43 @@ if tempdir != None:
         tempData = hd.listRead(tempfiles, plot = False,
                                 thickness = t, area = a)     
     
-    landau.a0 = landau.a0Calc(tempData)
+    landau.a0 = landau.a0_calc(tempData)
 
 freqfiles = hd.dirRead(freqdir)
 freqData = hd.listRead(freqfiles, thickness = t, area = a)
 
 cCompData = freqData[1]
 
-landau.c = landau.cCalc(freqData, plot=1)
-compensatedData, landau.pr = landau.cCompensation(cCompData)
-hd.hystPlot([cCompData,compensatedData],
-            ['Before', 'After'],
-            plotE=False)
-freqCompData = list(map(lambda x:landau.cCompensation(x)[0],freqData))
-landau.rhoCalc(freqData)
+landau.c = landau.c_calc(freqData, plot=1)
+compensatedData, landau.pr = landau.c_compensation(cCompData)
+hd.hyst_plot([cCompData, compensatedData],
+             ['Before', 'After'],
+             plotE=False)
+freqCompData = list(map(lambda x:landau.c_compensation(x)[0], freqData))
+landau.rho_calc(freqData)
 
 
 
 freqDataLkgComp = hd.listRead(freqfiles, templkgfiles, thickness = t, area = a)
 cCompDataLkgComp = freqDataLkgComp[1]
-hd.hystPlot([cCompData,cCompDataLkgComp],
-            ["With Leakage","Without Leakage"],plotE=False)
+hd.hyst_plot([cCompData, cCompDataLkgComp],
+             ["With Leakage","Without Leakage"], plotE=False)
 
 ### FORC Calculation
 
 
 landau_forc = hd.HysteresisData(thickness = t, area = a)
-landau_forc.tsvRead(forcFile)
-landau_forc.hystPlot(plotE=1)
-e, er, probs = landau_forc.forcCalc(plot = True)
+landau_forc.tsv_read(forcFile)
+landau_forc.hyst_plot(plotE=1)
+e, er, probs = landau_forc.forc_calc(plot = True)
     
-domains = landau.domainGen(e, er, probs, n=100, plot = False)
+domains = landau.domain_gen(e, er, probs, n=100, plot = False)
 
 elimit = 1.1*max(cCompData.voltage)/t
 
 esweep = np.linspace(-elimit,elimit,num=1000)
 esweep = np.append(esweep,esweep[::-1])
-res = landau.calcEfePreisach(esweep, domains, cAdd = True, plot=0)
+res = landau.calc_efe_preisach(esweep, domains, cAdd = True, plot=0)
 
 # Plots FORC results vs actual hysteresis measurement ##
 fig = plt.figure()
@@ -125,8 +125,8 @@ hystData = []
 legend = []
 for f in freqfiles:
     data = hd.HysteresisData()
-    data.tsvRead(f)
-#    data.dvdtPlot() # plots dvdt for analysis - unrelated to freq hystPlot
+    data.tsv_read(f)
+#    data.dvdt_plot() # plots dvdt for analysis - unrelated to freq hyst_plot
     hystData.append(data)
     legend.append(int(data.freq))
 
@@ -134,7 +134,7 @@ legend = sorted(legend)
 hystData = sorted(hystData, key=lambda data: int(data.freq))
 
 legend = [str(x)+' Hz' for x in legend]  
-hd.hystPlot(hystData, legend)
+hd.hyst_plot(hystData, legend)
 
 
 if tempdir != None:
@@ -144,7 +144,7 @@ if tempdir != None:
     legend = []
     for f in tempfiles:
         data = hd.HysteresisData()
-        data.tsvRead(f)
+        data.tsv_read(f)
         hystData.append(data)
         legend.append(int(data.temp))
     
@@ -152,7 +152,7 @@ if tempdir != None:
     hystData = sorted(hystData, key=lambda data: int(data.temp))
     
     legend = [str(x)+' K' for x in legend]  
-    hd.hystPlot(hystData, legend)
+    hd.hyst_plot(hystData, legend)
     
     # Following code plots a series of diff temp hystdata files on same plot
     # with leakage current subtraction
@@ -162,7 +162,7 @@ if tempdir != None:
         legend = []
         for f in tempfiles:
             data = hd.HysteresisData()
-            data.tsvRead(f)
+            data.tsv_read(f)
             hystData.append(data)
             legend.append(int(data.temp))
         
@@ -171,7 +171,7 @@ if tempdir != None:
         tempData = sorted(tempData, key=lambda data: int(data.temp))
         
         legend = [str(x)+' K' for x in legend]  
-        hd.hystPlot(tempData, legend)
+        hd.hyst_plot(tempData, legend)
     
 # Following code plots a series of diff temp leakagedata files on same plot
 
@@ -179,11 +179,11 @@ leakageData = []
 legend = []
 for f in templkgfiles:
     data = hd.LeakageData()
-    data.lcmRead(f)
+    data.lcm_read(f)
     leakageData.append(data)
     legend.append(int(data.temp))
 
 legend = sorted(legend)
 leakageData = sorted(leakageData, key=lambda data: int(data.temp))
 legend = [str(x)+' K' for x in legend]  
-hd.lcmPlot(leakageData, legend)
+hd.lcm_plot(leakageData, legend)

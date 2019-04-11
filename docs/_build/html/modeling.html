@@ -62,7 +62,7 @@ of 0.</p>
 <p>LandauFull implements rho, Tc, and a0 for more detailed analysis.</p>
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.cCalc">
-<code class="descname">cCalc</code><span class="sig-paren">(</span><em>hystData</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.cCalc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">c_calc</code><span class="sig-paren">(</span><em>hystData</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.cCalc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates non-ferroelectric sample capacitance for the landau film
 given a list of tf1000 DHM measurement CSV files,
 with the DHM measurements taken at different frequencies</p>
@@ -85,7 +85,7 @@ i = C dV/dt using the median abs(current) value at different freq
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.cCompensation">
-<code class="descname">cCompensation</code><span class="sig-paren">(</span><em>data</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.cCompensation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">c_compensation</code><span class="sig-paren">(</span><em>data</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.cCompensation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates Pr value by subtracting out effect of capacitance in PV curve</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -106,7 +106,7 @@ and polarization recalculated from new current</li>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.calcEfePreisach">
-<code class="descname">calcEfePreisach</code><span class="sig-paren">(</span><em>esweep</em>, <em>domains</em>, <em>initState=None</em>, <em>plot=False</em>, <em>cAdd=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.calcEfePreisach" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_efe_preisach</code><span class="sig-paren">(</span><em>esweep</em>, <em>domains</em>, <em>initState=None</em>, <em>plot=False</em>, <em>cAdd=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.calcEfePreisach" title="Permalink to this definition">¶</a></dt>
 <dd><p>Models domains as simple hystereons using ec, pr</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -133,7 +133,7 @@ and polarization recalculated from new current</li>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.domainGen">
-<code class="descname">domainGen</code><span class="sig-paren">(</span><em>e</em>, <em>er</em>, <em>prob</em>, <em>n=100</em>, <em>plot=False</em>, <em>retParms=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.domainGen" title="Permalink to this definition">¶</a></dt>
+<code class="descname">domain_gen</code><span class="sig-paren">(</span><em>e</em>, <em>er</em>, <em>prob</em>, <em>n=100</em>, <em>plot=False</em>, <em>retParms=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.domainGen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates N ferroelectric domains with Ebias and Ec based on the given
 FORC probability distribution.</p>
 <dl class="docutils">
@@ -171,7 +171,7 @@ domains[:,3] = Ebias</li>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.ePlot">
-<code class="descname">ePlot</code><span class="sig-paren">(</span><em>pVals</em>, <em>eFe</em>, <em>ec=None</em>, <em>ebias=0</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.ePlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">e_plot</code><span class="sig-paren">(</span><em>pVals</em>, <em>eFe</em>, <em>ec=None</em>, <em>ebias=0</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.ePlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots E vs P for landau film.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -197,7 +197,7 @@ domains[:,3] = Ebias</li>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.getUfe">
-<code class="descname">getUfe</code><span class="sig-paren">(</span><em>pvals</em>, <em>domains</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.getUfe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_Ufe</code><span class="sig-paren">(</span><em>pvals</em>, <em>domains</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.getUfe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sums potential energy of all ferroelectric domains in a film to get
 the overall energy landscape.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -222,7 +222,7 @@ the overall energy landscape.</p>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFilm.uPlot">
-<code class="descname">uPlot</code><span class="sig-paren">(</span><em>pVals</em>, <em>uFe</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.uPlot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">u_plot</code><span class="sig-paren">(</span><em>pVals</em>, <em>uFe</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFilm.uPlot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots U vs P for landau film.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -264,7 +264,7 @@ the overall energy landscape.</p>
 <dd><p>Full implementation of Landau model. See LandauBase for more info.</p>
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFull.a0Calc">
-<code class="descname">a0Calc</code><span class="sig-paren">(</span><em>hystData</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFull.a0Calc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">a0_calc</code><span class="sig-paren">(</span><em>hystData</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFull.a0Calc" title="Permalink to this definition">¶</a></dt>
 <dd><p>IN DEVELOPMENT - needs further testing</p>
 <p>Calculates an a0 for the landau film given a list
 of tf1000 DHM measurement CSV files, with the DHM measurements
@@ -285,7 +285,7 @@ taken at different frequencies</p>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauFull.rhoCalc">
-<code class="descname">rhoCalc</code><span class="sig-paren">(</span><em>hystData</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFull.rhoCalc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rho_calc</code><span class="sig-paren">(</span><em>hystData</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauFull.rhoCalc" title="Permalink to this definition">¶</a></dt>
 <dd><p>IN DEVELOPMENT - needs further testing</p>
 <p>Calculates a viscosity coefficient for the landau film given a list
 of tf1000 DHM measurement CSV files, with the DHM measurements
@@ -327,7 +327,7 @@ aTerm is alpha or alpha*(T-Tc) coefficient, depending on film model used.</p>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauDomain.getEfe">
-<code class="descname">getEfe</code><span class="sig-paren">(</span><em>pvals</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauDomain.getEfe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_efe</code><span class="sig-paren">(</span><em>pvals</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauDomain.getEfe" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -344,7 +344,7 @@ aTerm is alpha or alpha*(T-Tc) coefficient, depending on film model used.</p>
 
 <dl class="method">
 <dt id="ferro.LandauFilm.LandauDomain.getUfe">
-<code class="descname">getUfe</code><span class="sig-paren">(</span><em>pvals</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauDomain.getUfe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_Ufe</code><span class="sig-paren">(</span><em>pvals</em><span class="sig-paren">)</span><a class="headerlink" href="#ferro.LandauFilm.LandauDomain.getUfe" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

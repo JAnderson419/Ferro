@@ -18,12 +18,12 @@ RTfreqData = hd.listRead(RTfreqFiles)
 RTfreq100hz = r".\testData\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Table1.tsv"
 
 RT100data = hd.HysteresisData()
-RT100data.tsvRead(RTfreq100hz)
-RT100data.hystPlot
+RT100data.tsv_read(RTfreq100hz)
+RT100data.hyst_plot
 
 RTWhiteFilm = lf.LandauSimple(thickness = 255E-7, area=1E-4)
-RTWhiteFilm.c = RTWhiteFilm.cCalc(RTfreqData, plot = 1)
-RT100compensated, RTWhiteFilm.pr = RTWhiteFilm.cCompensation(RT100data, plot = 1)
+RTWhiteFilm.c = RTWhiteFilm.c_calc(RTfreqData, plot = 1)
+RT100compensated, RTWhiteFilm.pr = RTWhiteFilm.c_compensation(RT100data, plot = 1)
 
 
 # Following code plots a series of diff freq hystdata files on same plot
@@ -32,8 +32,8 @@ hystData = []
 legend = []
 for f in RTfreqFiles:
     data = hd.HysteresisData()
-    data.tsvRead(f)
-    data.dvdtPlot() # plots dvdt for analysis - unrelated to freq hystPlot
+    data.tsv_read(f)
+    data.dvdt_plot() # plots dvdt for analysis - unrelated to freq hyst_plot
     hystData.append(data)
     legend.append(int(data.freq))
 
@@ -41,4 +41,4 @@ legend = sorted(legend)
 hystData = sorted(hystData, key=lambda data: int(data.freq))  
 
 legend = [str(x)+' Hz' for x in legend]      
-hd.hystPlot(hystData, legend)
+hd.hyst_plot(hystData, legend)
