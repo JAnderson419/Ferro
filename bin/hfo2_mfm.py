@@ -30,7 +30,7 @@ cCompData = freqData[0]
 
 hfo2.c = hfo2.c_calc(freqData, plot=1)
 compensatedData, hfo2.pr = hfo2.c_compensation(cCompData)
-compensatedData.hyst_plot(plotE=True)
+compensatedData.hyst_plot(plot_e=True)
 hfo2.rho_calc(freqData)
 
 hfo2.a0 = hfo2.a0_calc(tempData)
@@ -38,14 +38,14 @@ hfo2.a0 = hfo2.a0_calc(tempData)
 freqDataLkgComp = hd.listRead(freqfiles, templkgfiles)
 cCompDataLkgComp = freqDataLkgComp[0]
 hd.hyst_plot([cCompData, cCompDataLkgComp],
-             ["With Leakage","Without Leakage"], plotE=1)
+             ["With Leakage","Without Leakage"], plot_e=1)
 
 ### FORC Calculation
 
 
 hfo2_forc = hd.HysteresisData(area=6579E-8, thickness=13E-7)
 hfo2_forc.tsv_read(forcFile)
-hfo2_forc.hyst_plot(plotE=1)
+hfo2_forc.hyst_plot(plot_e=1)
 e, er, probs = hfo2_forc.forc_calc(plot = False)
     
 domains = hfo2.domain_gen(e, er, probs, n=100, plot = False)

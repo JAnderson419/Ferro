@@ -31,7 +31,7 @@ RT100compensated.hyst_plot()
 forcFile = r".\testData\RT WhiteA\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table7.tsv"
 RTWhiteAFORC = hd.HysteresisData(area=1E-4, thickness=255E-7)
 RTWhiteAFORC.tsv_read(forcFile)
-RTWhiteAFORC.hyst_plot(plotE=1)
+RTWhiteAFORC.hyst_plot(plot_e=1)
 e, er, probs = RTWhiteAFORC.forc_calc(plot = True)
     
 domains = RTWhiteFilm.domain_gen(e, er, probs, n=100, plot = False)

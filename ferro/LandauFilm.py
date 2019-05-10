@@ -388,7 +388,7 @@ class LandauFull(LandauFilm):
 
         for i, d in enumerate(hyst_data):
             dt = d.time[1] - d.time[0]
-            # print(dvdt[i],"\n", d.fileName)
+            # print(dvdt[i],"\n", d.file_name)
             dvdt = (d.voltage[1] - d.voltage[0]) / dt
 
             for j, q in enumerate(d.polarization):
@@ -452,7 +452,7 @@ class LandauFull(LandauFilm):
         for i, d in enumerate(hystData):
             temp[i] = d.temp
             dt = d.time[1] - d.time[0]
-            # print(dvdt[i],"\n", d.fileName)
+            # print(dvdt[i],"\n", d.file_name)
             dvdt = (d.voltage[1] - d.voltage[0]) / dt
 
             for j, q in enumerate(d.polarization):

@@ -17,10 +17,10 @@ a = 1E-4 # mask defined area that was used in measurement
 
 forc1 = hd.HysteresisData(thickness = t, area = a)
 forc1.tsv_read(forcFile1)
-forc1.hyst_plot(plotE=1)
+forc1.hyst_plot(plot_e=1)
 forc1.forc_calc(plot = True)
 
 forc2 = hd.HysteresisData(thickness = t, area = a)
 forc2.tsv_read(forcFile2)
-forc2.hyst_plot(plotE=1)
+forc2.hyst_plot(plot_e=1)
 forc2.forc_calc(plot = True)

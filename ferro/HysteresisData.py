@@ -58,23 +58,23 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
     Returns
     -------
     
-    dataList : list
+    data_list : list
         HysteresisData objects created from files.
     """
-    dataList = []
+    data_list = []
     for f in files:
         data = HysteresisData(**kwargs)
         data.tsv_read(f)
         if leakagefiles:
             r = re.compile('.*(_| )' + re.escape(str(data.temp)) + 'K.*')
-            tempC = str(data.temp - 273)
-            r2 = re.compile('.*(_| )' + re.escape(tempC) + 'C.*')
-            noMatch = True
+            temp_c = str(data.temp - 273)
+            r2 = re.compile('.*(_| )' + re.escape(temp_c) + 'C.*')
+            no_match = True
             for j in leakagefiles:
                 match = r.match(j)
                 match2 = r2.match(j)
                 if match or match2:
-                    noMatch = False
+                    no_match = False
                     ldata = LeakageData()
                     ldata.lcm_read(j)
                     ldata.lcm_fit()
@@ -82,14 +82,14 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
                     data = data.leakageCompensation(ldata)
                 else:
                     next
-            if noMatch:
+            if no_match:
                 raise UserWarning('No leakage file found to match data. Compensation cannot be performed.')
-        dataList.append(data)
+        data_list.append(data)
 
-    return dataList
+    return data_list
 
 
-def hyst_plot(data, legend=None, plotE=False):
+def hyst_plot(data, legend=None, plot_e=False):
     """
     Plots V vs P, V vs I, and time vs V given hysteresis measurement data.
     
@@ -99,7 +99,7 @@ def hyst_plot(data, legend=None, plotE=False):
         HysteresisData objects to plot.
     legend : list 
         str labels corresponding to data.
-    plotE : bool 
+    plot_e : bool
         If True plots E instead of P.
     
     Returns
@@ -118,7 +118,7 @@ def hyst_plot(data, legend=None, plotE=False):
     ax2.set_prop_cycle('c', [colormap(i) for i in np.linspace(0, .6, len(data))])
     lines = []
     for d in data:
-        if plotE:
+        if plot_e:
             line = ax1.plot(1E-6 * d.field, 1E6 * d.polarization)
             lines.append(line[0])
             ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
@@ -143,7 +143,7 @@ def hyst_plot(data, legend=None, plotE=False):
         fig1.legend(lines, legend, loc='center right')
 
 
-def ncv_plot(data, legend=None, plotE=False):
+def ncv_plot(data, legend=None, plot_e=False):
     """
     Plots dP/dV (capacitance) of PV data.
     
@@ -153,7 +153,7 @@ def ncv_plot(data, legend=None, plotE=False):
         HysteresisData objects to plot.
     legend : list 
         str labels corresponding to data.
-    plotE : bool 
+    plot_e : bool
         If True plots E instead of P.
     
     Returns
@@ -172,7 +172,7 @@ def ncv_plot(data, legend=None, plotE=False):
     for d in data:
         ncv = np.diff(d.polarization) / np.diff(d.voltage)
         ncv_v = 0.5 * (d.voltage[1:] + d.voltage[:-1])
-        if plotE:
+        if plot_e:
             line = ax1.plot(1E-6 * ncv_v / d.thickness, 1E6 * ncv)
             lines.append(line[0])
             ax1.set_xlabel('Electric Field (MV/cm)')
@@ -252,7 +252,7 @@ class SampleData:
         -------
         n/a
         """
-        self.fileName = ''
+        self.file_name = ''
         self.thickness = thickness  # cm
         self.area = area  # cm^2
         self.temp = temperature  # K
@@ -342,49 +342,49 @@ class HysteresisData(SampleData):
         self.field = self.voltage / (self.thickness)  # V/cm
         self.dt = self.time[1] - self.time[0]  # s
 
-    def leakage_compensation(self, leakageData):
+    def leakage_compensation(self, leakage_data):
         """
         Removes leakage current contribution from hysteresis data using 
         model fit to lcm data.
 
         Parameters
         ----------
-        leakageData: LeakageData 
+        leakage_data: LeakageData
             Object to use in compensation.
         
         Returns
         -------
-        compData: HysteresisData
+        comp_data: HysteresisData
             Deep copy of self with leakage current removed.
         """
-        ld = leakageData
+        ld = leakage_data
 
-        if ld.lcmParms == []:
+        if ld.lcm_parms == []:
             warn("Please run lcm_fit on the Leakage Data before attempting compensation.",
                  RuntimeWarning)
             return self
 
-        compData = copy.deepcopy(self)  #
+        comp_data = copy.deepcopy(self)  #
 
-        for j, i in enumerate(compData.current):
-            ilkg = leakage_func(self.voltage[j], *ld.lcmParms)
-            compData.current[j] = i - ilkg
+        for j, i in enumerate(comp_data.current):
+            ilkg = leakage_func(self.voltage[j], *ld.lcm_parms)
+            comp_data.current[j] = i - ilkg
 
-        compData.current = compData.current - np.mean(compData.current)
+        comp_data.current = comp_data.current - np.mean(comp_data.current)
 
-        testpol = np.zeros(len(compData.current))
+        testpol = np.zeros(len(comp_data.current))
         for i in range(np.size(testpol)):
             if i == 0:
                 next
             else:
-                testpol[i] = testpol[i - 1] + compData.current[i] * self.dt / self.area
+                testpol[i] = testpol[i - 1] + comp_data.current[i] * self.dt / self.area
 
         offset = max(testpol) - (max(testpol) - min(testpol)) / 2
 
         testpol = testpol - offset
-        compData.polarization = testpol
+        comp_data.polarization = testpol
 
-        return compData
+        return comp_data
 
     def bandstop_filter(self, y, freqs=[50, 70], plot=False):
         """
@@ -409,9 +409,9 @@ class HysteresisData(SampleData):
         y : complex ndarray 
             The filtered input data (y). Returned in time domain.
         """
-        N = len(y)
+        n = len(y)
 
-        f = np.fft.fftfreq(N, self.dt)  # cycles/sec
+        f = np.fft.fftfreq(n, self.dt)  # cycles/sec
         f = 2 * np.pi * self.dt * f  # rad/sample
 
         b, a = signal.butter(1, freqs / (0.5 / self.dt), btype='bandstop')
@@ -445,31 +445,31 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
-        N = len(self.time)
+        n = len(self.time)
 
         pf = np.fft.fft(y)
-        tf = np.linspace(0, 1 / (2 * self.dt), N // 2)
+        tf = np.linspace(0, 1 / (2 * self.dt), n // 2)
 
         fig1 = plt.figure()
         fig1.set_facecolor('white')
         plt.cla()
         ax1 = fig1.add_subplot(111)
         ax1.set_title(str(self.freq) + ' Hz ' + str(self.temp) + ' K')
-        datacursor(ax1.plot(tf, 2.0 / N * np.abs(pf[0:N // 2])))
+        datacursor(ax1.plot(tf, 2.0 / n * np.abs(pf[0:n // 2])))
         ax1.set_xlabel('frequency')
 
     #        ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
 
-    def hyst_plot(self, plotE=False):
+    def hyst_plot(self, plot_e=False):
         """
         Plots V vs P, V vs I, and time vs V given hysteresis measurement data.
         
         Parameters
         ----------
-        plotE : bool
+        plot_e : bool
             If True plots E instead of P
         """
-        if plotE:
+        if plot_e:
             fig1 = plt.figure()
             fig1.set_facecolor('white')
             ax1 = fig1.add_subplot(211)
@@ -529,13 +529,13 @@ class HysteresisData(SampleData):
         ax1.set_xlabel('count')
         ax1.set_ylabel('abs(dv/dt) (V/s)')
 
-    def ncv_plot(self, plotE=False):
+    def ncv_plot(self, plot_e=False):
         """
         Plots dP/dV (capacitance) of PV data.
         
         Parameters
         ----------
-        plotE : bool 
+        plot_e : bool
             If True plots E instead of P.
         
         Returns
@@ -548,11 +548,10 @@ class HysteresisData(SampleData):
 
         ncv = np.diff(self.polarization) / np.diff(self.voltage)
         ncv_v = 0.5 * (self.voltage[1:] + self.voltage[:-1])
-        if plotE:
+        if plot_e:
             ax1.plot(1E-6 * ncv_v / self.thickness, 1E6 * ncv)
             ax1.set_xlabel('Electric Field (MV/cm)')
             ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
-
 
         else:
             ax1.plot(ncv_v, 1E6 * ncv)
@@ -560,7 +559,7 @@ class HysteresisData(SampleData):
             ax1.set_ylabel('Capacitance ($\mu{}F/cm^2$)')
 
     def forc_calc(self, plot=False, linear=True,
-                  filtIter=None, filtDim=[1, 1]):
+                  filt_iter=None, filt_dim=[1, 1]):
         """
         Finds minima/maxima in voltage data, cuts down data to only reversal 
         curves, interpolates data onto a linear grid using griddata, and 
@@ -579,63 +578,63 @@ class HysteresisData(SampleData):
                 Turns plotting of results on if set to True
             linear : bool 
                 Switches to linear interpolation
-            filtIter : int
+            filt_iter : int
                 Number of rolling average filter iterations to apply to the 
                 mixed partial derivative of p.
-            filtDim : len 2 sequence of ints
+            filt_dim : len 2 sequence of ints
                 Size of filter for E & Er axes.
             
         Returns
         ----------
-            uniformE : 1d np array 
+            uniform_e : 1d np array
                 E values that correspond to prob
-            uniformEr : 1d np array
+            uniform_er : 1d np array
                 Er values that correspond to prob
             prob : 2d numpy array
                 Prob distribution of grains for given E,Er
         """
 
-        minimaIndex = []
-        maximaIndex = []
+        minima_index = []
+        maxima_index = []
         for i, v in enumerate(self.voltage):
             if i == 0:
                 continue
             elif i == len(self.voltage) - 2:
                 break
             if (v < self.voltage[i - 1]) & (v < self.voltage[i + 1]):
-                minimaIndex.append(i)
+                minima_index.append(i)
             if (v > self.voltage[i - 1]) & (v > self.voltage[i + 1]):
-                maximaIndex.append(i)
+                maxima_index.append(i)
 
-        if len(minimaIndex) < 2:
+        if len(minima_index) < 2:
             raise ValueError("Could not find two minima for FORC calculation. Aborting.")
 
-        vrFORC = []
-        vFORC = []
-        pFORC = []
-        for i, v in enumerate(minimaIndex):
-            vrFORC.extend([self.voltage[v - 1]] * (maximaIndex[i + 1] - v))
-            vFORC.extend(self.voltage[v:maximaIndex[i + 1]])
-            pFORC.extend(self.polarization[v:maximaIndex[i + 1]])
+        vr_forc = []
+        v_forc = []
+        p_forc = []
+        for i, v in enumerate(minima_index):
+            vr_forc.extend([self.voltage[v - 1]] * (maxima_index[i + 1] - v))
+            v_forc.extend(self.voltage[v:maxima_index[i + 1]])
+            p_forc.extend(self.polarization[v:maxima_index[i + 1]])
 
-        eFORC = np.asfarray(vFORC) / (self.thickness)  # V/cm
-        erFORC = np.asfarray(vrFORC) / (self.thickness)  # V/cm
+        e_forc = np.asfarray(v_forc) / (self.thickness)  # V/cm
+        er_forc = np.asfarray(vr_forc) / (self.thickness)  # V/cm
 
-        uniformE = np.linspace(eFORC.min(), eFORC.max(), 200)
-        uniformEr = np.unique(np.sort(erFORC))
-        uniformV = np.linspace(np.asfarray(vFORC).min(), np.asfarray(vFORC).max(), 200)
-        uniformVr = np.unique(np.sort(np.asfarray(vrFORC)))
+        uniform_e = np.linspace(e_forc.min(), e_forc.max(), 200)
+        uniform_er = np.unique(np.sort(er_forc))
+        uniform_v = np.linspace(np.asfarray(v_forc).min(), np.asfarray(v_forc).max(), 200)
+        uniform_vr = np.unique(np.sort(np.asfarray(vr_forc)))
 
         if linear:
-            grid = plt.mlab.griddata(eFORC, erFORC, pFORC, uniformE, uniformEr, 'linear')
+            grid = plt.mlab.griddata(e_forc, er_forc, p_forc, uniform_e, uniform_er, 'linear')
         else:
-            grid = plt.mlab.griddata(eFORC, erFORC, pFORC, uniformE, uniformEr)
-        dE, dEr = np.gradient(grid, uniformVr[1] - uniformVr[0], uniformV[1] - uniformV[0])
-        dEdE, dEdEr = np.gradient(dE, uniformVr[1] - uniformVr[0], uniformV[1] - uniformV[0])
-        if filtIter != None:
+            grid = plt.mlab.griddata(e_forc, er_forc, p_forc, uniform_e, uniform_er)
+        dE, dEr = np.gradient(grid, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
+        dEdE, dEdEr = np.gradient(dE, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
+        if filt_iter != None:
             mask = np.ma.getmask(dEdEr)  # store mask for later
             dEdEr = dEdEr.filled(0)  # fill mask to prevent filter NaN errors
-            for i in range(filtIter): dEdEr = flt.uniform_filter(dEdEr, filtDim)
+            for i in range(filt_iter): dEdEr = flt.uniform_filter(dEdEr, filt_dim)
             dEdEr = np.ma.masked_where(mask, dEdEr)  # reapply mask
         prob = abs(dEdEr) / np.sum(abs(dEdEr))  # normalize for prob dist
 
@@ -645,9 +644,9 @@ class HysteresisData(SampleData):
             plt.clf()
             ax4 = fig4.add_subplot(111)
             plt.set_cmap('jet')
-            #            FORCplot = ax4.contourf(uniformV,uniformVr,1E6*-dEdEr,75)
-            FORCplot = ax4.contourf(1E-6 * uniformE, 1E-6 * uniformEr, prob, 75)
-            cbar = plt.colorbar(FORCplot)
+            #            forc_plot = ax4.contourf(uniform_v,uniform_vr,1E6*-dEdEr,75)
+            forc_plot = ax4.contourf(1E-6 * uniform_e, 1E-6 * uniform_er, prob, 75)
+            cbar = plt.colorbar(forc_plot)
             #        cbar.formatter.set_scientific(True)
             cbar.update_ticks()
             cbar.set_label(r'Probability')
@@ -656,13 +655,13 @@ class HysteresisData(SampleData):
             ax4.set_xlabel("E (MV/cm)")
             ax4.set_ylabel("$E_r$ (MV/cm)")
             ax4.set_title('FORC Plot')
-            #            ax4.plot([uniformVr[0],uniformVr[-1]],[uniformVr[0],uniformVr[-1]],'k-')
+            #            ax4.plot([uniform_vr[0],uniform_vr[-1]],[uniform_vr[0],uniform_vr[-1]],'k-')
 
             fig5 = plt.figure()
             fig5.set_facecolor('white')
             plt.clf()
             ax5 = fig5.add_subplot(111)
-            ax5 = plt.scatter(vFORC, np.asfarray(pFORC) * 1E6, c=vrFORC, alpha=0.25)
+            ax5 = plt.scatter(v_forc, np.asfarray(p_forc) * 1E6, c=vr_forc, alpha=0.25)
             plt.xlabel("$V (V)$")
             plt.ylabel('$P_r (\mu{}C/cm^2)$')
             cb = plt.colorbar(ax5)
@@ -673,22 +672,22 @@ class HysteresisData(SampleData):
             fig5.set_facecolor('white')
             plt.clf()
             ax5 = fig5.add_subplot(111)
-            ax5 = plt.scatter(eFORC * 1E-6, np.asfarray(pFORC) * 1E6, c=erFORC * 1E-6, alpha=0.25)
+            ax5 = plt.scatter(e_forc * 1E-6, np.asfarray(p_forc) * 1E6, c=er_forc * 1E-6, alpha=0.25)
             plt.xlabel("E (MV/cm)")
             plt.ylabel('$P_r (\mu{}C/cm^2)$')
             cb = plt.colorbar(ax5)
             cb.set_label("$E_r$ (MV/cm)")
             plt.title('$\\rho{}^-$ as Used for FORC Plot')
 
-        return uniformE, uniformEr, prob
+        return uniform_e, uniform_er, prob
 
 
 class LeakageData(SampleData):
     def __init__(self, **kwargs):
         SampleData.__init__(self, **kwargs)
-        self.lcmVoltage = []
-        self.lcmCurrent = []
-        self.lcmParms = []
+        self.lcm_voltage = []
+        self.lcm_current = []
+        self.lcm_parms = []
 
     def lcm_read(self, filename):
         """
@@ -705,7 +704,7 @@ class LeakageData(SampleData):
         -------
         n/a
         """
-        self.fileName = filename
+        self.file_name = filename
 
         r = re.compile('.*(_| )(\d+)C.*')
         try:
@@ -724,14 +723,14 @@ class LeakageData(SampleData):
 
             for row in data:
                 if row:  # ignores blank lines
-                    self.lcmVoltage.append(row[0])
-                    self.lcmCurrent.append(row[1])
+                    self.lcm_voltage.append(row[0])
+                    self.lcm_current.append(row[1])
 
-        self.lcmVoltage = np.asfarray(self.lcmVoltage)  # V
-        self.lcmCurrent = self.area * 1E-6 * np.asfarray(self.lcmCurrent)  # A
+        self.lcm_voltage = np.asfarray(self.lcm_voltage)  # V
+        self.lcm_current = self.area * 1E-6 * np.asfarray(self.lcm_current)  # A
 
     def lcm_fit(self, func=leakage_func,
-                initGuess=np.array([2E-10, 2E-10, .8E-6, -1E-6, 1E-6, 0, -1])):
+                init_guess=np.array([2E-10, 2E-10, .8E-6, -1E-6, 1E-6, 0, -1])):
         """
         Attempts to fit parameters to leakage current, stores in hd object
         
@@ -739,16 +738,16 @@ class LeakageData(SampleData):
         ----------
         func : function 
             Defines eqn to be used to fit data
-        initGuess : np array of appropriate length to match func            
+        init_guess : np array of appropriate length to match func            
             Provides initial values for curve_fit
         Returns
         -------
         n/a
         """
         # FIXME: curve_fit has trouble converging with some data
-        self.lcmParms, pcov = curve_fit(func, self.lcmVoltage,
-                                        self.lcmCurrent, p0=initGuess)
-        print('Fit Parms:', self.lcmParms)
+        self.lcm_parms, pcov = curve_fit(func, self.lcm_voltage,
+                                         self.lcm_current, p0=init_guess)
+        print('Fit Parms:', self.lcm_parms)
         print('Std Dev:', np.sqrt(np.diag(pcov)))
 
     def lcm_plot(self, func=leakage_func):
@@ -759,11 +758,11 @@ class LeakageData(SampleData):
         fig.set_facecolor('white')
         plt.cla()
         ax = fig.add_subplot(111)
-        #        datacursor(ax.plot(self.lcmVoltage,np.log(np.abs(self.lcmCurrent))))
-        datacursor(ax.plot(self.lcmVoltage, 1E6 * self.lcmCurrent, 'o'))
-        if self.lcmParms != []:
-            #            ax.plot(self.lcmVoltage,np.log(np.abs(leakage_func(self.lcmVoltage,*self.lcmParms))))
-            ax.plot(self.lcmVoltage, 1E6 * func(self.lcmVoltage, *self.lcmParms))
+        #        datacursor(ax.plot(self.lcm_voltage,np.log(np.abs(self.lcm_current))))
+        datacursor(ax.plot(self.lcm_voltage, 1E6 * self.lcm_current, 'o'))
+        if self.lcm_parms:
+            #            ax.plot(self.lcm_voltage,np.log(np.abs(leakage_func(self.lcm_voltage,*self.lcm_parms))))
+            ax.plot(self.lcm_voltage, 1E6 * func(self.lcm_voltage, *self.lcm_parms))
         ax.set_xlabel('Voltage (V)')
         ax.set_ylabel('Leakage Current ($\mu{}A$)')
 

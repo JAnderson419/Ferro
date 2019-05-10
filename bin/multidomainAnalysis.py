@@ -81,7 +81,7 @@ landau.c = landau.c_calc(freqData, plot=1)
 compensatedData, landau.pr = landau.c_compensation(cCompData)
 hd.hyst_plot([cCompData, compensatedData],
              ['Before', 'After'],
-             plotE=False)
+             plot_e=False)
 freqCompData = list(map(lambda x:landau.c_compensation(x)[0], freqData))
 landau.rho_calc(freqData)
 
@@ -90,14 +90,14 @@ landau.rho_calc(freqData)
 freqDataLkgComp = hd.listRead(freqfiles, templkgfiles, thickness = t, area = a)
 cCompDataLkgComp = freqDataLkgComp[1]
 hd.hyst_plot([cCompData, cCompDataLkgComp],
-             ["With Leakage","Without Leakage"], plotE=False)
+             ["With Leakage","Without Leakage"], plot_e=False)
 
 ### FORC Calculation
 
 
 landau_forc = hd.HysteresisData(thickness = t, area = a)
 landau_forc.tsv_read(forcFile)
-landau_forc.hyst_plot(plotE=1)
+landau_forc.hyst_plot(plot_e=1)
 e, er, probs = landau_forc.forc_calc(plot = True)
     
 domains = landau.domain_gen(e, er, probs, n=100, plot = False)
