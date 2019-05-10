@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install codecov
+
+script:
+  - coverage run --source=ferro/ tests/
+
+after_success:
+  - codecov
