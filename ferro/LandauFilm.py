@@ -37,7 +37,7 @@ class LandauFilm:
         self.c = c  # F
         self.pr = pr
 
-    def c_calc(self, hystData, plot=False):
+    def c_calc(self, hyst_data, plot=False):
         """
         Calculates non-ferroelectric sample capacitance for the landau film 
         given a list of tf1000 DHM measurement CSV files, 
@@ -49,37 +49,39 @@ class LandauFilm:
         
         Parameters
         ----------
-        files : array_like of HysteresisData files.
-        
+        hyst_data : array_like of HysteresisData files.
+        plot: Boolean
+            Toggles display of matplotlib plot with data fit.
+
         Returns
         -------
-        iFit[0] : float
+        i_fit[0] : float
             Capacitance in farads
         """
 
-        medI = np.zeros(len(hystData))
-        freqs = np.zeros(len(hystData))
-        dvdt = np.zeros(len(hystData))
+        med_i = np.zeros(len(hyst_data))
+        freqs = np.zeros(len(hyst_data))
+        dvdt = np.zeros(len(hyst_data))
 
-        for i, d in enumerate(hystData):
+        for i, d in enumerate(hyst_data):
             freqs[i] = d.freq
             dvdt[i] = np.mean(np.abs(np.diff(d.voltage) / d.dt))
-            medI[i] = np.median(np.abs(d.current))
+            med_i[i] = np.median(np.abs(d.current))
 
-        iFit = np.polyfit(dvdt, medI, 1)
-        iFit_fn = np.poly1d(iFit)
-        er = iFit[0] * self.thickness / (self.area * sc.epsilon_0 * 1E-2)
+        i_fit = np.polyfit(dvdt, med_i, 1)
+        i_fit_fn = np.poly1d(i_fit)
+        er = i_fit[0] * self.thickness / (self.area * sc.epsilon_0 * 1E-2)
 
         if plot:
             fig2 = plt.figure()
             fig2.set_facecolor('white')
             ax2 = fig2.add_subplot(111)
-            ax2.set_title('Capacitance = {:0.3e} F, er= {:.3f}'.format(iFit[0], er))
-            datacursor(ax2.plot(dvdt, medI * 1E6, 'o', dvdt, 1E6 * iFit_fn(dvdt), '--k'))
+            ax2.set_title('Capacitance = {:0.3e} F, er= {:.3f}'.format(i_fit[0], er))
+            datacursor(ax2.plot(dvdt, med_i * 1E6, 'o', dvdt, 1E6 * i_fit_fn(dvdt), '--k'))
             ax2.set_xlabel('dV/dt (V/s)')
             ax2.set_ylabel('Current ($\mu{}A$)')
 
-        return iFit[0]
+        return i_fit[0]
 
     def c_compensation(self, data, plot=False):
         """ 
@@ -88,10 +90,12 @@ class LandauFilm:
         Parameters
         ----------
         data: HysteresisData object
-            
+        plot: Boolean
+            Toggles display of matplotlib plot of original and compensated data.
+
         Returns
         -------
-        compData: HysteresisData object
+        comp_data: HysteresisData object
             identical to input but with C*dv/dt current subtracted out
             and polarization recalculated from new current
         pr: float
@@ -100,7 +104,7 @@ class LandauFilm:
 
         # TODO: Test with high leakage current samples
 
-        compData = copy.deepcopy(data)  #
+        comp_data = copy.deepcopy(data)  #
 
         dvdt = np.mean(np.abs(np.diff(data.voltage) / data.dt))
         #        dvdt = (data.voltage[1]-data.voltage[0])/data.dt
@@ -108,28 +112,28 @@ class LandauFilm:
 
         for j, i in enumerate(data.current):
             if abs(i) >= icap:
-                compData.current[j] = i - np.sign(i) * icap
+                comp_data.current[j] = i - np.sign(i) * icap
             else:
-                compData.current[j] = 0
+                comp_data.current[j] = 0
 
         testpol = np.zeros(len(data.current))
         for i in range(np.size(testpol)):
             if i == 0:
                 next
             else:
-                testpol[i] = testpol[i - 1] + compData.current[i] * compData.dt / compData.area
+                testpol[i] = testpol[i - 1] + comp_data.current[i] * comp_data.dt / comp_data.area
 
         pr = (max(testpol) - min(testpol)) / 2
         offset = max(testpol) - (max(testpol) - min(testpol)) / 2
 
         testpol = testpol - offset
-        compData.polarization = testpol
+        comp_data.polarization = testpol
 
         if plot:
             data.hyst_plot()
-            compData.hyst_plot()
+            comp_data.hyst_plot()
 
-        return compData, pr
+        return comp_data, pr
 
     def domain_gen(self, e, er, prob, n=100, plot=False, retParms=False):
         """
@@ -151,7 +155,7 @@ class LandauFilm:
             
         Returns
         -------
-        domainList: list containing domain objects created from generated
+        domain_list: list containing domain objects created from generated
                     parameters.
 
         domains: 2d array of length n by 4 containing domain parameters:
@@ -170,7 +174,7 @@ class LandauFilm:
             else:
                 index[i] = index[i - 1] + 1
         #        print (probf)
-        domainList = []
+        domain_list = []
         domains = np.zeros([n, 4])
         for i in range(n):
             j = int(np.random.choice(index, p=probf))
@@ -180,8 +184,8 @@ class LandauFilm:
             domains[i, 1] = ergrain
             domains[i, 2] = (egrain - ergrain) / 2  # ec
             domains[i, 3] = (egrain + ergrain) / 2  # ebias
-            genDomain = LandauDomain(self, self.area / n, domains[i, 2], domains[i, 3])
-            domainList.append(genDomain)
+            gen_domain = LandauDomain(self, self.area / n, domains[i, 2], domains[i, 3])
+            domain_list.append(gen_domain)
 
         if plot:
             fig1 = plt.figure()
@@ -194,11 +198,11 @@ class LandauFilm:
             ax1.set_ylabel("$E_r$ (MV/cm)")
 
         if retParms:
-            return (domainList, domains)
+            return (domain_list, domains)
         else:
-            return domainList
+            return domain_list
 
-    def get_Ufe(self, pvals, domains):
+    def get_ufe(self, pvals, domains):
         """
         Sums potential energy of all ferroelectric domains in a film to get
         the overall energy landscape.
@@ -215,12 +219,12 @@ class LandauFilm:
 
         u = np.zeros(len(pvals))
         for i in domains:
-            u = u + i.get_Ufe(pvals)
+            u = u + i.get_ufe(pvals)
 
         return u
 
-    def calc_efe_preisach(self, esweep, domains, initState=None,
-                          plot=False, cAdd=False):
+    def calc_efe_preisach(self, esweep, domains, init_state=None,
+                          plot=False, c_add=False):
         """
         Models domains as simple hystereons using ec, pr
         
@@ -228,7 +232,7 @@ class LandauFilm:
         ----------
         esweep: np array of field values for which to calculate Pr
         domains: list containing all domain objects in the film
-        initState: np array containing initial state of hysterons (-1 or 1)
+        init_state: np array containing initial state of hysterons (-1 or 1)
         plot: bool, triggers plotting of generated hysteresis curve
             
         Returns
@@ -236,10 +240,10 @@ class LandauFilm:
         p: np array, polarization charge values for film (C/cm^2)
         state: np array, final state of hysterons
         """
-        if initState == None:
+        if init_state == None:
             state = -np.ones(len(domains))
         else:
-            state = initState
+            state = init_state
 
         sweepDir = np.gradient(esweep)
 
@@ -256,7 +260,7 @@ class LandauFilm:
                 p[j] = p[j] + d.pr * d.area * state[i]
 
                 # convert back into charge density
-        if cAdd:
+        if c_add:
             p = (p + esweep * self.thickness * self.c) / self.area
         else:
             p = p / self.area
@@ -273,14 +277,14 @@ class LandauFilm:
 
         return p, state
 
-    def u_plot(self, pVals, uFe):
+    def u_plot(self, pvals, ufe):
         """
         Plots U vs P for landau film.
         
         Parameters
         ----------
-        pVals: 1d np array of polarization charge values
-        uFe: 1d np array of energy densities calculated at xVals.
+        pvals: 1d np array of polarization charge values
+        ufe: 1d np array of energy densities calculated at xVals.
             
         Returns
         -------
@@ -291,18 +295,18 @@ class LandauFilm:
         fig1.set_facecolor('white')
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        datacursor(ax1.plot(pVals * 1E6, uFe))
+        datacursor(ax1.plot(pvals * 1E6, ufe))
         ax1.set_xlabel('Polarization Charge, P (uC/cm^2)')
         ax1.set_ylabel('Energy, U')
 
-    def e_plot(self, pVals, eFe, ec=None, ebias=0):
+    def e_plot(self, pvals, efe, ec=None, ebias=0):
         """
         Plots E vs P for landau film.
         
         Parameters
         ----------
-        pVals: 1d np array of polarization charge values
-        eFe: 1d np array of electric field calculated at xVals.
+        pvals: 1d np array of polarization charge values
+        efe: 1d np array of electric field calculated at xVals.
         ec: float, overlays dotted line at ec+ebias and -ec+ebias on plot
         ebias: float, defines ebias. Used only if ec defined
             
@@ -315,14 +319,14 @@ class LandauFilm:
         fig1.set_facecolor('white')
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        datacursor(ax1.plot(eFe * 1E-6, pVals * 1E6))
+        datacursor(ax1.plot(efe * 1E-6, pvals * 1E6))
         ax1.set_ylabel('Polarization Charge, P (uC/cm^2)')
         ax1.set_xlabel('Electric Field, MV/cm')
         if ec != None:
             e1 = (-ec - ebias) * 1E-6
             e2 = (ec - ebias) * 1E-6
-            ax1.plot([e1, e1], [np.min(pVals) * 1E6, np.max(pVals) * 1E6], 'r--')
-            ax1.plot([e2, e2], [np.min(pVals) * 1E6, np.max(pVals) * 1E6], 'r--')
+            ax1.plot([e1, e1], [np.min(pvals) * 1E6, np.max(pvals) * 1E6], 'r--')
+            ax1.plot([e2, e2], [np.min(pvals) * 1E6, np.max(pvals) * 1E6], 'r--')
 
 
 class LandauSimple(LandauFilm):
@@ -334,7 +338,7 @@ class LandauSimple(LandauFilm):
         LandauFilm.__init__(self, **kwargs)
         self.a = a
 
-    def aCalc(self, c=None, t=None):
+    def a_calc(self, c=None, t=None):
         if c is None:
             c = self.c
         if t is None:
@@ -354,7 +358,7 @@ class LandauFull(LandauFilm):
         self.T0 = T0
         self.rho = rho
 
-    def rho_calc(self, hystData):
+    def rho_calc(self, hyst_data):
         """
         IN DEVELOPMENT - needs further testing
         
@@ -371,18 +375,18 @@ class LandauFull(LandauFilm):
         n/a - not implemented yet 
         """
         # TODO: work on improving rho calculation (noise from C, leakage I)
-        cComp = 0
+        c_comp = 0
         pmax = []
-        for f in hystData:
+        for f in hyst_data:
             pmax.append(np.max(f.polarization))
 
         pmax = np.asfarray(pmax)
         p = np.min(pmax)
 
-        dpdt = np.zeros(len(hystData))
-        e = np.zeros(len(hystData))
+        dpdt = np.zeros(len(hyst_data))
+        e = np.zeros(len(hyst_data))
 
-        for i, d in enumerate(hystData):
+        for i, d in enumerate(hyst_data):
             dt = d.time[1] - d.time[0]
             # print(dvdt[i],"\n", d.fileName)
             dvdt = (d.voltage[1] - d.voltage[0]) / dt
@@ -391,7 +395,7 @@ class LandauFull(LandauFilm):
                 if j == 0:
                     next
                 else:
-                    if cComp == 1:
+                    if c_comp == 1:
                         dvdt = (d.voltage[j] - d.voltage[j - 1]) / dt
                         d.current[j] = d.current[j] - self.c * dvdt
 
@@ -433,7 +437,7 @@ class LandauFull(LandauFilm):
         n/a - not implemented yet       
         """
         # FIXME: a0 is an order of magnitude too high - need better temp data?
-        cComp = 0
+        c_comp = 0
         pmax = []
         for f in hystData:
             pmax.append(np.max(f.polarization))
@@ -455,7 +459,7 @@ class LandauFull(LandauFilm):
                 if j == 0:
                     next
                 else:
-                    if cComp == 1:
+                    if c_comp == 1:
                         dvdt = (d.voltage[j] - d.voltage[j - 1]) / dt
                         d.current[j] = d.current[j] - self.c * dvdt
 
@@ -498,13 +502,13 @@ class LandauDomain:
     aTerm is alpha or alpha*(T-Tc) coefficient, depending on film model used.
     """
 
-    def __init__(self, landau, area, ec, ebias, aTerm=0, b=0, g=0):
+    def __init__(self, landau, area, ec, ebias, a_term=0, b=0, g=0):
         self.pr = landau.pr
         self.t = landau.thickness
         self.c = landau.c
         self.ec = ec
         self.ebias = ebias
-        self.a = aTerm
+        self.a = a_term
         self.b = b
         self.g = g
         self.area = area
@@ -569,12 +573,12 @@ class LandauDomain:
 
     def parm_fit(self, plot=False):
         guess = np.asarray((-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6))
-        aGuess, bGuess, gGuess = guess
+        a_guess, b_guess, g_guess = guess
         guessRes = 26
 
-        avals = np.linspace(aGuess / 1E3, aGuess * 1E3, guessRes)
-        bvals = np.linspace(bGuess / 1E3, bGuess * 1E3, guessRes)
-        gvals = np.linspace(gGuess / 1E4, gGuess * 1E4, guessRes)
+        avals = np.linspace(a_guess / 1E3, a_guess * 1E3, guessRes)
+        bvals = np.linspace(b_guess / 1E3, b_guess * 1E3, guessRes)
+        gvals = np.linspace(g_guess / 1E4, g_guess * 1E4, guessRes)
 
         err = np.empty([guessRes, guessRes, guessRes])
         for i, a in enumerate(avals):

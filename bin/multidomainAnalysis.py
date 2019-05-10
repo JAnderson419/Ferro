@@ -106,7 +106,7 @@ elimit = 1.1*max(cCompData.voltage)/t
 
 esweep = np.linspace(-elimit,elimit,num=1000)
 esweep = np.append(esweep,esweep[::-1])
-res = landau.calc_efe_preisach(esweep, domains, cAdd = True, plot=0)
+res = landau.calc_efe_preisach(esweep, domains, c_add= True, plot=0)
 
 # Plots FORC results vs actual hysteresis measurement ##
 fig = plt.figure()
