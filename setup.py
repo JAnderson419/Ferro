@@ -17,7 +17,7 @@ setup(
     packages=['ferro',],
     license='Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International',
     description='Manipulation and Modeling of Ferroelectric Test Data',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         'scipy',
         'numpy',
