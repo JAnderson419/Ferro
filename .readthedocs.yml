@@ -22,7 +22,7 @@ python:
   install:
     - method: pip
       path: .
-      extrarequirements:
+      extra_requirements:
         - numpydocs
     - method: setuptools
       path: ferro
