@@ -23,6 +23,6 @@ python:
     - method: pip
       path: .
       extra_requirements:
-        - numpydocs
+        - numpydoc
     - method: setuptools
       path: .
