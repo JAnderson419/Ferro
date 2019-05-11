@@ -20,9 +20,8 @@ formats: all
 python:
   version: 3.7
   install:
-    - method: pip
+    - method: easy_install
+      requirements: numpydoc
       path: .
-      extra_requirements:
-        - numpydoc
     - method: setuptools
       path: .
