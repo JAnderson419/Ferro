@@ -760,7 +760,7 @@ class LeakageData(SampleData):
         ax = fig.add_subplot(111)
         #        datacursor(ax.plot(self.lcm_voltage,np.log(np.abs(self.lcm_current))))
         datacursor(ax.plot(self.lcm_voltage, 1E6 * self.lcm_current, 'o'))
-        if self.lcm_parms:
+        if self.lcm_parms != []:
             #            ax.plot(self.lcm_voltage,np.log(np.abs(leakage_func(self.lcm_voltage,*self.lcm_parms))))
             ax.plot(self.lcm_voltage, 1E6 * func(self.lcm_voltage, *self.lcm_parms))
         ax.set_xlabel('Voltage (V)')
