@@ -8,7 +8,7 @@ Tests fft_plot and bandstop_filter functions of HysteresisData
 """
 
 import matplotlib.pyplot as plt
-from os.path import join
+from os.path import join, dirname, realpath
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
@@ -16,7 +16,7 @@ plt.close('all')
 
 
 
-RTfreq1000hz = join('.', 'testData', 'RT WhiteA', 'RT WhiteA 1Hz 8V 1Average Table3.tsv')
+RTfreq1000hz = join(dirname(realpath(__file__)), 'testData', 'RT WhiteA', 'RT WhiteA 1Hz 8V 1Average Table3.tsv')
 
 RTdata = hd.HysteresisData()
 RTdata.tsv_read(RTfreq1000hz)

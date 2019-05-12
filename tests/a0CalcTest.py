@@ -6,14 +6,14 @@ Created on Fri May 26 12:50:08 2017
 """
 
 import matplotlib.pyplot as plt
-from os.path import join
+from os.path import join, dirname, realpath
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
 plt.close('all')
 
 
-sampledir = join('.', 'testData', 'hfo2_MFM')
+sampledir = join(dirname(realpath(__file__)), 'testData', 'hfo2_MFM')
 freqdir = join(sampledir, 'H9_x9y4_1e4_freq')
 freqfiles = hd.dir_read(freqdir)
 freqdata = hd.list_read(freqfiles)
