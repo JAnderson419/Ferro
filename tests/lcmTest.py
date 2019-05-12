@@ -14,9 +14,9 @@ from context import HysteresisData as hd
 plt.close('all')
 
 tempdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
-tempfiles = hd.dirRead(tempdir)
+tempfiles = hd.dir_read(tempdir)
 templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
-templkgfiles = hd.dirRead(templkgdir)
+templkgfiles = hd.dir_read(templkgdir)
 
 datafile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps\H9 die (9,4) S3 79C 100Hz 3V 1Average Table3.tsv"
 lkgfile = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg\H9 die (9,4) S3 79C 2s step Table2.tsv"

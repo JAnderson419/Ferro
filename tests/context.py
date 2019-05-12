@@ -9,7 +9,7 @@ Copied from http://python-guide-pt-br.readthedocs.io/en/latest/writing/structure
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../ferro')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.join('..','ferro'))))
 
 import HysteresisData
 import LandauFilm

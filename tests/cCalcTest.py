@@ -10,7 +10,7 @@ from context import HysteresisData as hd
 
 plt.close('all')
 discretecapdir = r'.\testData\2pt2nF_discrete_freqs'
-dcfiles = hd.dirRead(discretecapdir)
-data = hd.listRead(dcfiles)
+dcfiles = hd.dir_read(discretecapdir)
+data = hd.list_read(dcfiles)
 testfilm = lf.LandauFilm()   
 cde = testfilm.c_calc(data, plot=1)
