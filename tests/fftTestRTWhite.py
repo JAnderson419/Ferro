@@ -8,6 +8,7 @@ Tests fft_plot and bandstop_filter functions of HysteresisData
 """
 
 import matplotlib.pyplot as plt
+from os.path import join
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
@@ -15,14 +16,14 @@ plt.close('all')
 
 
 
-RTfreq1000hz = r".\testData\RT WhiteA\RT WhiteA 1Hz 8V 1Average Table3.tsv"
+RTfreq1000hz = join('.', 'testData', 'RT WhiteA', 'RT WhiteA 1Hz 8V 1Average Table3.tsv')
 
 RTdata = hd.HysteresisData()
 RTdata.tsv_read(RTfreq1000hz)
 RTdata.hyst_plot()
 
 RTdata.fft_plot(RTdata.current)
-RTdata.current = RTdata.bandstop_filter(RTdata.current, plot = True)
+RTdata.current = RTdata.bandstop_filter(RTdata.current, plot=True)
 RTdata.polarization = RTdata.bandstop_filter(RTdata.polarization)
 RTdata.fft_plot(RTdata.current)
 #RTdata.lpFilter(RTdata.polarization)

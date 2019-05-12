@@ -6,16 +6,17 @@ Created on Fri May 26 12:50:08 2017
 """
 
 import matplotlib.pyplot as plt
+from os.path import join
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
 plt.close('all')
 
-
-RTfreqDir = r".\testData\RT WhiteA\RTWhiteAFreq"
+sampledir = join('.', 'testData', 'RT WhiteA')
+RTfreqDir = join(sampledir, 'RTWhiteAFreq')
 RTfreqFiles = hd.dir_read(RTfreqDir)
 RTfreqData = hd.list_read(RTfreqFiles)
-RTfreq100hz = r".\testData\RT WhiteA\RTWhiteAFreq\RT WhiteA 100Hz 8V 1Average Table1.tsv"
+RTfreq100hz = join(RTfreqDir, 'RT WhiteA 100Hz 8V 1Average Table1.tsv')
 
 RT100data = hd.HysteresisData()
 RT100data.tsv_read(RTfreq100hz)

@@ -6,12 +6,15 @@ Created on Fri May 26 12:50:08 2017
 """
 
 import matplotlib.pyplot as plt
+from os.path import join
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
 plt.close('all')
 
-freqdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_freq"
+
+sampledir = join('.', 'testData', 'hfo2_MFM')
+freqdir = join(sampledir, 'H9_x9y4_1e4_freq')
 freqfiles = hd.dir_read(freqdir)
 freqdata = hd.list_read(freqfiles)
 hfo2 = lf.LandauFull(thickness=13E-7, area=6579E-8)
@@ -19,10 +22,10 @@ hfo2 = lf.LandauFull(thickness=13E-7, area=6579E-8)
 hfo2.c = hfo2.c_calc(freqdata, plot=1)
 hfo2.rho_calc(freqdata)
 
-tempdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
+tempdir = join(sampledir, 'H9_x9y4_1e4_S3_temps')
 tempfiles = hd.dir_read(tempdir)
 tempdata = hd.list_read(tempfiles)
-templkgdir = r".\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
+templkgdir = join(sampledir, 'H9_x9y4_1e4_S3_tempslkg')
 templkgfiles = hd.dir_read(templkgdir)
 
 hfo2.a0 = hfo2.a0_calc(tempdata)
