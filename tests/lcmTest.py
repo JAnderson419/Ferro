@@ -8,13 +8,13 @@ Tests fft_plot and bandstop_filter functions of HysteresisData
 """
 
 import matplotlib.pyplot as plt
-from os.path import join
+from os.path import join, dirname, realpath
 from context import LandauFilm as lf
 from context import HysteresisData as hd
 
 plt.close('all')
 
-sampledir = join('.', 'testData', 'hfo2_MFM')
+sampledir = join(dirname(realpath(__file__)), 'testData', 'hfo2_MFM')
 tempdir = join(sampledir, 'H9_x9y4_1e4_S3_temps')
 tempfiles = hd.dir_read(tempdir)
 templkgdir = join(sampledir, 'H9_x9y4_1e4_S3_tempslkg')
