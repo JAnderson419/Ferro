@@ -222,7 +222,7 @@ def lcm_plot(data, legend=None):
     for d in data:
         line = ax.plot(d.lcm_voltage, 1E6 * d.lcm_current)
         lines.append(line[0])
-        if d.lcmParms != []:
+        if d.lcm_parms != []:
             ax.plot(d.lcm_voltage, 1E6 * leakage_func(d.lcm_voltage, *d.lcm_parms))
     ax.set_xlabel('Voltage (V)')
     ax.set_ylabel('Leakage Current ($\mu{}A$)')
