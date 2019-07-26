@@ -18,6 +18,7 @@ from mpldatacursor import datacursor
 from scipy.optimize import curve_fit
 from scipy import signal
 from scipy.ndimage import filters as flt
+from scipy.interpolate import griddata
 
 
 # matplotlib.rcParams.update({'font.size': 16})
@@ -624,11 +625,12 @@ class HysteresisData(SampleData):
         uniform_er = np.unique(np.sort(er_forc))
         uniform_v = np.linspace(np.asfarray(v_forc).min(), np.asfarray(v_forc).max(), 200)
         uniform_vr = np.unique(np.sort(np.asfarray(vr_forc)))
+        xi_grid, yi_grid = np.meshgrid(uniform_e, uniform_er)
 
         if linear:
-            grid = plt.mlab.griddata(e_forc, er_forc, p_forc, uniform_e, uniform_er, 'linear')
+            grid = griddata((e_forc, er_forc), p_forc, (xi_grid, yi_grid), method='linear')
         else:
-            grid = plt.mlab.griddata(e_forc, er_forc, p_forc, uniform_e, uniform_er)
+            grid = griddata((e_forc, er_forc), p_forc, (xi_grid, yi_grid), method='nearest')
         dE, dEr = np.gradient(grid, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
         dEdE, dEdEr = np.gradient(dE, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
         if filt_iter != None:

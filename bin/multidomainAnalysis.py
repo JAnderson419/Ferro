@@ -17,30 +17,30 @@ device = 0
 
 ### Radiant Technologies White B ###
 if device == 0:
-    freqdir = r"..\ferro\tests\testData\RTWhiteB\RTWhiteB_freqs"
+    freqdir = r"..\tests\testData\RTWhiteB\RTWhiteB_freqs"
     tempdir = None
-    templkgdir = r"..\ferro\tests\testData\RTWhiteB\RTWHITEB_lkg"
-    forcFile = r"..\ferro\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table1.tsv"
+    templkgdir = r"..\tests\testData\RTWhiteB\RTWHITEB_lkg"
+    forcFile = r"..\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table1.tsv"
     t = 255E-7 
     a = 1E-4 # mask defined area that was used in measurement 
     aReal = 1E-4 # includes effect of undercut during M1 etch
 
 ### Radiant Technologies White A ###
 if device == 1:
-    freqdir = r"..\ferro\tests\testData\RT WhiteA\RTWhiteAFreq"
+    freqdir = r"..\tests\testData\RT WhiteA\RTWhiteAFreq"
     tempdir = None
-    templkgdir = r"..\ferro\tests\testData\RTWhiteB\RTWHITEB_lkg" 
-    forcFile = r"..\ferro\tests\testData\\RT WhiteA\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table2.tsv"
+    templkgdir = r"..\tests\testData\RTWhiteB\RTWHITEB_lkg"
+    forcFile = r"..\tests\testData\\RT WhiteA\RTWhiteAFORC\RT WhiteA 0Hz 7V 1Average Table2.tsv"
     t = 255E-7 
     a = 1E-4 # mask defined area that was used in measurement 
     aReal = 1E-4 # includes effect of undercut during M1 etch
     
 ### FeFETD1 - FE ###
 if device == 2:
-    freqdir = r"..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs"
-    tempdir = r"..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_temps"
-    templkgdir = r"..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg"
-    forcFile = r"..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_forc\FeFETD1_die84_MFS+_100_10x10 0Hz 5V 1Average Table1.tsv"
+    freqdir = r"..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs"
+    tempdir = r"..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_temps"
+    templkgdir = r"..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg"
+    forcFile = r"..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_forc\FeFETD1_die84_MFS+_100_10x10 0Hz 5V 1Average Table1.tsv"
     t = 10E-7 
     a = 1E-4 # mask defined area that was used in measurement 
     aReal = 8.1E3 # includes effect of undercut during M1 etch
@@ -48,16 +48,16 @@ if device == 2:
 
 #### FeFETD5 - AFE ###
 if device == 3:
-    freqdir = r"..\ferro\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_freqs"
-    tempdir = r"..\ferro\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_temps"
-    templkgdir = r"..\ferro\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_lkg"
-    forcFile = r"..\ferro\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_FORC\FeFETD5_die68_MFS+_60_20x20_FORC_5V 0Hz 5V 1Average Table2.tsv"
+    freqdir = r"..\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_freqs"
+    tempdir = r"..\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_temps"
+    templkgdir = r"..\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_lkg"
+    forcFile = r"..\tests\testData\FeFETD5\MFS+\die84\FeFETD5_die84_MFS+_60_20x20_FORC\FeFETD5_die68_MFS+_60_20x20_FORC_5V 0Hz 5V 1Average Table2.tsv"
     t = 10E-7
     a = 2.4E-4
     aReal = 2.166E4 # includes effect of undercut during M1 etch
 ################
 
-landau = lf.LandauFull(thickness = t, area = aReal)
+landau = lf.LandauFull(thickness=t, area=aReal)
 templkgfiles = hd.dirRead(templkgdir)
 
 if tempdir != None:
