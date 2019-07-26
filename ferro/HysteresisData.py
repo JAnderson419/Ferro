@@ -631,12 +631,14 @@ class HysteresisData(SampleData):
             grid = griddata((e_forc, er_forc), p_forc, (xi_grid, yi_grid), method='linear')
         else:
             grid = griddata((e_forc, er_forc), p_forc, (xi_grid, yi_grid), method='nearest')
+        grid = np.ma.masked_equal(grid, np.NaN)
         dE, dEr = np.gradient(grid, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
         dEdE, dEdEr = np.gradient(dE, uniform_vr[1] - uniform_vr[0], uniform_v[1] - uniform_v[0])
         if filt_iter != None:
             mask = np.ma.getmask(dEdEr)  # store mask for later
             dEdEr = dEdEr.filled(0)  # fill mask to prevent filter NaN errors
-            for i in range(filt_iter): dEdEr = flt.uniform_filter(dEdEr, filt_dim)
+            for i in range(filt_iter):
+                dEdEr = flt.uniform_filter(dEdEr, filt_dim)
             dEdEr = np.ma.masked_where(mask, dEdEr)  # reapply mask
         prob = abs(dEdEr) / np.sum(abs(dEdEr))  # normalize for prob dist
 
