@@ -8,13 +8,16 @@ Welcome to Ferro's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
    
    Introduction <intro>
-   Data Handling Classes <data>
-   Film Modeling Classes <modeling>
 
+.. autosummary::
+   :toctree: _autosummary
+
+    ferro.HysteresisData
+    ferro.
 
 
 Indices and tables
