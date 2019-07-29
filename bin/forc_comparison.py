@@ -10,8 +10,8 @@ from context import HysteresisData as hd
 
 plt.close('all')
 
-forcFile1 = r"..\ferro\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table1.tsv"
-forcFile2 = r"..\ferro\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table3.tsv"
+forcFile1 = r"..\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table1.tsv"
+forcFile2 = r"..\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table3.tsv"
 t = 255E-7 
 a = 1E-4 # mask defined area that was used in measurement 
 

@@ -13,18 +13,18 @@ from context import HysteresisData as hd
 
 plt.close('all')
 
-freqdir = r"..\ferro\tests\testData\hfo2_MFM\H9_x9y4_1e4_freq"
-tempdir = r"..\ferro\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
-templkgdir = r"..\ferro\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
-forcFile = r"..\ferro\tests\testData\hfo2_MFM\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table1.tsv"
+freqdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_freq"
+tempdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
+templkgdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
+forcFile = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table1.tsv"
 
-templkgfiles = hd.dirRead(templkgdir)
+templkgfiles = hd.dir_read(templkgdir)
 
-tempfiles = hd.dirRead(tempdir)
-tempData = hd.listRead(tempfiles, templkgfiles)
+tempfiles = hd.dir_read(tempdir)
+tempData = hd.list_read(tempfiles, templkgfiles)
 
-freqfiles = hd.dirRead(freqdir)
-freqData = hd.listRead(freqfiles)
+freqfiles = hd.dir_read(freqdir)
+freqData = hd.list_read(freqfiles)
 hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
 cCompData = freqData[0]
 
@@ -35,7 +35,7 @@ hfo2.rho_calc(freqData)
 
 hfo2.a0 = hfo2.a0_calc(tempData)
 
-freqDataLkgComp = hd.listRead(freqfiles, templkgfiles)
+freqDataLkgComp = hd.list_read(freqfiles, templkgfiles)
 cCompDataLkgComp = freqDataLkgComp[0]
 hd.hyst_plot([cCompData, cCompDataLkgComp],
              ["With Leakage","Without Leakage"], plot_e=1)

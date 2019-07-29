@@ -58,22 +58,22 @@ if device == 3:
 ################
 
 landau = lf.LandauFull(thickness=t, area=aReal)
-templkgfiles = hd.dirRead(templkgdir)
+templkgfiles = hd.dir_read(templkgdir)
 
 if tempdir != None:
-    tempfiles = hd.dirRead(tempdir)
+    tempfiles = hd.dir_read(tempdir)
 
     if leakageComp:
-        tempData = hd.listRead(tempfiles, templkgfiles, plot = False,
+        tempData = hd.list_read(tempfiles, templkgfiles, plot = False,
                                thickness = t, area = a)
     else:
-        tempData = hd.listRead(tempfiles, plot = False,
+        tempData = hd.list_read(tempfiles, plot = False,
                                 thickness = t, area = a)     
     
     landau.a0 = landau.a0_calc(tempData)
 
-freqfiles = hd.dirRead(freqdir)
-freqData = hd.listRead(freqfiles, thickness = t, area = a)
+freqfiles = hd.dir_read(freqdir)
+freqData = hd.list_read(freqfiles, thickness = t, area = a)
 
 cCompData = freqData[1]
 
@@ -87,7 +87,7 @@ landau.rho_calc(freqData)
 
 
 
-freqDataLkgComp = hd.listRead(freqfiles, templkgfiles, thickness = t, area = a)
+freqDataLkgComp = hd.list_read(freqfiles, templkgfiles, thickness = t, area = a)
 cCompDataLkgComp = freqDataLkgComp[1]
 hd.hyst_plot([cCompData, cCompDataLkgComp],
              ["With Leakage","Without Leakage"], plot_e=False)
