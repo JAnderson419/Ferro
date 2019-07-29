@@ -31,7 +31,7 @@ class LandauFilm:
     LandauFull implements rho, Tc, and a0 for more detailed analysis.
     """
 
-    def __init__(self, thickness=13E-7, area=6606E-8, c=0, pr=0):
+    def __init__(self, thickness=13e-7, area=6606e-8, c=0, pr=0):
         self.thickness = thickness  # cm
         self.area = area  # cm^2
         self.c = c  # F
@@ -70,16 +70,18 @@ class LandauFilm:
 
         i_fit = np.polyfit(dvdt, med_i, 1)
         i_fit_fn = np.poly1d(i_fit)
-        er = i_fit[0] * self.thickness / (self.area * sc.epsilon_0 * 1E-2)
+        er = i_fit[0] * self.thickness / (self.area * sc.epsilon_0 * 1e-2)
 
         if plot:
             fig2 = plt.figure()
-            fig2.set_facecolor('white')
+            fig2.set_facecolor("white")
             ax2 = fig2.add_subplot(111)
-            ax2.set_title('Capacitance = {:0.3e} F, er= {:.3f}'.format(i_fit[0], er))
-            datacursor(ax2.plot(dvdt, med_i * 1E6, 'o', dvdt, 1E6 * i_fit_fn(dvdt), '--k'))
-            ax2.set_xlabel('dV/dt (V/s)')
-            ax2.set_ylabel('Current ($\mu{}A$)')
+            ax2.set_title("Capacitance = {:0.3e} F, er= {:.3f}".format(i_fit[0], er))
+            datacursor(
+                ax2.plot(dvdt, med_i * 1e6, "o", dvdt, 1e6 * i_fit_fn(dvdt), "--k")
+            )
+            ax2.set_xlabel("dV/dt (V/s)")
+            ax2.set_ylabel("Current ($\mu{}A$)")
 
         return i_fit[0]
 
@@ -121,7 +123,10 @@ class LandauFilm:
             if i == 0:
                 next
             else:
-                testpol[i] = testpol[i - 1] + comp_data.current[i] * comp_data.dt / comp_data.area
+                testpol[i] = (
+                    testpol[i - 1]
+                    + comp_data.current[i] * comp_data.dt / comp_data.area
+                )
 
         pr = (max(testpol) - min(testpol)) / 2
         offset = max(testpol) - (max(testpol) - min(testpol)) / 2
@@ -189,10 +194,10 @@ class LandauFilm:
 
         if plot:
             fig1 = plt.figure()
-            fig1.set_facecolor('white')
+            fig1.set_facecolor("white")
             plt.cla()
             ax1 = fig1.add_subplot(111)
-            ax1.plot(1E-6 * domains[:, 0], 1E-6 * domains[:, 1], 'o')
+            ax1.plot(1e-6 * domains[:, 0], 1e-6 * domains[:, 1], "o")
             ax1.set_title("Randomly Generated Grain Distribution")
             ax1.set_xlabel("E (MV/cm)")
             ax1.set_ylabel("$E_r$ (MV/cm)")
@@ -223,8 +228,9 @@ class LandauFilm:
 
         return u
 
-    def calc_efe_preisach(self, esweep, domains, init_state=None,
-                          plot=False, c_add=False):
+    def calc_efe_preisach(
+        self, esweep, domains, init_state=None, plot=False, c_add=False
+    ):
         """
         Models domains as simple hystereons using ec, pr
         
@@ -267,13 +273,13 @@ class LandauFilm:
 
         if plot:
             fig1 = plt.figure()
-            fig1.set_facecolor('white')
+            fig1.set_facecolor("white")
             plt.cla()
             ax1 = fig1.add_subplot(111)
-            ax1.set_title('Presiach Modeled Hysteresis')
-            datacursor(ax1.plot(esweep * 1E-6, 1E6 * p))
-            ax1.set_xlabel('Electric Field (MV/cm)')
-            ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
+            ax1.set_title("Presiach Modeled Hysteresis")
+            datacursor(ax1.plot(esweep * 1e-6, 1e6 * p))
+            ax1.set_xlabel("Electric Field (MV/cm)")
+            ax1.set_ylabel("Polarization Charge ($\mu{}C/cm^2$)")
 
         return p, state
 
@@ -292,12 +298,12 @@ class LandauFilm:
         """
 
         fig1 = plt.figure()
-        fig1.set_facecolor('white')
+        fig1.set_facecolor("white")
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        datacursor(ax1.plot(pvals * 1E6, ufe))
-        ax1.set_xlabel('Polarization Charge, P (uC/cm^2)')
-        ax1.set_ylabel('Energy, U')
+        datacursor(ax1.plot(pvals * 1e6, ufe))
+        ax1.set_xlabel("Polarization Charge, P (uC/cm^2)")
+        ax1.set_ylabel("Energy, U")
 
     def e_plot(self, pvals, efe, ec=None, ebias=0):
         """
@@ -316,17 +322,17 @@ class LandauFilm:
         """
 
         fig1 = plt.figure()
-        fig1.set_facecolor('white')
+        fig1.set_facecolor("white")
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        datacursor(ax1.plot(efe * 1E-6, pvals * 1E6))
-        ax1.set_ylabel('Polarization Charge, P (uC/cm^2)')
-        ax1.set_xlabel('Electric Field, MV/cm')
+        datacursor(ax1.plot(efe * 1e-6, pvals * 1e6))
+        ax1.set_ylabel("Polarization Charge, P (uC/cm^2)")
+        ax1.set_xlabel("Electric Field, MV/cm")
         if ec != None:
-            e1 = (-ec - ebias) * 1E-6
-            e2 = (ec - ebias) * 1E-6
-            ax1.plot([e1, e1], [np.min(pvals) * 1E6, np.max(pvals) * 1E6], 'r--')
-            ax1.plot([e2, e2], [np.min(pvals) * 1E6, np.max(pvals) * 1E6], 'r--')
+            e1 = (-ec - ebias) * 1e-6
+            e2 = (ec - ebias) * 1e-6
+            ax1.plot([e1, e1], [np.min(pvals) * 1e6, np.max(pvals) * 1e6], "r--")
+            ax1.plot([e2, e2], [np.min(pvals) * 1e6, np.max(pvals) * 1e6], "r--")
 
 
 class LandauSimple(LandauFilm):
@@ -413,12 +419,12 @@ class LandauFull(LandauFilm):
         #            d.fft_plot(dvdt_filtered)
 
         fig1 = plt.figure()
-        fig1.set_facecolor('white')
+        fig1.set_facecolor("white")
         plt.cla()
         ax1 = fig1.add_subplot(111)
         datacursor(ax1.plot(dpdt, e))
-        ax1.set_xlabel('dP/dt')
-        ax1.set_ylabel('dE')
+        ax1.set_xlabel("dP/dt")
+        ax1.set_ylabel("dE")
 
     def a0_calc(self, hystData):
         """
@@ -483,13 +489,13 @@ class LandauFull(LandauFilm):
         #        print (a0,Tc)
 
         fig1 = plt.figure()
-        fig1.set_facecolor('white')
+        fig1.set_facecolor("white")
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        datacursor(ax1.plot(temp, e, 'o', temp, a0fit_fn(temp)))
-        ax1.set_title('a0 = {:0.3e}'.format(a0))
-        ax1.set_xlabel('T (C)')
-        ax1.set_ylabel('E (V/cm)')
+        datacursor(ax1.plot(temp, e, "o", temp, a0fit_fn(temp)))
+        ax1.set_title("a0 = {:0.3e}".format(a0))
+        ax1.set_xlabel("T (C)")
+        ax1.set_ylabel("E (V/cm)")
 
 
 class LandauDomain:
@@ -516,9 +522,23 @@ class LandauDomain:
     def eqns(self, p):
         a, b, g = p
         #        print (a,b,g,self.c,self.t,self.pr,self.ec,self.ebias)
-        eq1 = self.ec - self.ebias + 1 * a * self.pr + 1 * b * self.pr ** 3 + 1 * g * self.pr ** 5
-        eq2 = 2 * a * self.pr + 4 * b * self.pr ** 3 + 6 * g * self.pr ** 5 + self.ebias + self.ec
-        eq3 = (2 * a + 12 * b * self.pr ** 2 + 30 * g * self.pr ** 4) - 1 / (self.c * self.t) / self.area
+        eq1 = (
+            self.ec
+            - self.ebias
+            + 1 * a * self.pr
+            + 1 * b * self.pr ** 3
+            + 1 * g * self.pr ** 5
+        )
+        eq2 = (
+            2 * a * self.pr
+            + 4 * b * self.pr ** 3
+            + 6 * g * self.pr ** 5
+            + self.ebias
+            + self.ec
+        )
+        eq3 = (2 * a + 12 * b * self.pr ** 2 + 30 * g * self.pr ** 4) - 1 / (
+            self.c * self.t
+        ) / self.area
         #        print (eq1, eq2, eq3)
         eq4 = 2 * a + 12 * b * self.pr ** 2 + 30 * g * self.pr ** 4
 
@@ -535,9 +555,24 @@ class LandauDomain:
     def eqns1(self, p):
         a, b, g = p
         #        print (a,b,g,self.pr,self.ec,self.ebias)
-        eq1 = (self.ec - self.ebias + 1 * a * self.pr + 1 * b * self.pr ** 3 + 1 * g * self.pr ** 5) ** 2
-        eq2 = (2 * a * self.pr + 4 * b * self.pr ** 3 + 6 * g * self.pr ** 5 + self.ebias + self.ec) ** 2
-        eq3 = ((2 * a + 12 * b * self.pr ** 2 + 30 * g * self.pr ** 4) - 1 / (self.c * self.t) / self.area) ** 2
+        eq1 = (
+            self.ec
+            - self.ebias
+            + 1 * a * self.pr
+            + 1 * b * self.pr ** 3
+            + 1 * g * self.pr ** 5
+        ) ** 2
+        eq2 = (
+            2 * a * self.pr
+            + 4 * b * self.pr ** 3
+            + 6 * g * self.pr ** 5
+            + self.ebias
+            + self.ec
+        ) ** 2
+        eq3 = (
+            (2 * a + 12 * b * self.pr ** 2 + 30 * g * self.pr ** 4)
+            - 1 / (self.c * self.t) / self.area
+        ) ** 2
         #        print (eq1, eq2, eq3)
 
         return (eq1, eq2, eq3)
@@ -551,15 +586,21 @@ class LandauDomain:
         return eq4
 
     def parm_calc(self):
-        guess = np.asarray((-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6))
+        guess = np.asarray(
+            (-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6)
+        )
         #        self.a,self.b,self.g = fsolve(self.eqns, guess)
 
         #        print (guess)
-        parms = minimize(self.eqns1,
-                         x0=np.asarray((-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6)),
-                         bounds=((None, 0), (0, None), (0, None)),
-                         #                         constraints = ({'type':'ineq', 'fun':self.con}),
-                         method='COBYLA')
+        parms = minimize(
+            self.eqns1,
+            x0=np.asarray(
+                (-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6)
+            ),
+            bounds=((None, 0), (0, None), (0, None)),
+            #                         constraints = ({'type':'ineq', 'fun':self.con}),
+            method="COBYLA",
+        )
         #        kwargs = {"method": "COBYLA",
         #                  "bounds" : ((None,0),(0,None),(0,None)),
         #                  "constraints" : ({'type':'ineq', 'fun':self.con})}
@@ -572,13 +613,15 @@ class LandauDomain:
         self.a, self.b, self.g = parms.x
 
     def parm_fit(self, plot=False):
-        guess = np.asarray((-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6))
+        guess = np.asarray(
+            (-2 / self.pr ** 2, 1 / (2 * self.pr ** 4), 1 / self.pr ** 6)
+        )
         a_guess, b_guess, g_guess = guess
         guessRes = 26
 
-        avals = np.linspace(a_guess / 1E3, a_guess * 1E3, guessRes)
-        bvals = np.linspace(b_guess / 1E3, b_guess * 1E3, guessRes)
-        gvals = np.linspace(g_guess / 1E4, g_guess * 1E4, guessRes)
+        avals = np.linspace(a_guess / 1e3, a_guess * 1e3, guessRes)
+        bvals = np.linspace(b_guess / 1e3, b_guess * 1e3, guessRes)
+        gvals = np.linspace(g_guess / 1e4, g_guess * 1e4, guessRes)
 
         err = np.empty([guessRes, guessRes, guessRes])
         for i, a in enumerate(avals):
@@ -605,14 +648,24 @@ class LandauDomain:
             #        colormap = plt.cm.viridis # uniform greyscale for printing
             colormap = plt.cm.nipy_spectral  # diverse color for colorblindness
             plt.clf()
-            ax1 = fig1.add_subplot(111, projection='3d')
+            ax1 = fig1.add_subplot(111, projection="3d")
             #            ax1.set_xscale('log')
             #            ax1.set_yscale('log')
             #            ax1.set_zscale('log')
-            p = ax1.scatter(np.abs(x), y, z, c=d, alpha=0.5, s=15, lw=0, cmap=colormap, norm=Normalize())
+            p = ax1.scatter(
+                np.abs(x),
+                y,
+                z,
+                c=d,
+                alpha=0.5,
+                s=15,
+                lw=0,
+                cmap=colormap,
+                norm=Normalize(),
+            )
             ax1.set_xlabel(r"-$\alpha{}$ Guess")
-            ax1.set_ylabel(r'$\beta{}$ Guess')
-            ax1.set_zlabel(r'$\gamma{}$ Guess')
+            ax1.set_ylabel(r"$\beta{}$ Guess")
+            ax1.set_zlabel(r"$\gamma{}$ Guess")
             plt.colorbar(p, ax=ax1)
 
     def get_ufe(self, pvals):
@@ -627,7 +680,12 @@ class LandauDomain:
         np array
             ufe values
         """
-        return self.a * pvals ** 2 + self.b * pvals ** 4 + self.g * pvals ** 6 - self.ebias * pvals
+        return (
+            self.a * pvals ** 2
+            + self.b * pvals ** 4
+            + self.g * pvals ** 6
+            - self.ebias * pvals
+        )
 
     def get_efe(self, pvals):
         """
@@ -641,11 +699,16 @@ class LandauDomain:
         np array 
             efe values
         """
-        return 2 * self.a * pvals + 4 * self.b * pvals ** 3 + 6 * self.g * pvals ** 5 - self.ebias
+        return (
+            2 * self.a * pvals
+            + 4 * self.b * pvals ** 3
+            + 6 * self.g * pvals ** 5
+            - self.ebias
+        )
 
 
 def main():
-    plt.close('all')
+    plt.close("all")
 
 
 #    FeFETD2 = HysteresisData()
@@ -656,5 +719,7 @@ def main():
 #    FeFETD2.tsv_read(r'D:\Google Drive\Ferroelectric Research\FE_20142015\TF-1000\Measurements\RadiantFEcaps_MIM_DiscreteCap\tool_tests\10uF discrete cap 100Hz 5V.tsv')
 #    FeFETD2.hyst_plot()
 
-if __name__ == "__main__":  # Executes main automatically if this file run directly rather than imported
+if (
+    __name__ == "__main__"
+):  # Executes main automatically if this file run directly rather than imported
     main()
