@@ -12,7 +12,7 @@ from os.path import join, dirname, realpath
 
 
 plt.close('all')
-testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
+testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
 
 freqdir = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_freq")
 

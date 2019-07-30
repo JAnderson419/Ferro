@@ -16,7 +16,7 @@ plt.close('all')
 device = 1
 t = 10E-7 # cm
 
-testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
+testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
 
 
 ### FeFET D1 - FE ###

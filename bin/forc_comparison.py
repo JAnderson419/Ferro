@@ -10,7 +10,7 @@ from context import data as hd
 
 
 plt.close('all')
-testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
+testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
 
 forcFile1 = join(testdatadir, 'RTWhiteB', 'RTWhiteB_FORC',
                  'RTWhiteB 0Hz 5V 1Average Table1.tsv')

@@ -12,7 +12,7 @@ from context import models as lf
 from context import data as hd
 
 plt.close('all')
-testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
+testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
 
 leakageComp = False
 device = 0
