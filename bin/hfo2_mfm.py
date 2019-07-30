@@ -41,7 +41,7 @@ hfo2.a0 = hfo2.a0_calc(tempData)
 freqDataLkgComp = hd.list_read(freqfiles, templkgfiles)
 cCompDataLkgComp = freqDataLkgComp[0]
 hd.hyst_plot([cCompData, cCompDataLkgComp],
-             ["With Leakage","Without Leakage"], plot_e=1)
+             ["With Leakage", "Without Leakage"], plot_e=1)
 
 ### FORC Calculation
 

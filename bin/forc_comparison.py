@@ -4,6 +4,7 @@ Created on Mon Jun 26 17:47:18 2017
 
 @author: Jackson
 """
+import matplotlib.pyplot as plt
 from os.path import join, dirname, realpath
 from context import models as lf
 from context import data as hd
