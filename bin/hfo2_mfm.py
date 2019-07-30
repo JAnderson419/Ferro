@@ -6,6 +6,7 @@ Created on Fri May 26 12:50:08 2017
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 from context import models as lf
 from context import data as hd
 from os.path import join, dirname, realpath
