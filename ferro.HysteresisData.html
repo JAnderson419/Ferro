@@ -86,10 +86,10 @@ Returns<br>
 y&nbsp;:&nbsp;complex&nbsp;ndarray&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;filtered&nbsp;input&nbsp;data&nbsp;(y).&nbsp;Returned&nbsp;in&nbsp;time&nbsp;domain.</tt></dd></dl>
 
-<dl><dt><a name="HysteresisData-dvdtPlot"><strong>dvdtPlot</strong></a>(self)</dt><dd><tt>Plots&nbsp;abs(dvdt)&nbsp;of&nbsp;a&nbsp;measurement.&nbsp;<br>
+<dl><dt><a name="HysteresisData-dvdtPlot"><strong>dvdt_plot</strong></a>(self)</dt><dd><tt>Plots&nbsp;abs(dvdt)&nbsp;of&nbsp;a&nbsp;measurement.&nbsp;<br>
 Can&nbsp;be&nbsp;used&nbsp;to&nbsp;investigate&nbsp;noise&nbsp;in&nbsp;capacitance&nbsp;extraction.</tt></dd></dl>
 
-<dl><dt><a name="HysteresisData-fftPlot"><strong>fftPlot</strong></a>(self, y)</dt><dd><tt>Takes&nbsp;fft&nbsp;of&nbsp;data&nbsp;and&nbsp;plots&nbsp;in&nbsp;frequency&nbsp;domain.<br>
+<dl><dt><a name="HysteresisData-fftPlot"><strong>fft_plot</strong></a>(self, y)</dt><dd><tt>Takes&nbsp;fft&nbsp;of&nbsp;data&nbsp;and&nbsp;plots&nbsp;in&nbsp;frequency&nbsp;domain.<br>
 &nbsp;<br>
 Parameters<br>
 ----------<br>
@@ -100,7 +100,7 @@ Returns<br>
 -------<br>
 n/a</tt></dd></dl>
 
-<dl><dt><a name="HysteresisData-forcCalc"><strong>forcCalc</strong></a>(self, plot=False, linear=True, filtIter=None, filtDim=[1, 1])</dt><dd><tt>Finds&nbsp;minima/maxima&nbsp;in&nbsp;voltage&nbsp;data,&nbsp;cuts&nbsp;down&nbsp;data&nbsp;to&nbsp;only&nbsp;reversal&nbsp;<br>
+<dl><dt><a name="HysteresisData-forcCalc"><strong>forc_calc</strong></a>(self, plot=False, linear=True, filtIter=None, filtDim=[1, 1])</dt><dd><tt>Finds&nbsp;minima/maxima&nbsp;in&nbsp;voltage&nbsp;data,&nbsp;cuts&nbsp;down&nbsp;data&nbsp;to&nbsp;only&nbsp;reversal&nbsp;<br>
 curves,&nbsp;interpolates&nbsp;data&nbsp;onto&nbsp;a&nbsp;linear&nbsp;grid&nbsp;using&nbsp;griddata,&nbsp;and&nbsp;<br>
 makes&nbsp;contour&nbsp;plot&nbsp;for&nbsp;FORC&nbsp;measurements.&nbsp;<br>
 &nbsp;<br>
@@ -132,7 +132,7 @@ Returns<br>
 &nbsp;&nbsp;&nbsp;&nbsp;prob&nbsp;:&nbsp;2d&nbsp;numpy&nbsp;array<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prob&nbsp;distribution&nbsp;of&nbsp;grains&nbsp;for&nbsp;given&nbsp;E,Er</tt></dd></dl>
 
-<dl><dt><a name="HysteresisData-hystPlot"><strong>hystPlot</strong></a>(self, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
+<dl><dt><a name="HysteresisData-hystPlot"><strong>hyst_plot</strong></a>(self, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
 &nbsp;<br>
 Parameters<br>
 ----------<br>
@@ -189,7 +189,7 @@ Data descriptors inherited from <a href="HysteresisData.html#SampleData">SampleD
 Methods defined here:<br>
 <dl><dt><a name="LeakageData-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
-<dl><dt><a name="LeakageData-lcmFit"><strong>lcmFit</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;, initGuess=array([  2.00000000e-10,   2.00000000e-10,   8.00000000e-07,
+<dl><dt><a name="LeakageData-lcmFit"><strong>lcm_fit</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;, initGuess=array([  2.00000000e-10,   2.00000000e-10,   8.00000000e-07,
         -1.00000000e-06,   1.00000000e-06,   0.00000000e+00,
         -1.00000000e+00]))</dt><dd><tt>Attempts&nbsp;to&nbsp;fit&nbsp;parameters&nbsp;to&nbsp;leakage&nbsp;current,&nbsp;stores&nbsp;in&nbsp;hd&nbsp;<a href="builtins.html#object">object</a><br>
 &nbsp;<br>
@@ -203,9 +203,9 @@ Returns<br>
 -------<br>
 n/a</tt></dd></dl>
 
-<dl><dt><a name="LeakageData-lcmPlot"><strong>lcmPlot</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;)</dt><dd><tt>Plots&nbsp;measured&nbsp;leakage&nbsp;current&nbsp;with&nbsp;fit&nbsp;data.</tt></dd></dl>
+<dl><dt><a name="LeakageData-lcmPlot"><strong>lcm_plot</strong></a>(self, func=&lt;function leakageFunc at 0x000002B0F96C4158&gt;)</dt><dd><tt>Plots&nbsp;measured&nbsp;leakage&nbsp;current&nbsp;with&nbsp;fit&nbsp;data.</tt></dd></dl>
 
-<dl><dt><a name="LeakageData-lcmRead"><strong>lcmRead</strong></a>(self, filename)</dt><dd><tt>Imports&nbsp;TSV&nbsp;measurement&nbsp;data&nbsp;previously&nbsp;parsed&nbsp;by&nbsp;tfDataTSV_v5.pl<br>
+<dl><dt><a name="LeakageData-lcmRead"><strong>lcm_read</strong></a>(self, filename)</dt><dd><tt>Imports&nbsp;TSV&nbsp;measurement&nbsp;data&nbsp;previously&nbsp;parsed&nbsp;by&nbsp;tfDataTSV_v5.pl<br>
 For&nbsp;use&nbsp;with&nbsp;TF-1000&nbsp;leakage&nbsp;current&nbsp;measurement&nbsp;data<br>
 &nbsp;<br>
 Parameters<br>
@@ -252,7 +252,7 @@ Data descriptors defined here:<br>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-dirRead"><strong>dirRead</strong></a>(path)</dt></dl>
- <dl><dt><a name="-hystPlot"><strong>hystPlot</strong></a>(data, legend=None, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
+ <dl><dt><a name="-hystPlot"><strong>hyst_plot</strong></a>(data, legend=None, plotE=False)</dt><dd><tt>Plots&nbsp;V&nbsp;vs&nbsp;P,&nbsp;V&nbsp;vs&nbsp;I,&nbsp;and&nbsp;time&nbsp;vs&nbsp;V&nbsp;given&nbsp;hysteresis&nbsp;measurement&nbsp;data.<br>
 &nbsp;<br>
 Parameters<br>
 ----------<br>
@@ -266,7 +266,7 @@ plotE&nbsp;:&nbsp;bool&nbsp;<br>
 Returns<br>
 -------<br>
 n/a</tt></dd></dl>
- <dl><dt><a name="-lcmPlot"><strong>lcmPlot</strong></a>(data, legend=None)</dt><dd><tt>Plots&nbsp;leakage&nbsp;current&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;voltage&nbsp;for&nbsp;a&nbsp;list&nbsp;of&nbsp;<a href="#LeakageData">LeakageData</a>.<br>
+ <dl><dt><a name="-lcmPlot"><strong>lcm_plot</strong></a>(data, legend=None)</dt><dd><tt>Plots&nbsp;leakage&nbsp;current&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;voltage&nbsp;for&nbsp;a&nbsp;list&nbsp;of&nbsp;<a href="#LeakageData">LeakageData</a>.<br>
 If&nbsp;parameters&nbsp;have&nbsp;been&nbsp;fit&nbsp;to&nbsp;data,&nbsp;will&nbsp;plot&nbsp;modeled&nbsp;leakage&nbsp;as&nbsp;well.<br>
 &nbsp;<br>
 Parameters<br>

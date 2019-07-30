@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install .
+  - pip install codecov
+
+script:
+  - coverage run --source=ferro/ tests/lcmTest.py
+  - coverage run --source=ferro/ tests/forcDomainTest.py
+  - coverage run --source=ferro/ tests/fftTestRTWhite.py
+  - coverage run --source=ferro/ tests/a0CalcTest.py
+  - coverage run --source=ferro/ bin/FeFETD1_cComparison.py
+  - coverage run --source=ferro/ bin/forc_comparison.py
+  - coverage run --source=ferro/ bin/hfo2_mfm.py
+  - coverage run --source=ferro/ bin/multidomainAnalysis.py
+
+after_success:
+  - codecov

@@ -5,35 +5,49 @@ Created on Fri May 26 12:50:08 2017
 @author: Jackson
 """
 
-from context import LandauFilm as lf
-from context import HysteresisData as hd
+from context import models as lf
+from context import data as hd
 import matplotlib.pyplot as plt
 import numpy as np
+from os.path import join, dirname, realpath
 
 plt.close('all')
 
 device = 1
 t = 10E-7 # cm
 
+testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
+
+
 ### FeFET D1 - FE ###
 if device == 0:
 
-    freqdirs = [r"..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_100x100_freq",
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_155x155_freq',
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_200x200_freq',
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_60_20x20_freq',
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs',
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_freq',
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_freq'
+    freqdirs = [
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_100x100_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_155x155_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_200x200_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_60_20x20_freq'),
+    #   r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_freq',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_freq'
                 ]
     
-    lkgdirs = [r"..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_100x100_leakage",
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_155x155_leakage',
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_200x200_leakage',
-                r'..\ferro\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_60_20x20_leakage',
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg' ,
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_leakage',
-    #            r'..\ferro\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_leakage'
+    lkgdirs = [
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_100x100_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_155x155_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_200x200_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_60_20x20_leakage'),
+    #   r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg' ,
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_leakage',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_leakage'
                 ]
     
     a = np.asarray([1E4,24025,4E4,24000])
@@ -45,16 +59,26 @@ if device == 0:
     
 ### FeFET D5 - AFE ###   
 elif device == 1:
-    freqdirs = [r"..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_100x100_freq",
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_200x200_freq',
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_60_20x20_freq',
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_100_10x10_freq',
+    freqdirs = [
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_100x100_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_200x200_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_60_20x20_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_100_10x10_freq'),
                 ]
     
-    lkgdirs = [r"..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_100x100_leakage",
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_200x200_leakage',
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_60_20x20_leakage',
-                r'..\ferro\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_100_10x10_leakage',
+    lkgdirs = [
+                join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_100x100_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_200x200_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_60_20x20_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_100_10x10_leakage'),
                 ]
     a = np.asarray([1E4,4E4,24000,1E4])
     p = np.asarray([400,800,4800,4000])
@@ -65,12 +89,12 @@ elif device == 1:
 
 c = []
 for i,f in enumerate(freqdirs):
-    dcfiles = hd.dirRead(f)    
-    lkgfile = hd.dirRead(lkgdirs[i])
-#    data = hd.listRead(dcfiles, lkgfile)
-    data = hd.listRead(dcfiles)
+    dcfiles = hd.dir_read(f)    
+    lkgfile = hd.dir_read(lkgdirs[i])
+#    data = hd.list_read(dcfiles, lkgfile)
+    data = hd.list_read(dcfiles)
     testfilm = lf.LandauFilm()   
-    cde = testfilm.cCalc(data, plot=1)
+    cde = testfilm.c_calc(data, plot=1)
     c.append(cde)
 
 c = np.asarray(c)
