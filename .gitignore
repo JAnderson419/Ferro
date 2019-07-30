@@ -1,1 +1,3 @@
 *.pyc
+/Ferro.egg-info/
+/dist/
