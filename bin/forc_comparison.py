@@ -4,14 +4,18 @@ Created on Mon Jun 26 17:47:18 2017
 
 @author: Jackson
 """
-
+from os.path import join
 from context import models as lf
 from context import data as hd
 
-plt.close('all')
 
-forcFile1 = r"..\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table1.tsv"
-forcFile2 = r"..\tests\testData\RTWhiteB\RTWhiteB_FORC\RTWhiteB 0Hz 5V 1Average Table3.tsv"
+plt.close('all')
+testdatadir = join("..", "tests", "testData")
+
+forcFile1 = join(testdatadir, 'RTWhiteB', 'RTWhiteB_FORC',
+                 'RTWhiteB 0Hz 5V 1Average Table1.tsv')
+forcFile2 = join(testdatadir, 'RTWhiteB', 'RTWhiteB_FORC',
+                 'RTWhiteB 0Hz 5V 1Average Table3.tsv')
 t = 255E-7 
 a = 1E-4 # mask defined area that was used in measurement 
 

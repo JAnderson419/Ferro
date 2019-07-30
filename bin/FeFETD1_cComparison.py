@@ -9,31 +9,45 @@ from context import models as lf
 from context import data as hd
 import matplotlib.pyplot as plt
 import numpy as np
+from os.path import join
 
 plt.close('all')
 
 device = 1
 t = 10E-7 # cm
 
+testdatadir = join("..", "tests", "testData")
+
+
 ### FeFET D1 - FE ###
 if device == 0:
 
-    freqdirs = [r"..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_100x100_freq",
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_155x155_freq',
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_200x200_freq',
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_60_20x20_freq',
-    #            r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs',
-    #            r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_freq',
-    #            r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_freq'
+    freqdirs = [
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_100x100_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_155x155_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_200x200_freq'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_60_20x20_freq'),
+    #   r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_freqs',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_freq',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_freq'
                 ]
     
-    lkgdirs = [r"..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_100x100_leakage",
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_155x155_leakage',
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_1_200x200_leakage',
-                r'..\tests\testData\FeFETD1\MFS+\die66\FeFETD1_die66_MFS+_60_20x20_leakage',
-    #            r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg' ,
-    #            r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_leakage',
-    #            r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_leakage'
+    lkgdirs = [
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_100x100_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_155x155_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_1_200x200_leakage'),
+        join(testdatadir, 'FeFETD1', 'MFS+', 'die66',
+             'FeFETD1_die66_MFS+_60_20x20_leakage'),
+    #   r'..\tests\testData\FeFETD1\MFS+\die84\FeFETD1_die84_MFS+_100_10x10_lkg' ,
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_1_100x100_leakage',
+    #   r'..\tests\testData\FeFETD1\MFS+\die116\FeFETD1_die116_MFS+_60_20x20_leakage'
                 ]
     
     a = np.asarray([1E4,24025,4E4,24000])
@@ -45,16 +59,26 @@ if device == 0:
     
 ### FeFET D5 - AFE ###   
 elif device == 1:
-    freqdirs = [r"..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_100x100_freq",
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_200x200_freq',
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_60_20x20_freq',
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_100_10x10_freq',
+    freqdirs = [
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_100x100_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_200x200_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_60_20x20_freq'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_100_10x10_freq'),
                 ]
     
-    lkgdirs = [r"..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_100x100_leakage",
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_1_200x200_leakage',
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_60_20x20_leakage',
-                r'..\tests\testData\FeFETD5\MFS+\die82\FeFETD5_die82_MFS+_100_10x10_leakage',
+    lkgdirs = [
+                join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_100x100_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_1_200x200_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_60_20x20_leakage'),
+        join(testdatadir, 'FeFETD5', 'MFS+', 'die82',
+             'FeFETD5_die82_MFS+_100_10x10_leakage'),
                 ]
     a = np.asarray([1E4,4E4,24000,1E4])
     p = np.asarray([400,800,4800,4000])

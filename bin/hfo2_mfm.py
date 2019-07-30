@@ -8,14 +8,18 @@ Created on Fri May 26 12:50:08 2017
 import matplotlib.pyplot as plt
 from context import models as lf
 from context import data as hd
+from os.path import join
 
 
 plt.close('all')
+testdatadir = join("..", "tests", "testData")
 
-freqdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_freq"
-tempdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_temps"
-templkgdir = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_S3_tempslkg"
-forcFile = r"..\tests\testData\hfo2_MFM\H9_x9y4_1e4_forc\H9 die (9,4) 0Hz 4V 1Average Table1.tsv"
+freqdir = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_freq")
+
+tempdir = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_S3_temps")
+templkgdir = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_S3_tempslkg")
+forcFile = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_forc",
+                "H9 die (9,4) 0Hz 4V 1Average Table1.tsv")
 
 templkgfiles = hd.dir_read(templkgdir)
 
