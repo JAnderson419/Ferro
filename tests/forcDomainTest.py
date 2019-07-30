@@ -8,8 +8,8 @@ Created on Mon Jun 12 10:45:02 2017
 import matplotlib.pyplot as plt
 import numpy as np
 from os.path import join, dirname, realpath
-from context import LandauFilm as lf
-from context import HysteresisData as hd
+from context import models as lf
+from context import data as hd
 
 plt.close('all')
 

@@ -9,8 +9,8 @@ Tests fft_plot and bandstop_filter functions of HysteresisData
 
 import matplotlib.pyplot as plt
 from os.path import join, dirname, realpath
-from context import LandauFilm as lf
-from context import HysteresisData as hd
+from context import models as lf
+from context import data as hd
 
 plt.close('all')
 

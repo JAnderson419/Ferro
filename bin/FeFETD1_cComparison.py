@@ -5,8 +5,8 @@ Created on Fri May 26 12:50:08 2017
 @author: Jackson
 """
 
-from context import LandauFilm as lf
-from context import HysteresisData as hd
+from context import models as lf
+from context import data as hd
 import matplotlib.pyplot as plt
 import numpy as np
 

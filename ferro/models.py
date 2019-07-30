@@ -15,7 +15,7 @@ from scipy.stats import skewnorm
 from scipy.optimize import fsolve, minimize, basinhopping, fmin_slsqp
 import numpy as np
 from mpldatacursor import datacursor
-from ferro import HysteresisData as hd
+from ferro import data as hd
 from mpl_toolkits.mplot3d import Axes3D
 
 

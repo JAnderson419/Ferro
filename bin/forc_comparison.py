@@ -5,8 +5,8 @@ Created on Mon Jun 26 17:47:18 2017
 @author: Jackson
 """
 
-from context import LandauFilm as lf
-from context import HysteresisData as hd
+from context import models as lf
+from context import data as hd
 
 plt.close('all')
 
