@@ -4,13 +4,13 @@ Created on Mon Jun 26 17:47:18 2017
 
 @author: Jackson
 """
-from os.path import join
+from os.path import join, dirname, realpath
 from context import models as lf
 from context import data as hd
 
 
 plt.close('all')
-testdatadir = join("..", "tests", "testData")
+testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
 
 forcFile1 = join(testdatadir, 'RTWhiteB', 'RTWhiteB_FORC',
                  'RTWhiteB 0Hz 5V 1Average Table1.tsv')

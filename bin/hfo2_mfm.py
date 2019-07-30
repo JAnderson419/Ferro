@@ -8,11 +8,11 @@ Created on Fri May 26 12:50:08 2017
 import matplotlib.pyplot as plt
 from context import models as lf
 from context import data as hd
-from os.path import join
+from os.path import join, dirname, realpath
 
 
 plt.close('all')
-testdatadir = join("..", "tests", "testData")
+testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
 
 freqdir = join(testdatadir, r"hfo2_MFM", "H9_x9y4_1e4_freq")
 

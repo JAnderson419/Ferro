@@ -9,14 +9,14 @@ from context import models as lf
 from context import data as hd
 import matplotlib.pyplot as plt
 import numpy as np
-from os.path import join
+from os.path import join, dirname, realpath
 
 plt.close('all')
 
 device = 1
 t = 10E-7 # cm
 
-testdatadir = join("..", "tests", "testData")
+testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
 
 
 ### FeFET D1 - FE ###

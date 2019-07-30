@@ -7,12 +7,12 @@ Created on Fri May 26 12:50:08 2017
 
 import matplotlib.pyplot as plt
 import numpy as np
-from os.path import join
+from os.path import join, dirname, realpath
 from context import models as lf
 from context import data as hd
 
 plt.close('all')
-testdatadir = join("..", "tests", "testData")
+testdatadir = join(dirname(realpath(__file__)), "tests", "testData")
 
 leakageComp = False
 device = 0
