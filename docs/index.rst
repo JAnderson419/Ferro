@@ -12,6 +12,7 @@ Welcome to Ferro's documentation!
    :caption: Contents:
    
    Introduction <intro>
+   Installation Guide (Getting Started for new Python Users) <installation>
    Data Handling Classes <data>
    Film Modeling Classes <modeling>
 
