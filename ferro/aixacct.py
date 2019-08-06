@@ -1,5 +1,6 @@
 
 import re
+import numpy as np
 from os.path import basename
 from enum import Enum
 
@@ -75,14 +76,14 @@ def read_tfdata(filepath):
     datatype = check_datatype(filepath)
     global_metadata = {}
     table_metadata = {}
-    datastr = ''
+    datastr = []
     table_dict = {}
-    tnum = 1
-    print(datatype)
+    tableheaderstr = ''
+    table_key = ''
 
     with open(filepath) as f:
         for line in f:
-            line.rstrip()
+            line.rstrip('\n')
             if re.match('^(DynamicHysteresis|Data Table|Pulse|Leakage)$', line):
                 summary_table_read = True
             if not summary_table_read:
@@ -100,6 +101,7 @@ def read_tfdata(filepath):
                     if check_istable(line, datatype):
                         is_data_table = True
                         is_data_table_header = False
+                        tableheaderstr = line
                         continue
                     else:
                         m = re.match(r'(.*): (.*)', line)
@@ -110,19 +112,35 @@ def read_tfdata(filepath):
                         is_data_table_header = True
                         is_data_table = False
                         table_dict[basename(filepath).split('.')[0]] = {
-                            'table {}'.format(tnum) : {
-                                'metadata': {**global_metadata,
-                                             **table_metadata},
-                                'data': datastr
+                            'meastype': datatype,
+                            'datatables': {
+                                table_key: {
+                                    'metadata': {**global_metadata,
+                                                 **table_metadata},
+                                    'dataheader': tableheaderstr.split('\t'),
+                                    'data': datastr
+                                }
                             }
                         }
                         table_metadata.clear()
-                        datastr = ''
-                        tnum += 1
+                        datastr = []
                     else:
-                        datastr = datastr+line
+                        datastr.append(line)
     return table_dict
 
-if __name__ == '__main__':
 
-    read_tfdata(r'C:\Users\Jackson\PycharmProjects\Ferro\tests\testData\RTWhiteB\RTWhiteB_freqs.dat')
+def load_tfdata(table_dict):
+
+    for f in table_dict:
+        print(f)
+        for table in table_dict[f]['datatables']:
+            t = table_dict[f]['datatables'][table]['data']
+            header = table_dict[f]['datatables'][table]['dataheader']
+            table_array = np.genfromtxt(t, skip_header=1)
+            print(header, table_array)
+            exit(0)
+
+
+if __name__ == '__main__':
+    data = read_tfdata(r'C:\Users\Jackson\PycharmProjects\Ferro\tests\testData\RTWhiteB\RTWhiteB_freqs.dat')
+    load_tfdata(data)
