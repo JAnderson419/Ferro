@@ -5,18 +5,18 @@ Created on Mon Apr 10 14:53:15 2017
 @author: Jackson Anderson, Rochester Institute of Technology jda4923@rit.edu
 """
 
-import re
+# import re
 import copy  # used for creating C/Ilkg compensated copies of exp data
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import scipy.constants as sc
-from scipy.stats import skew
-from scipy.stats import skewnorm
+# from scipy.stats import skew
+# from scipy.stats import skewnorm
 from scipy.optimize import fsolve, minimize, basinhopping, fmin_slsqp
 import numpy as np
 from mpldatacursor import datacursor
-from ferro import data as hd
-from mpl_toolkits.mplot3d import Axes3D
+# from ferro import data as hd
+# from mpl_toolkits.mplot3d import Axes3D
 
 
 class LandauFilm:

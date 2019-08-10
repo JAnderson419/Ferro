@@ -10,7 +10,7 @@ from warnings import warn
 import re
 import copy  # used for creating Ilkg compensated copies of exp data
 from os import listdir
-from os.path import join, isfile
+from os.path import join, isfile, basename
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -26,12 +26,12 @@ from scipy.interpolate import griddata
 
 def leakage_func(x, a, b, c, d, e, f, g):
     return (
-        a * (x - g) ** 5
-        + b * (x - g) ** 4
-        + c * (x - g) ** 3
-        + d * (x - g) ** 2
-        + e * (x - g)
-        + f
+            a * (x - g) ** 5
+            + b * (x - g) ** 4
+            + c * (x - g) ** 3
+            + d * (x - g) ** 2
+            + e * (x - g)
+            + f
     )
 
 
@@ -266,7 +266,7 @@ class SampleData:
         -------
         n/a
         """
-        self.file_name = ""
+        self.sample_name = ""
         self.thickness = thickness  # cm
         self.area = area  # cm^2
         self.temp = temperature  # K
@@ -303,6 +303,20 @@ class HysteresisData(SampleData):
         self.freq = freq  # Hz
         self.dt = 0
 
+    def __eq__(self, other):
+        if type(self) == type(other):
+            if (self.area == other.area and
+                    self.thickness == other.thickness and
+                    np.array_equal(self.voltage,other.voltage) and
+                    np.array_equal(self.polarization, other.polarization) and
+                    np.array_equal(self.time, other.time) and
+                    np.array_equal(self.current, other.current)):
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def tsv_read(self, filename):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
@@ -318,7 +332,9 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
-        self.fileName = filename
+        samplenamematch = re.match(r'^(.*) \d*Hz.*', basename(filename))
+        if samplenamematch:
+            self.sample_name = samplenamematch.group(1)
 
         r = re.compile(".*(_| )(\d+)C.*")
         try:
@@ -471,7 +487,7 @@ class HysteresisData(SampleData):
         plt.cla()
         ax1 = fig1.add_subplot(111)
         ax1.set_title(str(self.freq) + " Hz " + str(self.temp) + " K")
-        datacursor(ax1.plot(tf, 2.0 / n * np.abs(pf[0 : n // 2])))
+        datacursor(ax1.plot(tf, 2.0 / n * np.abs(pf[0: n // 2])))
         ax1.set_xlabel("frequency")
 
     #        ax1.set_ylabel('Polarization Charge ($\mu{}C/cm^2$)')
@@ -631,8 +647,8 @@ class HysteresisData(SampleData):
         p_forc = []
         for i, v in enumerate(minima_index):
             vr_forc.extend([self.voltage[v - 1]] * (maxima_index[i + 1] - v))
-            v_forc.extend(self.voltage[v : maxima_index[i + 1]])
-            p_forc.extend(self.polarization[v : maxima_index[i + 1]])
+            v_forc.extend(self.voltage[v: maxima_index[i + 1]])
+            p_forc.extend(self.polarization[v: maxima_index[i + 1]])
 
         e_forc = np.asfarray(v_forc) / (self.thickness)  # V/cm
         er_forc = np.asfarray(vr_forc) / (self.thickness)  # V/cm
@@ -721,6 +737,18 @@ class LeakageData(SampleData):
         self.lcm_current = []
         self.lcm_parms = []
 
+    def __eq__(self, other):
+        if type(self) == type(other):
+            if (self.area == other.area and
+                    self.thickness == other.thickness and
+                    np.array_equal(self.lcm_voltage, other.lcm_voltage) and
+                    np.array_equal(self.lcm_current, other.lcm_current)):
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def lcm_read(self, filename):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v5.pl
@@ -736,7 +764,9 @@ class LeakageData(SampleData):
         -------
         n/a
         """
-        self.file_name = filename
+        samplenamematch = re.match(r'^(.*) \d*s.*', basename(filename))
+        if samplenamematch:
+            self.sample_name = samplenamematch.group(1)
 
         r = re.compile(".*(_| )(\d+)C.*")
         try:
@@ -762,9 +792,9 @@ class LeakageData(SampleData):
         self.lcm_current = self.area * 1e-6 * np.asfarray(self.lcm_current)  # A
 
     def lcm_fit(
-        self,
-        func=leakage_func,
-        init_guess=np.array([2e-10, 2e-10, 0.8e-6, -1e-6, 1e-6, 0, -1]),
+            self,
+            func=leakage_func,
+            init_guess=np.array([2e-10, 2e-10, 0.8e-6, -1e-6, 1e-6, 0, -1]),
     ):
         """
         Attempts to fit parameters to leakage current, stores in hd object
@@ -808,6 +838,6 @@ def main():
 
 
 if (
-    __name__ == "__main__"
+        __name__ == "__main__"
 ):  # Executes main automatically if this file run directly rather than imported
     main()

@@ -1,6 +1,7 @@
 
 import re
 import numpy as np
+import data as hd
 from os.path import basename
 from enum import Enum
 
@@ -9,7 +10,42 @@ class MeasEnum(Enum):
     FATIGUE = 2
     PULSE = 3
     LEAKAGE = 4
+meas_struct = {
+    MeasEnum.HYSTERESIS: {
+        'datatype': hd.HysteresisData,
+        'metadata': {
+            'area': 'Area [mm2]',
+            'freq': 'Hysteresis Frequency [Hz]',
+            'thickness': 'Thickness [nm]'
+        },
+        'datatable': {
+            'time': 0,
+            'voltage': 1,
+            'current': 3,
+            'polarization': 4
+        },
+        'multiplier': {
+            'thickness': 1E-7,
+            'polarization': 1E-6,
+            'area': 1E-2
 
+        }
+    },
+    MeasEnum.FATIGUE: None,
+    MeasEnum.PULSE: None,
+    MeasEnum.LEAKAGE: {
+        'datatype': hd.HysteresisData,
+        'metadata': {
+            'area': 'Area [mm2]',
+            'thickness': 'Thickness [nm]'
+        },
+        'datatable': {
+            'lcm_voltage': 0,
+            'lcm_current': 1,
+        }
+    }
+
+}
 
 def check_datatype(filepath):
     f = open(filepath)
@@ -77,13 +113,19 @@ def read_tfdata(filepath):
     global_metadata = {}
     table_metadata = {}
     datastr = []
-    table_dict = {}
     tableheaderstr = ''
     table_key = ''
 
+    filekey = basename(filepath).split('.')[0]
+    table_dict= {
+        filekey: {
+            'meastype': datatype,
+            'datatables': {}
+        }
+    }
     with open(filepath) as f:
         for line in f:
-            line.rstrip('\n')
+            line.rstrip(r'\n')
             if re.match('^(DynamicHysteresis|Data Table|Pulse|Leakage)$', line):
                 summary_table_read = True
             if not summary_table_read:
@@ -108,38 +150,68 @@ def read_tfdata(filepath):
                         if m:
                             table_metadata[m.group(1)] = m.group(2)
                 elif is_data_table:
-                    if re.match(r'^(/n)?$', line):
-                        is_data_table_header = True
-                        is_data_table = False
-                        table_dict[basename(filepath).split('.')[0]] = {
-                            'meastype': datatype,
-                            'datatables': {
-                                table_key: {
-                                    'metadata': {**global_metadata,
-                                                 **table_metadata},
-                                    'dataheader': tableheaderstr.split('\t'),
-                                    'data': datastr
-                                }
+                    if re.match(r'^(\n)?$', line):
+                        table_dict[filekey]['datatables'].update({
+                            table_key: {
+                                'metadata': {**global_metadata,
+                                             **table_metadata},
+                                'dataheader': tableheaderstr.split('\t'),
+                                'data': datastr
                             }
                         }
+                        )
+                    elif re.match(r'Table (\[*\d*.*\d*\]*)', line):
+                        table_key = line
+                        is_data_table_header = True
+                        is_data_table = False
                         table_metadata.clear()
                         datastr = []
                     else:
                         datastr.append(line)
+    # add last table in file to dict
+    table_dict[filekey]['datatables'].update({
+        table_key: {
+            'metadata': {**global_metadata,
+                         **table_metadata},
+            'dataheader': tableheaderstr.split('\t'),
+            'data': datastr
+        }
+    }
+    )
     return table_dict
 
+def get_multiplier(datatype, key):
+    if key in meas_struct[datatype]['multiplier']:
+        return meas_struct[datatype]['multiplier'][key]
+    else:
+        return 1
 
 def load_tfdata(table_dict):
-
+    obj_list = []
     for f in table_dict:
-        print(f)
-        for table in table_dict[f]['datatables']:
-            t = table_dict[f]['datatables'][table]['data']
-            header = table_dict[f]['datatables'][table]['dataheader']
-            table_array = np.genfromtxt(t, skip_header=1)
-            print(header, table_array)
-            exit(0)
+        datatype = table_dict[f]['meastype']
+        if not meas_struct[datatype]:
+            raise NotImplementedError
+        else:
+            for table in table_dict[f]['datatables']:
+                t = table_dict[f]['datatables'][table]['data']
+                header = table_dict[f]['datatables'][table]['dataheader']
+                table_array = np.genfromtxt(t)
 
+                dataobj = meas_struct[datatype]['datatype']()
+                dataobj.sample_name = f
+                for key, val in meas_struct[datatype]['metadata'].items():
+                    v = table_dict[f]['datatables'][table]['metadata'][val]
+                    try:
+                        m = get_multiplier(datatype, key)
+                        dataobj.__setattr__(key, float(v)*m)
+                    except TypeError:
+                        dataobj.__setattr__(key, v)
+                for key, val in meas_struct[datatype]['datatable'].items():
+                    m = get_multiplier(datatype, key)
+                    dataobj.__setattr__(key, m*table_array[:, val])
+                obj_list.append(dataobj)
+    return obj_list
 
 if __name__ == '__main__':
     data = read_tfdata(r'C:\Users\Jackson\PycharmProjects\Ferro\tests\testData\RTWhiteB\RTWhiteB_freqs.dat')
