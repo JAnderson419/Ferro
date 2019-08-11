@@ -14,6 +14,7 @@ Welcome to Ferro's documentation!
    Introduction <intro>
    Installation Guide (Getting Started for new Python Users) <installation>
    Data Handling Classes <data>
+   AixACCT Data Import <aixacct>
    Film Modeling Classes <modeling>
 
 

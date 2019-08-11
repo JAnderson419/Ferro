@@ -1,7 +1,7 @@
 
 import re
 import numpy as np
-import data as hd
+from . import data as hd
 from os.path import basename
 from enum import Enum
 
@@ -113,15 +113,17 @@ def read_tfdata(filepath):
 
     Returns data in a dictionary of following structure :
         filename:
-            'table #':
-                'metadata':
-                    Waveform: triangle
-                    SampleName: RTWhiteB
-                    Area [mm2]: 0.01
-                    Thickness [nm]: 255
-                    ...
-               'data':
-                    '0.000000e+000\t3.235215e-004\t ...'
+            'meastype': MeasEnum.HYSTERESIS,
+            'datatables':
+                'Table #':
+                    'metadata':
+                        Waveform: triangle
+                        SampleName: RTWhiteB
+                        Area [mm2]: 0.01
+                        Thickness [nm]: 255
+                        ...
+                   'data':
+                        '0.000000e+000\t3.235215e-004\t ...'
 
 
     Parameters
