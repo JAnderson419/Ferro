@@ -10,10 +10,11 @@ class MeasEnum(Enum):
     An Enumeration representing measurement data type.
 
     Valid entries include:
-        HYSTERESIS = 1 (Hysteresis and FORC)
-        FATIGUE = 2
-        PULSE = 3 (PUND)
-        LEAKAGE = 4 (I-V)
+
+        - HYSTERESIS = 1 (Hysteresis and FORC)
+        - FATIGUE = 2
+        - PULSE = 3 (PUND)
+        - LEAKAGE = 4 (I-V)
 
     """
     HYSTERESIS = 1

@@ -65,14 +65,7 @@ each present data table into a corresponding SampleData object and returns all t
 from the file as a list. From here, one can access individual data tables in the list
 for analysis or loop over the list to perform operations on each measurement.
 
-
-MeasEnum
------------
-.. autoclass:: ferro.aixacct.MeasEnum
-	:members:
-
-
-Non-Class Functions
+Functions
 -----------------------
 .. automodule:: ferro.aixacct
 	:members:
