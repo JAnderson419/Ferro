@@ -6,6 +6,16 @@ from os.path import basename
 from enum import Enum
 
 class MeasEnum(Enum):
+    """
+    An Enumeration representing measurement data type.
+
+    Valid entries include:
+        HYSTERESIS = 1 (Hysteresis and FORC)
+        FATIGUE = 2
+        PULSE = 3 (PUND)
+        LEAKAGE = 4 (I-V)
+
+    """
     HYSTERESIS = 1
     FATIGUE = 2
     PULSE = 3
@@ -52,6 +62,18 @@ meas_struct = {
 }
 
 def check_datatype(filepath):
+    """
+
+    Parameters
+    ----------
+    filepath: str
+        Full path to file to open.
+
+    Returns
+    -------
+    MeasEnum.Type : Enum
+        An entry in MeasEnum representing the type of measurement in the file.
+    """
     f = open(filepath, encoding='cp1252')
     firstline = f.readline()
     f.close()
@@ -69,11 +91,14 @@ def check_istable(line, datatype):
 
     Parameters
     ----------
-    line
-    datatype
-
+    line: str
+        Current line in the data file that is open.
+    datatype: MeasEnum
+        Type of measurement being read.
     Returns
     -------
+    bool(m): boolean
+        Boolean representi if the current line is a datatable header or not.
 
     '''
     if datatype is MeasEnum.LEAKAGE:
@@ -185,12 +210,39 @@ def read_tfdata(filepath):
     return table_dict
 
 def get_multiplier(datatype, key):
+    """
+    Checks to see if unit conversion is defined for current information being parsed.
+
+    Parameters
+    ----------
+    datatype: MeasEnum
+        Type of measurement data being converted.
+    key:
+        Current parameters being read from datatable or metadata
+    Returns
+    -------
+    multiplier: float
+        The multiplier needed to read in data values in CGS units.
+
+    """
     if key in meas_struct[datatype]['multiplier']:
         return meas_struct[datatype]['multiplier'][key]
     else:
         return 1
 
 def load_tfdata(table_dict):
+    """
+
+    Parameters
+    ----------
+    table_dict: dict
+        A dictionary representing the data parsed from the .dat file by read_tfdata().
+
+    Returns
+    -------
+    obj_list: list
+        A list of SampleData objects of the appropriate type to match the MeasEnum value for the file.
+    """
     obj_list = []
     for f in table_dict:
         datatype = table_dict[f]['meastype']
