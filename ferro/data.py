@@ -742,7 +742,8 @@ class LeakageData(SampleData):
             if (self.area == other.area and
                     self.thickness == other.thickness and
                     np.array_equal(self.lcm_voltage, other.lcm_voltage) and
-                    np.array_equal(self.lcm_current, other.lcm_current)):
+                    np.allclose(self.lcm_current, other.lcm_current) # calculated, so need tolerance for float math
+            ):
                 return True
             else:
                 return False

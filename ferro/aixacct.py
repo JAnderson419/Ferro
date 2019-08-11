@@ -28,13 +28,12 @@ meas_struct = {
             'thickness': 1E-7,
             'polarization': 1E-6,
             'area': 1E-2
-
         }
     },
     MeasEnum.FATIGUE: None,
     MeasEnum.PULSE: None,
     MeasEnum.LEAKAGE: {
-        'datatype': hd.HysteresisData,
+        'datatype': hd.LeakageData,
         'metadata': {
             'area': 'Area [mm2]',
             'thickness': 'Thickness [nm]'
@@ -42,6 +41,11 @@ meas_struct = {
         'datatable': {
             'lcm_voltage': 0,
             'lcm_current': 1,
+        },
+        'multiplier': {
+            'thickness': 1E-7,
+            'area': 1E-2,
+            'lcm_current': 1E-6
         }
     }
 
@@ -57,7 +61,7 @@ def check_datatype(filepath):
         return MeasEnum.FATIGUE
     elif re.match('PulseResult', firstline):
         return MeasEnum.PULSE
-    elif re.match('LeakageResult'):
+    elif re.match('LeakageResult', firstline):
         return MeasEnum.LEAKAGE
 
 def check_istable(line, datatype):
@@ -209,10 +213,11 @@ def load_tfdata(table_dict):
                         dataobj.__setattr__(key, v)
                 for key, val in meas_struct[datatype]['datatable'].items():
                     m = get_multiplier(datatype, key)
-                    dataobj.__setattr__(key, m*table_array[:, val])
+                    # TODO: make this more elegant - E field, current calculated from raw read-in parameters?
+                    if key == 'lcm_current': # converts Current density to current
+                        dataobj.__setattr__(key, m*table_array[:, val]*dataobj.area)
+                    else:
+                        dataobj.__setattr__(key, m * table_array[:, val])
+
                 obj_list.append(dataobj)
     return obj_list
-
-if __name__ == '__main__':
-    data = read_tfdata(r'C:\Users\Jackson\PycharmProjects\Ferro\tests\testData\RTWhiteB\RTWhiteB_freqs.dat')
-    load_tfdata(data)
