@@ -52,7 +52,7 @@ meas_struct = {
 }
 
 def check_datatype(filepath):
-    f = open(filepath)
+    f = open(filepath, encoding='cp1252')
     firstline = f.readline()
     f.close()
     if re.match('DynamicHysteresisResult', firstline):
