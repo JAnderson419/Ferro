@@ -301,7 +301,6 @@ class HysteresisData(SampleData):
         self.polarization = []
         self.capacitance = []
         self.freq = freq  # Hz
-        self.dt = 0
 
     def __eq__(self, other):
         if type(self) == type(other):
