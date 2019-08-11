@@ -5,7 +5,7 @@ from os.path import join, dirname, realpath
 sampledir = join(dirname(realpath(__file__)), 'testData', 'RTWhiteB')
 
 def test_direct_load_aixACCT_hysteresis_data():
-    RTfreqDir = join(sampledir, 'RTWhiteB_Freqs')
+    RTfreqDir = join(sampledir, 'RTWhiteB_freqs')
     RTfreqFiles = hd.dir_read(RTfreqDir)
     RTfreqData = hd.list_read(RTfreqFiles, thickness=255E-7, area=1e-4)
 
@@ -15,7 +15,7 @@ def test_direct_load_aixACCT_hysteresis_data():
     assert all(elem in directFreqData for elem in RTfreqData)
 
 def test_direct_load_aixACCT_leakage_data():
-    RTlkgDir = join(sampledir, 'RTWhiteB_lkg')
+    RTlkgDir = join(sampledir, 'RTWHITEB_lkg')
     RTlkgFiles = hd.dir_read(RTlkgDir)
     lkglist = []
     for i in RTlkgFiles:
