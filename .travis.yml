@@ -5,6 +5,7 @@ install:
   - pip install .
   - pip install pytest
   - pip install codecov
+  - pip install pytest-cov
 
 script:
   - coverage run --source=ferro/ tests/lcmTest.py
@@ -16,7 +17,7 @@ script:
   - coverage run --source=ferro/ bin/forc_comparison.py
   - coverage run --source=ferro/ bin/hfo2_mfm.py
   - coverage run --source=ferro/ bin/multidomainAnalysis.py
-  - pytest --cov=ferro/ --cov-append
+  - pytest --cov=./ --cov-append
 
 after_success:
   - codecov
