@@ -15,7 +15,7 @@ import scipy.constants as sc
 from scipy.optimize import fsolve, minimize, basinhopping, fmin_slsqp
 import numpy as np
 from mpldatacursor import datacursor
-# from . import data as hd
+# from ferro import data as hd
 # from mpl_toolkits.mplot3d import Axes3D
 
 

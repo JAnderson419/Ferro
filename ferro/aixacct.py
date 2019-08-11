@@ -1,7 +1,7 @@
 
 import re
 import numpy as np
-from . import data as hd
+from ferro import data as hd
 from os.path import basename
 from enum import Enum
 
