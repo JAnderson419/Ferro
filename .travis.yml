@@ -16,7 +16,7 @@ script:
   - coverage run --source=ferro/ bin/forc_comparison.py
   - coverage run --source=ferro/ bin/hfo2_mfm.py
   - coverage run --source=ferro/ bin/multidomainAnalysis.py
-  - pytest --rootdir=ferro/
+  - pytest
 
 after_success:
   - codecov
