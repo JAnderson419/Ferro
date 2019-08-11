@@ -5,7 +5,7 @@ Created on Thu Jun  1 08:33:01 2017
 @author: Jackson Anderson
 """
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='Ferro',

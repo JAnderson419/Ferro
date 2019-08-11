@@ -10,20 +10,20 @@ I had hoped to implement the complete Landau model as part of my MS thesis work 
 
 LandauFilm
 --------------
-.. autoclass:: ferro.LandauFilm.LandauFilm
+.. autoclass:: ferro.models.LandauFilm
 	:members:
 
 LandauSimple
 ---------------
-.. autoclass:: ferro.LandauFilm.LandauSimple
+.. autoclass:: ferro.models.LandauSimple
 	:members:
 
 LandauFull
 ------------
-.. autoclass:: ferro.LandauFilm.LandauFull
+.. autoclass:: ferro.models.LandauFull
 	:members:
 
 LandauDomain
 ------------
-.. autoclass:: ferro.LandauFilm.LandauDomain
+.. autoclass:: ferro.models.LandauDomain
 	:members:

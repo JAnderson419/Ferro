@@ -66,7 +66,7 @@ from the file as a list. From here, one can access individual data tables in the
 for analysis or loop over the list to perform operations on each measurement.
 
 
-SampleData
+MeasEnum
 -----------
 .. autoclass:: ferro.aixacct.MeasEnum
 	:members:

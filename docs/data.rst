@@ -9,20 +9,20 @@ This section includes documentation on the various data handling classes that ar
 
 Non-Class Functions
 -----------------------
-.. automodule:: ferro.HysteresisData
+.. automodule:: ferro.data
 	:members:
 
 SampleData
 -----------
-.. autoclass:: ferro.HysteresisData.SampleData
+.. autoclass:: ferro.data.SampleData
 	:members:
 	
 HysteresisData
 ---------------
-.. autoclass:: ferro.HysteresisData.HysteresisData
+.. autoclass:: ferro.data.HysteresisData
 	:members:
 	
 LeakageData
 --------------
-.. autoclass:: ferro.HysteresisData.LeakageData
+.. autoclass:: ferro.data.LeakageData
 	:members:
