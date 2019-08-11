@@ -127,7 +127,7 @@ def read_tfdata(filepath):
             'datatables': {}
         }
     }
-    with open(filepath) as f:
+    with open(filepath, encoding='cp1252') as f:
         for line in f:
             line.rstrip(r'\n')
             if re.match('^(DynamicHysteresis|Data Table|Pulse|Leakage)$', line):
