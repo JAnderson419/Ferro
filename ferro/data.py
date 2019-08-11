@@ -317,6 +317,15 @@ class HysteresisData(SampleData):
         else:
             return False
 
+    @property
+    def field(self):
+        return self.voltage/self.thickness
+
+    @property
+    def dt(self):
+        return self.time[1] - self.time[0]
+
+
     def tsv_read(self, filename):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
@@ -369,8 +378,6 @@ class HysteresisData(SampleData):
         self.voltage = np.asfarray(self.voltage)
         self.current = np.asfarray(self.current)  # A
         self.polarization = 1e-6 * np.asfarray(self.polarization)  # C/cm^2
-        self.field = self.voltage / (self.thickness)  # V/cm
-        self.dt = self.time[1] - self.time[0]  # s
 
     def leakage_compensation(self, leakage_data):
         """
