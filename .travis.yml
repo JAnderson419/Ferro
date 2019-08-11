@@ -6,8 +6,10 @@ install:
   - pip install pytest
   - pip install codecov
 
-script:
+before_script:
   - cd ferro
+  -
+script:
   - coverage run  tests/lcmTest.py
   - coverage run  tests/forcDomainTest.py
   - coverage run  tests/fftTestRTWhite.py
