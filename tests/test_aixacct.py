@@ -1,5 +1,5 @@
-from context import data as hd
-from context import aixacct as aix
+from ferro import data as hd
+from ferro import aixacct as aix
 from os.path import join, dirname, realpath
 
 sampledir = join(dirname(realpath(__file__)), 'testData', 'RTWhiteB')
@@ -27,3 +27,7 @@ def test_direct_load_aixACCT_leakage_data():
     directlkgData = aix.load_tfdata(directreaddict)
     print(all(elem in directlkgData for elem in lkglist))
     assert all(elem in directlkgData for elem in lkglist)
+
+if __name__ == '__main__':
+    test_direct_load_aixACCT_hysteresis_data()
+    test_direct_load_aixACCT_leakage_data()
