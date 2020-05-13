@@ -1,3 +1,8 @@
 *.pyc
 /Ferro.egg-info/
 /dist/
+/docs/_build/doctrees/
+/docs/_build/html/
+/.idea
+/Ferro.egg-info
+

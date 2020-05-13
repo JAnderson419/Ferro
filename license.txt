@@ -1,5 +1,7 @@
 Original code authored by Jackson Anderson.
-Copyright (c) 2017 Rochester Institute of Technology
+Code circa August 2017 Copyright (c) Rochester Institute of Technology
+
+Later derivatives Copyright 2020, Ferro development team
 
 Attribution-NonCommercial-ShareAlike 4.0 International
 
@@ -423,7 +425,7 @@ Section 8 -- Interpretation.
 Creative Commons is not a party to its public
 licenses. Notwithstanding, Creative Commons may elect to apply one of
 its public licenses to material it publishes and in those instances
-will be considered the “Licensor.” The text of the Creative Commons
+will be considered the Â“Licensor.Â” The text of the Creative Commons
 public licenses is dedicated to the public domain under the CC0 Public
 Domain Dedication. Except for the limited purpose of indicating that
 material is shared under a Creative Commons public license or as
