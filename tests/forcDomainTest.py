@@ -34,8 +34,9 @@ forc_file = join(sampledir, 'RTWhiteAFORC', 'RT WhiteA 0Hz 7V 1Average Table7.ts
 RTWhiteAFORC = hd.HysteresisData(area=1E-4, thickness=255E-7)
 RTWhiteAFORC.tsv_read(forc_file)
 RTWhiteAFORC.hyst_plot(plot_e=1)
+RTWhiteAFORC.time_plot()
 e, er, probs = RTWhiteAFORC.forc_calc(plot=True)
-    
+
 domains = RTWhiteFilm.domain_gen(e, er, probs, n=100, plot=False)
 
 esweep = np.linspace(-0.28E6, 0.28E6, num=1000)
