@@ -78,9 +78,10 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
         data = HysteresisData(**kwargs)
         data.tsv_read(f)
         if leakagefiles:
-            r = re.compile(".*(_| )" + re.escape(str(data.temp)) + "K.*")
+            r = re.compile(".*(_| )(" + re.escape(str(data.temp)) + '|' + re.escape(str(int(data.temp))) + ")K.*")
             temp_c = str(data.temp - 273)
-            r2 = re.compile(".*(_| )" + re.escape(temp_c) + "C.*")
+            temp_c_int = str(int(data.temp - 273))
+            r2 = re.compile(".*(_| )(" + re.escape(temp_c) + '|' + re.escape(temp_c_int) + ")C.*")
             no_match = True
             for j in leakagefiles:
                 match = r.match(j)
@@ -273,7 +274,7 @@ class SampleData:
 
 
 class HysteresisData(SampleData):
-    def __init__(self, freq=100, **kwargs):
+    def __init__(self, freq=100.0, **kwargs):
         """
         Inherits SampleData. See that class for info on thickness, area, 
         and temperature
@@ -306,7 +307,7 @@ class HysteresisData(SampleData):
         if type(self) == type(other):
             if (self.area == other.area and
                     self.thickness == other.thickness and
-                    np.array_equal(self.voltage,other.voltage) and
+                    np.array_equal(self.voltage, other.voltage) and
                     np.array_equal(self.polarization, other.polarization) and
                     np.array_equal(self.time, other.time) and
                     np.array_equal(self.current, other.current)):
@@ -340,24 +341,24 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
-        samplenamematch = re.match(r'^(.*) \d*Hz.*', basename(filename))
+        samplenamematch = re.match(r'^(.*) \d+Hz.*', basename(filename))
         if samplenamematch:
             self.sample_name = samplenamematch.group(1)
 
         r = re.compile(".*(_| )(\d+)C.*")
         try:
-            self.temp = int(r.match(filename).group(2)) + 273
+            self.temp = float(r.match(filename).group(2)) + 273
         except AttributeError:
             try:
                 r = re.compile(".*(\d+)K.*")
-                self.temp = int(r.match(filename).group(2))
+                self.temp = float(r.match(filename).group(2))
             except AttributeError:
                 print("No temperature specified. Defaulting to 300K")
                 next
 
         r = re.compile(".*(_| )(\d+)Hz.*")
         try:
-            self.freq = r.match(filename).group(2)
+            self.freq = float(r.match(filename).group(2))
         except AttributeError:
             print("No frequency specified. Defaulting to 100Hz")
             next
