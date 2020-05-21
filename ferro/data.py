@@ -78,9 +78,10 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
         data = HysteresisData(**kwargs)
         data.tsv_read(f)
         if leakagefiles:
-            r = re.compile(".*(_| )" + re.escape(str(data.temp)) + "K.*")
+            r = re.compile(".*(_| )" + re.escape(str(data.temp)) + '|' + re.escape(str(int(data.temp))) + "K.*")
             temp_c = str(data.temp - 273)
-            r2 = re.compile(".*(_| )" + re.escape(temp_c) + "C.*")
+            temp_c_int = str(int(data.temp - 273))
+            r2 = re.compile(".*(_| )" + re.escape(temp_c) + '|' + re.escape(temp_c_int) + "C.*")
             no_match = True
             for j in leakagefiles:
                 match = r.match(j)
