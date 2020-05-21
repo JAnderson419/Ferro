@@ -340,7 +340,7 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
-        samplenamematch = re.match(r'^(.*) \d*Hz.*', basename(filename))
+        samplenamematch = re.match(r'^(.*) \d+Hz.*', basename(filename))
         if samplenamematch:
             self.sample_name = samplenamematch.group(1)
 
