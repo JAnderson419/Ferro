@@ -260,7 +260,7 @@ class SampleData:
             Area of the sample in cm^2. This should match the area that was
             used to calculate polarization charge per unit area for the data.
             
-        temperature: int
+        temperature: float
             Temperature (in Kelvin) at which the measurement was taken.
         
         Returns
@@ -288,7 +288,7 @@ class HysteresisData(SampleData):
             Area of the sample in cm^2. This should match the area that was
             used to calculate polarization charge per unit area for the data.
             
-        temperature: int
+        temperature: float
             Temperature (in Kelvin) at which the measurement was taken.
         
         Returns
@@ -302,6 +302,10 @@ class HysteresisData(SampleData):
         self.polarization = []
         self.capacitance = []
         self.freq = freq  # Hz
+
+    def __str__(self):
+        return f'Hysteresis Data, {len(self.voltage)} points, {min(self.voltage):0.2f} to {max(self.voltage):0.2f} V, ' \
+               f'{self.freq} Hz, {self.temp}K, Pmax = {1E6*max(self.polarization):0.2f} uC/cm^2'
 
     def __eq__(self, other):
         if type(self) == type(other):
@@ -326,7 +330,7 @@ class HysteresisData(SampleData):
         return self.time[1] - self.time[0]
 
 
-    def tsv_read(self, filename):
+    def tsv_read(self, filename, verbose=False):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
         For use with TF-1000 hysteresis measurement data.
@@ -353,14 +357,18 @@ class HysteresisData(SampleData):
                 r = re.compile(".*(\d+)K.*")
                 self.temp = float(r.match(filename).group(2))
             except AttributeError:
-                print("No temperature specified. Defaulting to 300K")
+                self.temp = 300
+                if verbose:
+                    print("No temperature specified. Defaulting to 300K")
                 next
 
         r = re.compile(".*(_| )(\d+)Hz.*")
         try:
             self.freq = float(r.match(filename).group(2))
         except AttributeError:
-            print("No frequency specified. Defaulting to 100Hz")
+            self.freq = 100
+            if verbose:
+                print("No frequency specified. Defaulting to 100Hz")
             next
 
         with open(filename, "r") as data:

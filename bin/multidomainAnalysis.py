@@ -87,6 +87,7 @@ freqfiles = hd.dir_read(freqdir)
 freqData = hd.list_read(freqfiles, thickness = t, area = a)
 
 cCompData = freqData[1]
+print(cCompData)
 
 landau.c = landau.c_calc(freqData, plot=1)
 compensatedData, landau.pr = landau.c_compensation(cCompData)
