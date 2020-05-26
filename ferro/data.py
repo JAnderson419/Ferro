@@ -90,7 +90,7 @@ def list_read(files, leakagefiles=None, plot=False, verbose=False, **kwargs):
                     no_match = False
                     ldata = LeakageData()
                     ldata.lcm_read(j)
-                    ldata.lcm_fit(verbose)
+                    ldata.lcm_fit(verbose=verbose)
                     if plot:
                         ldata.lcm_plot()
                     data = data.leakage_compensation(ldata)
