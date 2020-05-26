@@ -33,3 +33,7 @@ def test_tsvload_default_temp(input_notemp_dhm):
 
 def test_tsvload_frequency_parse(input_notemp_dhm):
     assert input_notemp_dhm.freq == 400
+
+def test_hysteresisData_Str(input_notemp_dhm):
+    string = input_notemp_dhm.__str__()
+    assert string == 'Hysteresis Data, 401 points, -3.97 to 3.96 V, 400.0 Hz, 300K, Pmax = 18.43 uC/cm^2'
