@@ -47,7 +47,7 @@ def dir_read(path):
     return files
 
 
-def list_read(files, leakagefiles=None, plot=False, **kwargs):
+def list_read(files, leakagefiles=None, plot=False, verbose=False, **kwargs):
     """
     Reads in several hysteresis measurements and creates objects for them.
     
@@ -90,7 +90,7 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
                     no_match = False
                     ldata = LeakageData()
                     ldata.lcm_read(j)
-                    ldata.lcm_fit()
+                    ldata.lcm_fit(verbose)
                     if plot:
                         ldata.lcm_plot()
                     data = data.leakage_compensation(ldata)
@@ -816,6 +816,7 @@ class LeakageData(SampleData):
             self,
             func=leakage_func,
             init_guess=np.array([2e-10, 2e-10, 0.8e-6, -1e-6, 1e-6, 0, -1]),
+            verbose=False,
     ):
         """
         Attempts to fit parameters to leakage current, stores in hd object
@@ -826,6 +827,8 @@ class LeakageData(SampleData):
             Defines eqn to be used to fit data
         init_guess : np array of appropriate length to match func            
             Provides initial values for curve_fit
+        verbose : bool
+            If True, print calculated fit parameters and std dev
         Returns
         -------
         n/a
@@ -834,8 +837,9 @@ class LeakageData(SampleData):
         self.lcm_parms, pcov = curve_fit(
             func, self.lcm_voltage, self.lcm_current, p0=init_guess
         )
-        print("Fit Parms:", self.lcm_parms)
-        print("Std Dev:", np.sqrt(np.diag(pcov)))
+        if verbose:
+            print("Fit Parms:", self.lcm_parms)
+            print("Std Dev:", np.sqrt(np.diag(pcov)))
 
     def lcm_plot(self, func=leakage_func):
         """ 
