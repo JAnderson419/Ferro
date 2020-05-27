@@ -17,7 +17,7 @@ script:
   - coverage run --append --source=ferro/ bin/forc_comparison.py
   - coverage run --append --source=ferro/ bin/hfo2_mfm.py
   - coverage run --append --source=ferro/ bin/multidomainAnalysis.py
-  
+
 
 after_success:
   - codecov
