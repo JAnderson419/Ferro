@@ -40,14 +40,14 @@ def leakage_func(x, a, b, c, d, e, f, g):
 
 def dir_read(path):
     files = []
-    r = re.compile(".*\.tsv$")
+    r = re.compile(r".*\.tsv$")
     files = [
         join(path, f) for f in listdir(path) if (isfile(join(path, f)) and r.match(f))
     ]
     return files
 
 
-def list_read(files, leakagefiles=None, plot=False, **kwargs):
+def list_read(files, leakagefiles=None, plot=False, verbose=False, **kwargs):
     """
     Reads in several hysteresis measurements and creates objects for them.
     
@@ -78,9 +78,10 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
         data = HysteresisData(**kwargs)
         data.tsv_read(f)
         if leakagefiles:
-            r = re.compile(".*(_| )" + re.escape(str(data.temp)) + "K.*")
+            r = re.compile(".*(_| )(" + re.escape(str(data.temp)) + '|' + re.escape(str(int(data.temp))) + ")K.*")
             temp_c = str(data.temp - 273)
-            r2 = re.compile(".*(_| )" + re.escape(temp_c) + "C.*")
+            temp_c_int = str(int(data.temp - 273))
+            r2 = re.compile(".*(_| )(" + re.escape(temp_c) + '|' + re.escape(temp_c_int) + ")C.*")
             no_match = True
             for j in leakagefiles:
                 match = r.match(j)
@@ -89,7 +90,7 @@ def list_read(files, leakagefiles=None, plot=False, **kwargs):
                     no_match = False
                     ldata = LeakageData()
                     ldata.lcm_read(j)
-                    ldata.lcm_fit()
+                    ldata.lcm_fit(verbose=verbose)
                     if plot:
                         ldata.lcm_plot()
                     data = data.leakage_compensation(ldata)
@@ -136,20 +137,20 @@ def hyst_plot(data, legend=None, plot_e=False):
         if plot_e:
             line = ax1.plot(1e-6 * d.field, 1e6 * d.polarization)
             lines.append(line[0])
-            ax1.set_ylabel("Polarization Charge ($\mu{}C/cm^2$)")
+            ax1.set_ylabel(r"Polarization Charge ($\mu{}C/cm^2$)")
 
             ax2.plot(1e-6 * d.field, 1e6 * d.current)
             ax2.set_xlabel("Electric Field (MV/cm)")
-            ax2.set_ylabel("Current ($\mu{}A$)")
+            ax2.set_ylabel(r"Current ($\mu{}A$)")
 
         else:
             line = ax1.plot(d.voltage, 1e6 * d.polarization)
             lines.append(line[0])
-            ax1.set_ylabel("Polarization Charge ($\mu{}C/cm^2$)")
+            ax1.set_ylabel(r"Polarization Charge ($\mu{}C/cm^2$)")
 
             ax2.plot(d.voltage, 1e6 * d.current)
             ax2.set_xlabel("Voltage (V)")
-            ax2.set_ylabel("Current ($\mu{}A$)")
+            ax2.set_ylabel(r"Current ($\mu{}A$)")
     if legend:
         box = ax1.get_position()
         ax1.set_position([box.x0, box.y0, box.width * 0.8, box.height])
@@ -191,13 +192,13 @@ def ncv_plot(data, legend=None, plot_e=False):
             line = ax1.plot(1e-6 * ncv_v / d.thickness, 1e6 * ncv)
             lines.append(line[0])
             ax1.set_xlabel("Electric Field (MV/cm)")
-            ax1.set_ylabel("Capacitance ($\mu{}F/cm^2$)")
+            ax1.set_ylabel(r"Capacitance ($\mu{}F/cm^2$)")
 
         else:
             line = ax1.plot(ncv_v, 1e6 * ncv)
             lines.append(line[0])
             ax1.set_xlabel("Voltage (V)")
-            ax1.set_ylabel("Capacitance ($\mu{}F/cm^2$)")
+            ax1.set_ylabel(r"Capacitance ($\mu{}F/cm^2$)")
 
     if legend:
         box = ax1.get_position()
@@ -239,7 +240,7 @@ def lcm_plot(data, legend=None):
         if d.lcm_parms != []:
             ax.plot(d.lcm_voltage, 1e6 * leakage_func(d.lcm_voltage, *d.lcm_parms))
     ax.set_xlabel("Voltage (V)")
-    ax.set_ylabel("Leakage Current ($\mu{}A$)")
+    ax.set_ylabel(r"Leakage Current ($\mu{}A$)")
 
     if legend:
         box = ax.get_position()
@@ -259,7 +260,7 @@ class SampleData:
             Area of the sample in cm^2. This should match the area that was
             used to calculate polarization charge per unit area for the data.
             
-        temperature: int
+        temperature: float
             Temperature (in Kelvin) at which the measurement was taken.
         
         Returns
@@ -273,7 +274,7 @@ class SampleData:
 
 
 class HysteresisData(SampleData):
-    def __init__(self, freq=100, **kwargs):
+    def __init__(self, freq=100.0, **kwargs):
         """
         Inherits SampleData. See that class for info on thickness, area, 
         and temperature
@@ -287,7 +288,7 @@ class HysteresisData(SampleData):
             Area of the sample in cm^2. This should match the area that was
             used to calculate polarization charge per unit area for the data.
             
-        temperature: int
+        temperature: float
             Temperature (in Kelvin) at which the measurement was taken.
         
         Returns
@@ -302,11 +303,15 @@ class HysteresisData(SampleData):
         self.capacitance = []
         self.freq = freq  # Hz
 
+    def __str__(self):
+        return f'Hysteresis Data, {len(self.voltage)} points, {min(self.voltage):0.2f} to {max(self.voltage):0.2f} V, ' \
+               f'{self.freq} Hz, {self.temp}K, Pmax = {1E6*max(self.polarization):0.2f} uC/cm^2'
+
     def __eq__(self, other):
         if type(self) == type(other):
             if (self.area == other.area and
                     self.thickness == other.thickness and
-                    np.array_equal(self.voltage,other.voltage) and
+                    np.array_equal(self.voltage, other.voltage) and
                     np.array_equal(self.polarization, other.polarization) and
                     np.array_equal(self.time, other.time) and
                     np.array_equal(self.current, other.current)):
@@ -325,7 +330,7 @@ class HysteresisData(SampleData):
         return self.time[1] - self.time[0]
 
 
-    def tsv_read(self, filename):
+    def tsv_read(self, filename, verbose=False):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
         For use with TF-1000 hysteresis measurement data.
@@ -340,26 +345,30 @@ class HysteresisData(SampleData):
         -------
         n/a
         """
-        samplenamematch = re.match(r'^(.*) \d*Hz.*', basename(filename))
+        samplenamematch = re.match(r'^(.*) \d+Hz.*', basename(filename))
         if samplenamematch:
             self.sample_name = samplenamematch.group(1)
 
-        r = re.compile(".*(_| )(\d+)C.*")
+        r = re.compile(r".*(_| )(\d+)C.*")
         try:
-            self.temp = int(r.match(filename).group(2)) + 273
+            self.temp = float(r.match(filename).group(2)) + 273
         except AttributeError:
             try:
-                r = re.compile(".*(\d+)K.*")
-                self.temp = int(r.match(filename).group(2))
+                r = re.compile(r".*(\d+)K.*")
+                self.temp = float(r.match(filename).group(2))
             except AttributeError:
-                print("No temperature specified. Defaulting to 300K")
+                self.temp = 300
+                if verbose:
+                    print("No temperature specified. Defaulting to 300K")
                 next
 
-        r = re.compile(".*(_| )(\d+)Hz.*")
+        r = re.compile(r".*(_| )(\d+)Hz.*")
         try:
-            self.freq = r.match(filename).group(2)
+            self.freq = float(r.match(filename).group(2))
         except AttributeError:
-            print("No frequency specified. Defaulting to 100Hz")
+            self.freq = 100
+            if verbose:
+                print("No frequency specified. Defaulting to 100Hz")
             next
 
         with open(filename, "r") as data:
@@ -513,12 +522,12 @@ class HysteresisData(SampleData):
             ax1 = fig1.add_subplot(211)
             ax1.set_title(str(self.freq) + " Hz " + str(self.temp) + " K")
             datacursor(ax1.plot(1e-6 * self.field, 1e6 * self.polarization))
-            ax1.set_ylabel("Polarization Charge ($\mu{}C/cm^2$)")
+            ax1.set_ylabel(r"Polarization Charge ($\mu{}C/cm^2$)")
 
             ax2 = fig1.add_subplot(212)
             datacursor(ax2.plot(1e-6 * self.field, 1e6 * self.current))
             ax2.set_xlabel("Electric Field (MV/cm)")
-            ax2.set_ylabel("Current ($\mu{}A$)")
+            ax2.set_ylabel(r"Current ($\mu{}A$)")
 
         else:
             fig1 = plt.figure()
@@ -526,12 +535,12 @@ class HysteresisData(SampleData):
             ax1 = fig1.add_subplot(211)
             ax1.set_title(str(self.freq) + " Hz " + str(self.temp) + " K")
             datacursor(ax1.plot(self.voltage, 1e6 * self.polarization))
-            ax1.set_ylabel("Polarization Charge ($\mu{}C/cm^2$)")
+            ax1.set_ylabel(r"Polarization Charge ($\mu{}C/cm^2$)")
 
             ax2 = fig1.add_subplot(212)
             datacursor(ax2.plot(self.voltage, 1e6 * self.current))
             ax2.set_xlabel("Voltage (V)")
-            ax2.set_ylabel("Current ($\mu{}A$)")
+            ax2.set_ylabel(r"Current ($\mu{}A$)")
 
     def time_plot(self):
         """
@@ -546,7 +555,7 @@ class HysteresisData(SampleData):
         ax4.set_ylabel("Voltage (V)")
         ax41 = ax4.twinx()
         ax41.plot(self.time, self.current * 1e6)
-        ax41.set_ylabel("Current ($\mu{}A$)")
+        ax41.set_ylabel(r"Current ($\mu{}A$)")
 
     def dvdt_plot(self):
         """
@@ -589,12 +598,12 @@ class HysteresisData(SampleData):
         if plot_e:
             ax1.plot(1e-6 * ncv_v / self.thickness, 1e6 * ncv)
             ax1.set_xlabel("Electric Field (MV/cm)")
-            ax1.set_ylabel("Capacitance ($\mu{}F/cm^2$)")
+            ax1.set_ylabel(r"Capacitance ($\mu{}F/cm^2$)")
 
         else:
             ax1.plot(ncv_v, 1e6 * ncv)
             ax1.set_xlabel("Voltage (V)")
-            ax1.set_ylabel("Capacitance ($\mu{}F/cm^2$)")
+            ax1.set_ylabel(r"Capacitance ($\mu{}F/cm^2$)")
 
     def forc_calc(self, plot=False, linear=True, filt_iter=None, filt_dim=[1, 1]):
         """
@@ -705,7 +714,7 @@ class HysteresisData(SampleData):
             plt.ticklabel_format(style="sci", axis="x", scilimits=(-2, 3))
             plt.ticklabel_format(style="sci", axis="y", scilimits=(-2, 3))
             ax4.set_xlabel("E (MV/cm)")
-            ax4.set_ylabel("$E_r$ (MV/cm)")
+            ax4.set_ylabel(r"$E_r$ (MV/cm)")
             ax4.set_title("FORC Plot")
             #            ax4.plot([uniform_vr[0],uniform_vr[-1]],[uniform_vr[0],uniform_vr[-1]],'k-')
 
@@ -714,11 +723,11 @@ class HysteresisData(SampleData):
             plt.clf()
             ax5 = fig5.add_subplot(111)
             ax5 = plt.scatter(v_forc, np.asfarray(p_forc) * 1e6, c=vr_forc, alpha=0.25)
-            plt.xlabel("$V (V)$")
-            plt.ylabel("$P_r (\mu{}C/cm^2)$")
+            plt.xlabel(r"$V (V)$")
+            plt.ylabel(r"$P_r (\mu{}C/cm^2)$")
             cb = plt.colorbar(ax5)
             cb.set_label("$V_r$")
-            plt.title("$\\rho{}^-$ as Used for FORC Plot")
+            plt.title(r"$\rho{}^-$ as Used for FORC Plot")
 
             fig5 = plt.figure()
             fig5.set_facecolor("white")
@@ -728,10 +737,10 @@ class HysteresisData(SampleData):
                 e_forc * 1e-6, np.asfarray(p_forc) * 1e6, c=er_forc * 1e-6, alpha=0.25
             )
             plt.xlabel("E (MV/cm)")
-            plt.ylabel("$P_r (\mu{}C/cm^2)$")
+            plt.ylabel(r"$P_r (\mu{}C/cm^2)$")
             cb = plt.colorbar(ax5)
-            cb.set_label("$E_r$ (MV/cm)")
-            plt.title("$\\rho{}^-$ as Used for FORC Plot")
+            cb.set_label(r"$E_r$ (MV/cm)")
+            plt.title(r"$\rho{}^-$ as Used for FORC Plot")
 
         return uniform_e, uniform_er, prob
 
@@ -742,6 +751,11 @@ class LeakageData(SampleData):
         self.lcm_voltage = []
         self.lcm_current = []
         self.lcm_parms = []
+
+    def __str__(self):
+        return f'Leakage Data, {len(self.lcm_voltage)} points, ' \
+               f'{min(self.lcm_voltage):0.2f} to {max(self.lcm_voltage):0.2f} V, ' \
+               f'{self.temp}K, Imax = {1E6 * max(self.lcm_current):0.2f} uA'
 
     def __eq__(self, other):
         if type(self) == type(other):
@@ -775,12 +789,12 @@ class LeakageData(SampleData):
         if samplenamematch:
             self.sample_name = samplenamematch.group(1)
 
-        r = re.compile(".*(_| )(\d+)C.*")
+        r = re.compile(r".*(_| )(\d+)C.*")
         try:
             self.temp = int(r.match(filename).group(2)) + 273
         except AttributeError:
             try:
-                r = re.compile(".*(_| )(\d+)K.*")
+                r = re.compile(r".*(_| )(\d+)K.*")
                 self.temp = int(r.match(filename).group(2))
             except AttributeError:
                 print("No temperature specified. Defaulting to 300K")
@@ -802,6 +816,7 @@ class LeakageData(SampleData):
             self,
             func=leakage_func,
             init_guess=np.array([2e-10, 2e-10, 0.8e-6, -1e-6, 1e-6, 0, -1]),
+            verbose=False,
     ):
         """
         Attempts to fit parameters to leakage current, stores in hd object
@@ -812,6 +827,8 @@ class LeakageData(SampleData):
             Defines eqn to be used to fit data
         init_guess : np array of appropriate length to match func            
             Provides initial values for curve_fit
+        verbose : bool
+            If True, print calculated fit parameters and std dev
         Returns
         -------
         n/a
@@ -820,8 +837,9 @@ class LeakageData(SampleData):
         self.lcm_parms, pcov = curve_fit(
             func, self.lcm_voltage, self.lcm_current, p0=init_guess
         )
-        print("Fit Parms:", self.lcm_parms)
-        print("Std Dev:", np.sqrt(np.diag(pcov)))
+        if verbose:
+            print("Fit Parms:", self.lcm_parms)
+            print("Std Dev:", np.sqrt(np.diag(pcov)))
 
     def lcm_plot(self, func=leakage_func):
         """ 
@@ -837,7 +855,7 @@ class LeakageData(SampleData):
             #            ax.plot(self.lcm_voltage,np.log(np.abs(leakage_func(self.lcm_voltage,*self.lcm_parms))))
             ax.plot(self.lcm_voltage, 1e6 * func(self.lcm_voltage, *self.lcm_parms))
         ax.set_xlabel("Voltage (V)")
-        ax.set_ylabel("Leakage Current ($\mu{}A$)")
+        ax.set_ylabel(r"Leakage Current ($\mu{}A$)")
 
 
 def main():
