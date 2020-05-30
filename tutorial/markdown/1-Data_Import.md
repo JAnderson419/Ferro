@@ -23,6 +23,7 @@ In order to explore the different ways data can be imported to ferro,
 we will start by importing the package and defining our data directories.
 
 ```python pycharm={"name": "#%%\n"}
+import pprint
 from os.path import join, dirname, realpath
 from ferro import data as hd, aixacct as aix
 
@@ -43,15 +44,17 @@ def isnotebook():
         return False      # Probably standard Python interpreter
 
 if isnotebook():
-    current_folder = globals()['_dh'][0]
+    root_folder = dirname(globals()['_dh'][0])
 else:
-    current_folder = dirname(dirname(realpath(__file__)))
+    root_folder = dirname(dirname(dirname(realpath(__file__))))
 
-DATA_ROOT = join(current_folder, "data")
+DATA_ROOT = join(root_folder, "tests", "testData")
 
 tempdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_temps")
 templkgdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_tempslkg")
 freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
+
+pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
 ```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
@@ -89,13 +92,13 @@ leakage current compensation of the hysteresis data, matching a leakage measurem
 
 ```python pycharm={"name": "#%%\n"}
 templkgfiles = hd.dir_read(templkgdir)
-print(templkgfiles)
+pp.pprint(templkgfiles)
 ```
 
 ```python pycharm={"name": "#%%\n"}
 tempfiles = hd.dir_read(tempdir)
 tempData = hd.list_read(tempfiles, templkgfiles)
-print(tempData)
+pp.pprint(tempData)
 ```
 
 
@@ -113,7 +116,7 @@ in the .dat file.
 
 ```python pycharm={"name": "#%%\n"}
 data_dict = aix.read_tfdata(join(DATA_ROOT, r"hfo2_MFM", 'H9_x9y4_1e4_S3_temps.dat'))
-print(data_dict)
+pp.pprint(data_dict)
 ```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
@@ -123,7 +126,7 @@ each measurement into an appropriate sampleData object using tsv_read():
 
 ```python pycharm={"name": "#%%\n"}
 data_list = aix.load_tfdata(data_dict)
-print(data_list)
+pp.pprint(data_list)
 ```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->

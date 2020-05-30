@@ -24,6 +24,7 @@ before attempting model fits.
 ```python pycharm={"name": "#%%\n"}
 %matplotlib inline
 
+import pprint
 from os.path import join, dirname, realpath
 from ferro import data as hd, aixacct as aix
 
@@ -44,13 +45,11 @@ def isnotebook():
         return False      # Probably standard Python interpreter
 
 if isnotebook():
-    current_folder = globals()['_dh'][0]
+    root_folder = dirname(globals()['_dh'][0])
 else:
-    current_folder = dirname(dirname(realpath(__file__)))
+    root_folder = dirname(dirname(dirname(realpath(__file__))))
 
-DATA_ROOT = join(current_folder, "data")
-current_folder = globals()['_dh'][0]
-DATA_ROOT = join(current_folder, "data")
+DATA_ROOT = join(root_folder, "tests", "testData")
 
 
 tempdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_temps")
@@ -59,8 +58,9 @@ freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
 
 templkgfiles = hd.dir_read(templkgdir)
 tempfiles = hd.dir_read(tempdir)
-```
 
+pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
+```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
 # list_read depreciation?
@@ -120,7 +120,7 @@ temperatures:
 <!-- #endregion -->
 
 ```python pycharm={"name": "#%%\n"}
-print(tempfiles)
+pp.pprint(tempfiles)
 ```
 
 To examine one of these, it can be imported and plotted as a LeakageData object:
