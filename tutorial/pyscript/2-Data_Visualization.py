@@ -23,6 +23,7 @@
 # %% pycharm={"name": "#%%\n"}
 # %matplotlib inline
 
+import pprint
 from os.path import join, dirname, realpath
 from ferro import data as hd, aixacct as aix
 
@@ -45,7 +46,7 @@ def isnotebook():
 if isnotebook():
     root_folder = dirname(globals()['_dh'][0])
 else:
-    root_folder = dirname(realpath(__file__))
+    root_folder = dirname(dirname(dirname(realpath(__file__))))
 
 DATA_ROOT = join(root_folder, "tests", "testData")
 
@@ -57,6 +58,7 @@ freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
 templkgfiles = hd.dir_read(templkgdir)
 tempfiles = hd.dir_read(tempdir)
 
+pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # # list_read depreciation?
@@ -104,7 +106,7 @@ data.time_plot()
 # temperatures:
 
 # %% pycharm={"name": "#%%\n"}
-print(tempfiles)
+pp.pprint(tempfiles)
 
 # %% [markdown]
 # To examine one of these, it can be imported and plotted as a LeakageData object:

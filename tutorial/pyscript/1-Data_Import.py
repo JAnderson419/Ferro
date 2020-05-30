@@ -24,6 +24,7 @@
 # we will start by importing the package and defining our data directories.
 
 # %% pycharm={"name": "#%%\n"}
+import pprint
 from os.path import join, dirname, realpath
 from ferro import data as hd, aixacct as aix
 
@@ -46,13 +47,15 @@ def isnotebook():
 if isnotebook():
     root_folder = dirname(globals()['_dh'][0])
 else:
-    root_folder = dirname(realpath(__file__))
+    root_folder = dirname(dirname(dirname(realpath(__file__))))
 
 DATA_ROOT = join(root_folder, "tests", "testData")
 
 tempdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_temps")
 templkgdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_tempslkg")
 freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
+
+pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # ## TSV import
@@ -86,12 +89,12 @@ print(data)
 
 # %% pycharm={"name": "#%%\n"}
 templkgfiles = hd.dir_read(templkgdir)
-print(templkgfiles)
+pp.pprint(templkgfiles)
 
 # %% pycharm={"name": "#%%\n"}
 tempfiles = hd.dir_read(tempdir)
 tempData = hd.list_read(tempfiles, templkgfiles)
-print(tempData)
+pp.pprint(tempData)
 
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
@@ -107,7 +110,7 @@ print(tempData)
 
 # %% pycharm={"name": "#%%\n"}
 data_dict = aix.read_tfdata(join(DATA_ROOT, r"hfo2_MFM", 'H9_x9y4_1e4_S3_temps.dat'))
-print(data_dict)
+pp.pprint(data_dict)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # The second half of the read in takes this complete set of data, which may include several IV or PV sweeps, and loads
@@ -115,7 +118,7 @@ print(data_dict)
 
 # %% pycharm={"name": "#%%\n"}
 data_list = aix.load_tfdata(data_dict)
-print(data_list)
+pp.pprint(data_list)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # ## RT import - WIP
