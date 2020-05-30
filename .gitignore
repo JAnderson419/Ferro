@@ -1,4 +1,5 @@
 *.pyc
+*.ipynb
 /Ferro.egg-info/
 /dist/
 /docs/_build/doctrees/
