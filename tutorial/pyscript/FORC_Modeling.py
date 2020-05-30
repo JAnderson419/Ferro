@@ -36,11 +36,11 @@ def isnotebook():
         return False      # Probably standard Python interpreter
 
 if isnotebook():
-    current_folder = globals()['_dh'][0]
+    root_folder = dirname(globals()['_dh'][0])
 else:
-    current_folder = dirname(dirname(realpath(__file__)))
+    root_folder = dirname(realpath(__file__))
 
-DATA_ROOT = join(current_folder, "data")
+DATA_ROOT = join(root_folder, "tests", "testData")
 forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
                 "H9 die (9,4) 0Hz 4V 1Average Table1.tsv")
 
