@@ -3,13 +3,19 @@ Ferro
 
 [![Documentation Status](https://readthedocs.org/projects/ferro/badge/?version=latest)](https://ferro.readthedocs.io/en/latest/?badge=latest)
 
-Master
+Master:
+
 [![Build Status](https://travis-ci.org/JAnderson419/Ferro.svg?branch=master)](https://travis-ci.org/JAnderson419/Ferro)
+
 [![codecov](https://codecov.io/gh/JAnderson419/Ferro/branch/master/graph/badge.svg)](https://codecov.io/gh/JAnderson419/Ferro)
 
-Dev
+Dev:
+
 [![Build Status](https://travis-ci.org/JAnderson419/Ferro.svg?branch=dev)](https://travis-ci.org/JAnderson419/Ferro)
+
 [![codecov](https://codecov.io/gh/JAnderson419/Ferro/branch/dev/graph/badge.svg)](https://codecov.io/gh/JAnderson419/Ferro)
+
+Tutorial: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JAnderson419/Ferro/dev?filepath=.%2Ftutorial)
 
 
 Ferro aims to be a python package to ease manipulation of ferroelectric (and perhaps ferromagnetic) test data. It includes a HysteresisData class for read-in, storage, and display of PV/PUND/IV measurements as well as the beginning of a Landau modeling class (work in progress) that currently has a simple Presiach model implemented. If you would like to use some portion of this for your research (or add on features), I would be happy to help you get started.
