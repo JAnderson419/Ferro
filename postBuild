@@ -1,0 +1,4 @@
+#!/bin/bash
+cd tutorial
+pip install -r tut-requirements.txt
+jupytext --sync ./pyscript/*.py

@@ -47,7 +47,7 @@ def dir_read(path):
     return files
 
 
-def list_read(files, leakagefiles=None, plot=False, verbose=False, **kwargs):
+def list_read(files, leakagefiles=None, plot=False, plot_E=False, verbose=False, **kwargs):
     """
     Reads in several hysteresis measurements and creates objects for them.
     
@@ -92,7 +92,7 @@ def list_read(files, leakagefiles=None, plot=False, verbose=False, **kwargs):
                     ldata.lcm_read(j)
                     ldata.lcm_fit(verbose=verbose)
                     if plot:
-                        ldata.lcm_plot()
+                        ldata.lcm_plot(plot_E)
                     data = data.leakage_compensation(ldata)
                 else:
                     next
@@ -570,7 +570,7 @@ class HysteresisData(SampleData):
         fig1.set_facecolor("white")
         plt.cla()
         ax1 = fig1.add_subplot(111)
-        ax1.set_title(self.freq + " Hz")
+        ax1.set_title(f"{self.freq:0.2f}" + " Hz")
         datacursor(ax1.plot(dvdt, "r."))
         ax1.plot([0, len(dvdt)], [avg, avg], "k--", linewidth=2)
         ax1.set_xlabel("count")
