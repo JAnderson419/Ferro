@@ -14,7 +14,10 @@
 # ---
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
+# <a id='top'></a>
 # # 2 - Data Visualization
+#
+# [Back to Table of Contents](0-Intro.ipynb#top)
 #
 # In this section, some of the experimental data visualization tools in ferro will be introduced.
 # These allow a researcher to verify that data was imported correctly and visualize trends in experimental data
@@ -61,7 +64,8 @@ tempfiles = hd.dir_read(tempdir)
 pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
-# # list_read depreciation?
+# <a id='pv'></a>
+# ## Hysteresis (P-V) Data Visualization
 
 # %% pycharm={"name": "#%%\n"}
 tempdata = hd.list_read(tempfiles, thickness=10E-7)
@@ -101,6 +105,10 @@ data.thickness = 1E-6 # change thickness back
 data.time_plot()
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
+# <a id='iv'></a>
+# ## Leakage Data Visualization and Hysteresis Leakage Compensation
+#
+#
 # This particular sample has a great deal of leakage current, so it may be useful to attempt leakage current subtraction
 # before more detailed analysis. For this particular sample, there are a number of leakage data taken at different
 # temperatures:
@@ -151,6 +159,11 @@ hd.hyst_plot(tempdata)
 hd.hyst_plot(compensated_tempdata)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
+# <a id='cv'></a>
+# ## Capacitive Current Plotting
+#
+#
+#
 # Finally, there also exist functions to plot dV/dt and dP/dV of the hysteresis data.
 # These are useful for capacitive current fitting, which will be covered in a future tutorial
 

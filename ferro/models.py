@@ -25,7 +25,7 @@ class LandauFilm:
     and beta parameters. 
     
     LandauSimple models behaviour at one temperature (solves for alpha rather
-    than alpha0 and Curie Temperature). It also asumes a viscosity coefficient
+    than alpha0 and Curie Temperature). It also assumes a viscosity coefficient
     of 0.
     
     LandauFull implements rho, Tc, and a0 for more detailed analysis.

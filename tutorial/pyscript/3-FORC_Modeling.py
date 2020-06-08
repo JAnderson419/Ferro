@@ -13,12 +13,17 @@
 #     name: python3
 # ---
 
+# %% [markdown] pycharm={"name": "#%% md\n"}
+# # FORC Analysis (Work in Progress)
+# <a id='top'></a>
+# [Back to Table of Contents](0-Intro.ipynb#top)
+
 # %%
 # %matplotlib inline
 
 import numpy as np
 from os.path import join, dirname, realpath
-from ferro import data as hd, aixacct as aix
+from ferro import data as hd, models as lf
 
 def isnotebook():
     '''
@@ -51,10 +56,11 @@ forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
 hfo2_forc = hd.HysteresisData(area=6579E-8, thickness=13E-7)
 hfo2_forc.tsv_read(forcFile)
 hfo2_forc.hyst_plot(plot_e=1)
-e, er, probs = hfo2_forc.forc_calc(plot = False)
+e, er, probs = hfo2_forc.forc_calc(plot = True)
 
-domains = hfo2_forc.domain_gen(e, er, probs, n=100, plot = False)
+hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
+domains = hfo2.domain_gen(e, er, probs, n=100, plot = False)
 
 esweep = np.linspace(-4.5E6,4.5E6,num=1000)
 esweep = np.append(esweep,esweep[::-1])
-hfo2_forc.calc_efe_preisach(esweep, domains, plot=1)
+hfo2.calc_efe_preisach(esweep, domains, plot=1)

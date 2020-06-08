@@ -14,7 +14,11 @@
 # ---
 
 # %% [markdown]
+# <a id='top'></a>
 # # 1 - Data Import and Visualization
+#
+# [Back to Table of Contents](0-Intro.ipynb#top)
+#
 #
 # In its current form, ferro supports simple data import from a TSV file as well as native support for aixACCT
 # dynamic hysteresis (inc. FORC) and Leakage (I-V) data. The aixACCT parser also understands PUND and Fatigue data,
@@ -59,6 +63,7 @@ pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # ## TSV import
+# <a id='tsv'></a>
 #
 # TSV import is the simplest method of loading data into ferro, requiring only a table with time,
 # voltage, and current data. When using this method, the data loading function will search for the frequency and
@@ -99,6 +104,7 @@ pp.pprint(tempData)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # ## aixACCT import
+# <a id='aixacct'></a>
 #
 # Native import for DynamicHysteresisResult amd LeakageResult data from aixACCT .dat ASCII export files is also supported.
 # This corresponds to DHM and Leakage measurements (if you are not sure of measurement type, open the .dat file in a
@@ -122,3 +128,4 @@ pp.pprint(data_list)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # ## RT import - WIP
+# <a id='rt'></a>
