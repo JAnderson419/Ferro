@@ -199,3 +199,4 @@ legend = sorted(legend)
 leakageData = sorted(leakageData, key=lambda data: int(data.temp))
 legend = [str(x)+' K' for x in legend]  
 hd.lcm_plot(leakageData, legend)
+plt.show()

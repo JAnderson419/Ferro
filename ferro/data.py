@@ -10,7 +10,7 @@ from warnings import warn
 import re
 import copy  # used for creating Ilkg compensated copies of exp data
 from os import listdir
-from os.path import join, isfile, basename
+from os.path import join, isfile, basename, dirname, realpath
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -19,6 +19,7 @@ from scipy.optimize import curve_fit
 from scipy import signal
 from scipy.ndimage import filters as flt
 from scipy.interpolate import griddata
+
 
 
 # matplotlib.rcParams.update({'font.size': 16})
@@ -33,13 +34,10 @@ def leakage_func(x, a, b, c, d, e, f, g):
             + e * (x - g)
             + f
     )
-
-
 #    return np.sign(x-d)*a*(np.exp(b*(np.abs(x-d))**c)-1)+np.log(e)
 
 
 def dir_read(path):
-    files = []
     r = re.compile(r".*\.tsv$")
     files = [
         join(path, f) for f in listdir(path) if (isfile(join(path, f)) and r.match(f))
@@ -247,7 +245,6 @@ def lcm_plot(data, legend=None):
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         fig.legend(lines, legend, loc="center right")
 
-
 class SampleData:
     def __init__(self, thickness=13e-7, area=1e-4, temperature=300):
         """
@@ -267,10 +264,11 @@ class SampleData:
         -------
         n/a
         """
-        self.sample_name = ""
+        self.sample_name = ' '
         self.thickness = thickness  # cm
         self.area = area  # cm^2
         self.temp = temperature  # K
+        self.cap_number = 0  # Capacitor Number
 
 
 class HysteresisData(SampleData):
@@ -296,12 +294,64 @@ class HysteresisData(SampleData):
         n/a
         """
         SampleData.__init__(self, **kwargs)
-        self.time = []
-        self.voltage = []
-        self.current = []
-        self.polarization = []
-        self.capacitance = []
+        self.time = [] #s
+        self.voltage = [] #V
+        self.current = [] #A
+        self.polarization = [] #C/cm^2
+        self.capacitance = [] #C
         self.freq = freq  # Hz
+        self.efield = 0 #Kv/cm
+
+    def read_ABHyst(self, abfile):
+        #abfile refers to the file name of AB
+        testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
+
+        abdir = join(testdatadir, "Typical_AB_Data_RT")
+        ABHyst = join(abdir, abfile)
+
+        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+\s+-?\d+.\d+')
+        freq = re.compile(r'^Hysteresis Period.')
+        field = re.compile(r'^Field.')
+        thick = re.compile(r'Sample Thickness.')
+        area = re.compile(r'Sample Area.')
+        name = re.compile(r'Sample Name.')
+
+        with open(ABHyst, "r", encoding='cp1252') as f:
+            for line in f:
+                if p.match(line):
+                    datapoint = line.split()
+                    self.time.append(datapoint[1])
+                    self.voltage.append(datapoint[2])
+                    self.polarization.append(datapoint[3])
+
+                elif name.match(line):
+                    datapoint = line.split(':')
+                    self.sample_name = datapoint[1]
+
+                elif freq.match(line):
+                    datapoint = line.split(':')
+                    self.freq = 1 / float(datapoint[1])  #get frequency
+
+                elif field.match(line):
+                    datapoint = line.split()
+                    self.efield = float(datapoint[1]) #get field
+
+                elif thick.match(line):
+                    datapoint = line.split(':')
+                    self.thickness = float(datapoint[1]) #get thickness
+                elif area.match(line):
+                    datapoint = line.split(':')
+                    self.area = float(datapoint[1])
+
+        self.time = [float(i) / 1000 for i in self.time] # change from ms to s
+        self.voltage = [float(i) for i in self.voltage]
+        self.polarization = [float(i) for i in self.polarization]
+        self.current.append(0)
+
+        #Get current
+        for i in range(len(self.time)):
+            if i > 0:
+                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1]))
 
     def __str__(self):
         return f'Hysteresis Data, {len(self.voltage)} points, {min(self.voltage):0.2f} to {max(self.voltage):0.2f} V, ' \
@@ -748,9 +798,11 @@ class HysteresisData(SampleData):
 class LeakageData(SampleData):
     def __init__(self, **kwargs):
         SampleData.__init__(self, **kwargs)
+        self.time = []
         self.lcm_voltage = []
         self.lcm_current = []
         self.lcm_parms = []
+        self.vdd = 0
 
     def __str__(self):
         return f'Leakage Data, {len(self.lcm_voltage)} points, ' \
@@ -769,6 +821,58 @@ class LeakageData(SampleData):
                 return False
         else:
             return False
+
+    def read_ABlkg(self, abfile):
+        # abfile refers to the file name of AB
+        testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
+
+        abdir = join(testdatadir, "Typical_AB_Data_RT")
+        ABlkg = join(abdir, abfile)
+
+        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+e[-+]\d+\s')
+        freq = re.compile(r'^Hysteresis Period.')
+        field = re.compile(r'^Field.')
+        thick = re.compile(r'Sample Thickness.')
+        area = re.compile(r'Sample Area.')
+        name = re.compile(r'Sample Name.')
+        vdd = re.compile(r'Volts.')
+
+        with open(ABlkg, "r", encoding='cp1252') as f:
+            for line in f:
+                if p.match(line):
+                    datapoint = line.split()
+                    self.time.append(datapoint[1])
+                    self.lcm_voltage.append(datapoint[2])
+                    self.lcm_current.append(datapoint[3])
+
+                elif vdd.match(line):
+                    datapoint = line.split(":")
+                    self.vdd = float(datapoint[1])
+
+                elif name.match(line):
+                    datapoint = line.split(':')
+                    self.sample_name = datapoint[1]
+
+                elif freq.match(line):
+                    datapoint = line.split(':')
+                    self.freq = 1 / float(datapoint[1])  # get frequency
+
+                elif field.match(line):
+                    datapoint = line.split()
+                    self.efield = float(datapoint[1])  # get field
+
+                elif thick.match(line):
+                    datapoint = line.split(':')
+                    self.thickness = float(datapoint[1])  # get thickness
+
+                elif area.match(line):
+                    datapoint = line.split(':')
+                    self.area = float(datapoint[1])
+
+        self.time = [float(i) / 1000 for i in self.time]  # change from ms to s
+        self.lcm_voltage = [float(i) for i in self.lcm_voltage]
+        self.lcm_current = [float(i) for i in self.lcm_current]
+
 
     def lcm_read(self, filename):
         """
@@ -860,7 +964,6 @@ class LeakageData(SampleData):
 
 def main():
     plt.close("all")
-
 
 if (
         __name__ == "__main__"
