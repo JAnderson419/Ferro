@@ -1,4 +1,3 @@
-
 import re
 import numpy as np
 from ferro import data as hd
@@ -17,10 +16,11 @@ class MeasEnum(Enum):
         - LEAKAGE = 4 (I-V)
 
     """
-    HYSTERESIS = 1
+    HYSTERESIS = 1 
     FATIGUE = 2
     PULSE = 3
     LEAKAGE = 4
+
 meas_struct = {
     MeasEnum.HYSTERESIS: {
         'datatype': hd.HysteresisData,
@@ -233,6 +233,8 @@ def get_multiplier(datatype, key):
     else:
         return 1
 
+
+#EXAMPLE of Object reading
 def load_tfdata(table_dict):
     """
 
