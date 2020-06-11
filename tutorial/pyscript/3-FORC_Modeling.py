@@ -49,6 +49,9 @@ else:
 DATA_ROOT = join(root_folder, "tests", "testData")
 forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
                 "H9 die (9,4) 0Hz 4V 1Average Table1.tsv")
+freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
+freqfiles = hd.dir_read(freqdir)
+freqData = hd.list_read(freqfiles, thickness = 13E-7, area=6579E-8)
 
 # %% pycharm={"name": "#%%\n"}
 ### FORC Calculation
@@ -56,9 +59,13 @@ forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
 hfo2_forc = hd.HysteresisData(area=6579E-8, thickness=13E-7)
 hfo2_forc.tsv_read(forcFile)
 hfo2_forc.hyst_plot(plot_e=1)
+
+
 e, er, probs = hfo2_forc.forc_calc(plot = True)
 
 hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
+hfo2.c = hfo2.c_calc(freqData, plot=1)
+compensatedData, hfo2.pr = hfo2.c_compensation(freqData[0])
 domains = hfo2.domain_gen(e, er, probs, n=100, plot = False)
 
 esweep = np.linspace(-4.5E6,4.5E6,num=1000)
