@@ -70,13 +70,13 @@ def file_lkginput():
     data.read_RTlkg(file)
     return data
 
-def test_meta(file_lkginput):
+def test_lkg_meta(file_lkginput):
     assert file_lkginput.thickness == 0.26
     assert file_lkginput.cap_number == 0
     assert file_lkginput.area == 1.00*pow(10,-4)
     assert file_lkginput.temp == 300
 
-def test_data(file_lkginput):
+def test_lkg_data(file_lkginput):
     assert (file_lkginput.lcm_voltage[0] == 9.000244) & (file_lkginput.lcm_voltage[509] == 9.000549)
     assert (file_lkginput.lcm_current[0] == 7.271*pow(10,-10)) & (file_lkginput.lcm_current[509] == 1.596*pow(10,-11))
     assert file_lkginput.vdd == 9.00
