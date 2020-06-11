@@ -245,8 +245,9 @@ def lcm_plot(data, legend=None):
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         fig.legend(lines, legend, loc="center right")
 
+
 class SampleData:
-    def __init__(self, thickness=13e-7, area=1e-4, temperature=300):
+    def __init__(self, thickness=13e-7, area=1e-4, temperature=300, sample_name=''):
         """
         Parameters
         ----------
@@ -264,7 +265,7 @@ class SampleData:
         -------
         n/a
         """
-        self.sample_name = ' '
+        self.sample_name = sample_name
         self.thickness = thickness  # cm
         self.area = area  # cm^2
         self.temp = temperature  # K
@@ -301,57 +302,7 @@ class HysteresisData(SampleData):
         self.capacitance = [] #C
         self.freq = freq  # Hz
         self.efield = 0 #Kv/cm
-
-    def read_ABHyst(self, abfile):
-        #abfile refers to the file name of AB
-        testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
-
-        abdir = join(testdatadir, "Typical_AB_Data_RT")
-        ABHyst = join(abdir, abfile)
-
-        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+\s+-?\d+.\d+')
-        freq = re.compile(r'^Hysteresis Period.')
-        field = re.compile(r'^Field.')
-        thick = re.compile(r'Sample Thickness.')
-        area = re.compile(r'Sample Area.')
-        name = re.compile(r'Sample Name.')
-
-        with open(ABHyst, "r", encoding='cp1252') as f:
-            for line in f:
-                if p.match(line):
-                    datapoint = line.split()
-                    self.time.append(datapoint[1])
-                    self.voltage.append(datapoint[2])
-                    self.polarization.append(datapoint[3])
-
-                elif name.match(line):
-                    datapoint = line.split(':')
-                    self.sample_name = datapoint[1]
-
-                elif freq.match(line):
-                    datapoint = line.split(':')
-                    self.freq = 1 / float(datapoint[1])  #get frequency
-
-                elif field.match(line):
-                    datapoint = line.split()
-                    self.efield = float(datapoint[1]) #get field
-
-                elif thick.match(line):
-                    datapoint = line.split(':')
-                    self.thickness = float(datapoint[1]) #get thickness
-                elif area.match(line):
-                    datapoint = line.split(':')
-                    self.area = float(datapoint[1])
-
-        self.time = [float(i) / 1000 for i in self.time] # change from ms to s
-        self.voltage = [float(i) for i in self.voltage]
-        self.polarization = [float(i) for i in self.polarization]
-        self.current.append(0)
-
-        #Get current
-        for i in range(len(self.time)):
-            if i > 0:
-                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1]))
+        self.vdd = 0 #V
 
     def __str__(self):
         return f'Hysteresis Data, {len(self.voltage)} points, {min(self.voltage):0.2f} to {max(self.voltage):0.2f} V, ' \
@@ -379,6 +330,73 @@ class HysteresisData(SampleData):
     def dt(self):
         return self.time[1] - self.time[0]
 
+    def read_RTHyst(self, rtfiledir):
+        """
+        Imports Radiant Technologies measurement data
+
+        Parameters
+        ----------
+        rtfiledir : str
+            RT file (with path) to open and parse. Stores data as
+            the associated HysteresisData object's attributes
+
+        Returns
+        -------
+        n/a
+        """
+        #testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
+
+        #TXdir = join(testdatadir, "Typical_AB_Data_RT")
+        #TXHyst = join(abdir, txfile)
+
+        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+\s+-?\d+.\d+')
+        freq = re.compile(r'^Hysteresis Period.')
+        field = re.compile(r'^Field.')
+        thick = re.compile(r'Sample Thickness.')
+        area = re.compile(r'Sample Area.')
+        name = re.compile(r'Sample Name.')
+        vdd = re.compile(r'Volts.')
+        with open(rtfiledir, "r", encoding='cp1252') as f:
+            for line in f:
+                if p.match(line):
+                    datapoint = line.split()
+                    self.time.append(datapoint[1])
+                    self.voltage.append(datapoint[2])
+                    self.polarization.append(datapoint[3])
+
+                elif name.match(line):
+                    datapoint = line.split(':')
+                    self.sample_name = datapoint[1]
+
+                elif freq.match(line):
+                    datapoint = line.split(':')
+                    self.freq = 1 / (float(datapoint[1]) / 1000)  #get frequency
+
+                elif field.match(line):
+                    datapoint = line.split()
+                    self.efield = float(datapoint[1]) #get field
+
+                elif thick.match(line):
+                    datapoint = line.split(':')
+                    self.thickness = float(datapoint[1]) #get thickness
+
+                elif area.match(line):
+                    datapoint = line.split(':')
+                    self.area = float(datapoint[1])
+
+                elif vdd.match(line):
+                    datapoint = line.split(':')
+                    self.vdd = float(datapoint[1])
+
+        self.time = [float(i) / 1000 for i in self.time] # change from ms to s
+        self.voltage = [float(i) for i in self.voltage]
+        self.polarization = [float(i) for i in self.polarization]
+        self.current.append(0)
+
+        #Get current
+        for i in range(len(self.time)):
+            if i > 0:
+                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1])) #dP/dt
 
     def tsv_read(self, filename, verbose=False):
         """
@@ -822,28 +840,34 @@ class LeakageData(SampleData):
         else:
             return False
 
-    def read_ABlkg(self, abfile):
-        # abfile refers to the file name of AB
-        testdatadir = join(dirname(dirname(realpath(__file__))), "tests", "testData")
+    def read_RTlkg(self, rtfiledir):
+        """
+        Imports Radiant Technologies measurement data
 
-        abdir = join(testdatadir, "Typical_AB_Data_RT")
-        ABlkg = join(abdir, abfile)
+        Parameters
+        ----------
+        rtfiledir : str
+            RT file (with path) to open and parse. Stores data as
+            the associated LeakageData object's attributes
 
-        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+e[-+]\d+\s')
-        freq = re.compile(r'^Hysteresis Period.')
-        field = re.compile(r'^Field.')
+        Returns
+        -------
+        n/a
+        """
+
+        p = re.compile(r'\s+\d')
         thick = re.compile(r'Sample Thickness.')
         area = re.compile(r'Sample Area.')
         name = re.compile(r'Sample Name.')
         vdd = re.compile(r'Volts.')
 
-        with open(ABlkg, "r", encoding='cp1252') as f:
+        with open(rtfiledir, "r", encoding='cp1252') as f:
             for line in f:
                 if p.match(line):
                     datapoint = line.split()
-                    self.time.append(datapoint[1])
-                    self.lcm_voltage.append(datapoint[2])
-                    self.lcm_current.append(datapoint[3])
+                    self.time.append(float(datapoint[1]) / 1000)
+                    self.lcm_voltage.append(float(datapoint[2]))
+                    self.lcm_current.append(float(datapoint[3]))
 
                 elif vdd.match(line):
                     datapoint = line.split(":")
@@ -853,14 +877,6 @@ class LeakageData(SampleData):
                     datapoint = line.split(':')
                     self.sample_name = datapoint[1]
 
-                elif freq.match(line):
-                    datapoint = line.split(':')
-                    self.freq = 1 / float(datapoint[1])  # get frequency
-
-                elif field.match(line):
-                    datapoint = line.split()
-                    self.efield = float(datapoint[1])  # get field
-
                 elif thick.match(line):
                     datapoint = line.split(':')
                     self.thickness = float(datapoint[1])  # get thickness
@@ -868,11 +884,6 @@ class LeakageData(SampleData):
                 elif area.match(line):
                     datapoint = line.split(':')
                     self.area = float(datapoint[1])
-
-        self.time = [float(i) / 1000 for i in self.time]  # change from ms to s
-        self.lcm_voltage = [float(i) for i in self.lcm_voltage]
-        self.lcm_current = [float(i) for i in self.lcm_current]
-
 
     def lcm_read(self, filename):
         """
