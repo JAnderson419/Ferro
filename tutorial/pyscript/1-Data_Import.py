@@ -114,7 +114,7 @@ pp.pprint(tempData)
 # %% pycharm={"name": "#%%\n"}
 aix_file = join(DATA_ROOT, r"hfo2_MFM", 'H9_x9y4_1e4_S3_temps.dat')
 num_lines = 5
-with open(aix_file) as f:
+with open(aix_file, encoding='cp1252') as f:
     head = [next(f) for x in range(num_lines)]
 pfile.pprint(head)
 
@@ -145,7 +145,7 @@ pp.pprint(data_list)
 # %% pycharm={"name": "#%%\n"}
 rt_file = join(DATA_ROOT, r"Typical_AB_Data_RT", "TypABdata.Hysteresis.2.txt")
 num_lines = 10
-with open(rt_file) as f:
+with open(rt_file, encoding='cp1252') as f:
     head = [next(f) for x in range(num_lines)]
 pfile.pprint(head)
 
