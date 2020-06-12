@@ -13,7 +13,12 @@ jupyter:
     name: python3
 ---
 
+<!-- #region -->
+<a id='top'></a>
 # 1 - Data Import and Visualization
+
+[Back to Table of Contents](0-Intro.ipynb#top)
+
 
 In its current form, ferro supports simple data import from a TSV file as well as native support for aixACCT
 dynamic hysteresis (inc. FORC) and Leakage (I-V) data. The aixACCT parser also understands PUND and Fatigue data,
@@ -21,6 +26,7 @@ but ferro does not yet include native data types for these measurement formats.
 
 In order to explore the different ways data can be imported to ferro,
 we will start by importing the package and defining our data directories.
+<!-- #endregion -->
 
 ```python pycharm={"name": "#%%\n"}
 import pprint
@@ -55,10 +61,12 @@ templkgdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_S3_tempslkg")
 freqdir = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_freq")
 
 pp = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=True)
+pfile = pprint.PrettyPrinter(indent=2, width=120, depth=4, compact=False)
 ```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
 ## TSV import
+<a id='tsv'></a>
 
 TSV import is the simplest method of loading data into ferro, requiring only a table with time,
 voltage, and current data. When using this method, the data loading function will search for the frequency and
@@ -104,18 +112,29 @@ pp.pprint(tempData)
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
 ## aixACCT import
+<a id='aixacct'></a>
 
 Native import for DynamicHysteresisResult amd LeakageResult data from aixACCT .dat ASCII export files is also supported.
 This corresponds to DHM and Leakage measurements (if you are not sure of measurement type, open the .dat file in a
-text editor and look at the first line).
+text editor and look at the first line, it will have a header with measurement type as seen below).
+<!-- #endregion -->
 
+```python pycharm={"name": "#%%\n"}
+aix_file = join(DATA_ROOT, r"hfo2_MFM", 'H9_x9y4_1e4_S3_temps.dat')
+num_lines = 5
+with open(aix_file, encoding='cp1252') as f:
+    head = [next(f) for x in range(num_lines)]
+pfile.pprint(head)
+```
+
+<!-- #region pycharm={"name": "#%% md\n"} -->
 The direct read in happens in two parts. The first half, `read_tfdata()`, parses the data text file and loads
 all of the information in the file into a dictionary. This dictionary contains all of the data originally stored
 in the .dat file.
 <!-- #endregion -->
 
 ```python pycharm={"name": "#%%\n"}
-data_dict = aix.read_tfdata(join(DATA_ROOT, r"hfo2_MFM", 'H9_x9y4_1e4_S3_temps.dat'))
+data_dict = aix.read_tfdata(aix_file)
 pp.pprint(data_dict)
 ```
 
@@ -130,5 +149,27 @@ pp.pprint(data_list)
 ```
 
 <!-- #region pycharm={"name": "#%% md\n"} -->
-## RT import - WIP
+## Radiant Technologies Import
+<a id='rt'></a>
+
+Radiant Technologies Vision software supports data export from the bottom right corner of the plot
+window for a measurement task. A txt file export from these testers looks something like the following:
 <!-- #endregion -->
+
+```python pycharm={"name": "#%%\n"}
+rt_file = join(DATA_ROOT, r"Typical_AB_Data_RT", "TypABdata.Hysteresis.2.txt")
+num_lines = 10
+with open(rt_file, encoding='cp1252') as f:
+    head = [next(f) for x in range(num_lines)]
+pfile.pprint(head)
+```
+
+<!-- #region pycharm={"name": "#%% md\n"} -->
+This file contains a single measurement, which can be loaded into an individual HysteresisData object.
+<!-- #endregion -->
+
+```python pycharm={"name": "#%%\n"}
+data = hd.HysteresisData()
+data.read_RTHyst(rt_file)
+print(data)
+```
