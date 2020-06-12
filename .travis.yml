@@ -22,6 +22,7 @@ script:
   - coverage run --append --source=ferro/ bin/multidomainAnalysis.py
   - coverage run --append --source=ferro/ tutorial/pyscript/1-Data_Import.py
   - coverage run --append --source=ferro/ tutorial/pyscript/2-Data_Visualization.py
+  - coverage run --append --source=ferro/ tutorial/pyscript/3-FORC_Modeling.py
 
 
 after_success:

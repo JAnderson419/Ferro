@@ -12,6 +12,7 @@ from matplotlib.colors import Normalize
 import scipy.constants as sc
 # from scipy.stats import skew
 # from scipy.stats import skewnorm
+import scipy as sp
 from scipy.optimize import fsolve, minimize, basinhopping, fmin_slsqp
 import numpy as np
 from mpldatacursor import datacursor
@@ -232,19 +233,26 @@ class LandauFilm:
         self, esweep, domains, init_state=None, plot=False, c_add=False
     ):
         """
-        Models domains as simple hystereons using ec, pr
+        Models domains as simple hystereons using ec, pr.
         
         Parameters
         ----------
-        esweep: np array of field values for which to calculate Pr
-        domains: list containing all domain objects in the film
-        init_state: np array containing initial state of hysterons (-1 or 1)
-        plot: bool, triggers plotting of generated hysteresis curve
+        esweep : array_like
+            field values for which to calculate Pr.
+        domains : list
+            contains all domain objects in the film.
+        init_state : array_like
+            initial state of hysterons (-1 or 1).
+        plot : bool
+            triggers plotting of generated hysteresis curve.
             
         Returns
         -------
-        p: np array, polarization charge values for film (C/cm^2)
-        state: np array, final state of hysterons
+        p : array_like
+            polarization charge values for film (C/cm^2).
+        state : array_like
+            final state of hysterons.
+
         """
         if init_state == None:
             state = -np.ones(len(domains))
