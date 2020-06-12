@@ -45,7 +45,7 @@ def isnotebook():
 if isnotebook():
     root_folder = dirname(globals()['_dh'][0])
 else:
-    root_folder = dirname(realpath(__file__))
+    root_folder = dirname(dirname(dirname(realpath(__file__))))
 
 DATA_ROOT = join(root_folder, "tests", "testData")
 forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
@@ -117,6 +117,6 @@ polarization, final_domain_state = hfo2.calc_efe_preisach(esweep, domains, plot=
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # The returned polarization array gives polarization values for the film corresponding
 # to the applied field, while the final_domain_state is an array of 1 or -1 representing the polarization
-# state of the domains. This array can be passed to future `calc_efe_preisach()` 
+# state of the domains. This array can be passed to future `calc_efe_preisach()`
 # function calls to provide an initial value for polarization for minor loop studies
 #  (if not specified, domains default to -1 state).
