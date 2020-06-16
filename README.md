@@ -2,6 +2,7 @@ Ferro
 ===========
 
 [![Documentation Status](https://readthedocs.org/projects/ferro/badge/?version=latest)](https://ferro.readthedocs.io/en/latest/?badge=latest)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJAnderson419%2FFerro.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FJAnderson419%2FFerro?ref=badge_shield)
 
 Master
 [![Build Status](https://travis-ci.org/JAnderson419/Ferro.svg?branch=master)](https://travis-ci.org/JAnderson419/Ferro)
@@ -21,3 +22,7 @@ For an overview of the role of each function beyond the docstrings, see chapter 
 Developed on python 3.5 and 3.6 using Anaconda. If downloading from Github, be sure to use pip to install the package to ensure you have the proper prerequisites. If you have any questions, please contact me. 
 
 **Jackson**
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJAnderson419%2FFerro.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FJAnderson419%2FFerro?ref=badge_large)
