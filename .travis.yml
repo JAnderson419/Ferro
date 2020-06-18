@@ -5,8 +5,11 @@ install:
   - pip install .
   - pip install pytest
   - pip install codecov
+  - pip install -r tutorial/tut-requirements.txt
 
-script:
+script: 
+  - jupytext --sync tutorial/pyscript/*.py
+  - jupytext --execute tutorial/*.ipynb
   - coverage run --source=ferro/ -m py.test
   - coverage run --append --source=ferro/ tests/lcmTest.py
   - coverage run --append --source=ferro/ tests/forcDomainTest.py
@@ -17,6 +20,9 @@ script:
   - coverage run --append --source=ferro/ bin/forc_comparison.py
   - coverage run --append --source=ferro/ bin/hfo2_mfm.py
   - coverage run --append --source=ferro/ bin/multidomainAnalysis.py
+  - coverage run --append --source=ferro/ tutorial/pyscript/1-Data_Import.py
+  - coverage run --append --source=ferro/ tutorial/pyscript/2-Data_Visualization.py
+  - coverage run --append --source=ferro/ tutorial/pyscript/3-FORC_Modeling.py
 
 
 after_success:
