@@ -378,7 +378,7 @@ class HysteresisData(SampleData):
 
                 elif thick.match(line):
                     datapoint = line.split(':')
-                    self.thickness = float(datapoint[1])  # get thickness
+                    self.thickness = float(datapoint[1])*1E-4  # get thickness in cm
 
                 elif area.match(line):
                     datapoint = line.split(':')
