@@ -737,7 +737,9 @@ class HysteresisData(SampleData):
         er_forc = np.asfarray(vr_forc) / (self.thickness)  # V/cm
 
         uniform_e = np.linspace(e_forc.min(), e_forc.max(), 200)
-        uniform_er = np.unique(np.sort(er_forc))
+        uniform_er = np.linspace(e_forc.min(), e_forc.max(), 200)
+        #print('test')
+        #uniform_er = np.unique(np.sort(er_forc))
         uniform_v = np.linspace(
             np.asfarray(v_forc).min(), np.asfarray(v_forc).max(), 200
         )
