@@ -419,10 +419,10 @@ class HysteresisData(SampleData):
         self.sample_name = basename(filename)  # unlike tsv_read, file naming format not known - save whole filename
         wb = open_workbook(filename)
         ws = wb.sheet_by_name('Data')
-        self.voltage = [c.value for c in ws.col(1, start_rowx=1)]  # V
-        self.current = [c.value for c in ws.col(2, start_rowx=1)]  # A
-        self.polarization = [c.value for c in ws.col(3, start_rowx=1)] / self.area  # C/cm^2
-        self.time = [c.value for c in ws.col(4, start_rowx=1)]  # s
+        self.voltage = np.asfarray([c.value for c in ws.col(1, start_rowx=1)])  # V
+        self.current = np.asfarray([c.value for c in ws.col(2, start_rowx=1)])  # A
+        self.polarization = np.asfarray([c.value for c in ws.col(3, start_rowx=1)]) / self.area  # C/cm^2
+        self.time = np.asfarray([c.value for c in ws.col(4, start_rowx=1)])  # s
         self.freq = 1 / float(wb.sheet_by_name('Settings').cell_value(13, 3))  # Hz
 
 
