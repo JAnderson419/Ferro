@@ -370,15 +370,15 @@ class HysteresisData(SampleData):
 
                 elif freq.match(line):
                     datapoint = line.split(':')
-                    self.freq = 1 / (float(datapoint[1]) / 1000)  #get frequency
+                    self.freq = 1 / (float(datapoint[1]) / 1000)  # get frequency
 
                 elif field.match(line):
                     datapoint = line.split()
-                    self.efield = float(datapoint[1]) #get field
+                    self.efield = float(datapoint[1])  # get field
 
                 elif thick.match(line):
                     datapoint = line.split(':')
-                    self.thickness = float(datapoint[1]) #get thickness
+                    self.thickness = float(datapoint[1])  # get thickness
 
                 elif area.match(line):
                     datapoint = line.split(':')
@@ -388,7 +388,7 @@ class HysteresisData(SampleData):
                     datapoint = line.split(':')
                     self.vdd = float(datapoint[1])
 
-        self.time = [float(i) / 1000 for i in self.time] # change from ms to s
+        self.time = [float(i) / 1000 for i in self.time]  # change from ms to s
         self.voltage = [float(i) for i in self.voltage]
         self.polarization = [float(i) for i in self.polarization]
         self.current.append(0)
@@ -396,7 +396,37 @@ class HysteresisData(SampleData):
         #Get current
         for i in range(len(self.time)):
             if i > 0:
-                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1])) #dP/dt
+                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1]))  # dP/dt
+
+    def read_k4200(self, filename):
+        """
+        Imports xls measurement data output by the double SweepSeg routine from a Keithley 4200-SCS.
+
+        Parameters
+        ----------
+        filename : str
+            xls file (with path) to open and parse. Stores data as
+            the associated HysteresisData object's attributes
+        Returns
+        -------
+
+        """
+        try:
+            from xlrd import open_workbook
+        except ImportError:
+            raise ImportError('Optional dependency xlrd not found. Run \'pip install xlrd\' to be able to read xls files')
+
+        self.sample_name = basename(filename)  # unlike tsv_read, file naming format not known - save whole filename
+        wb = open_workbook(filename)
+        ws = wb.sheet_by_name('Data')
+        self.voltage = [c.value for c in ws.col(1, start_rowx=1)]  # V
+        self.current = [c.value for c in ws.col(2, start_rowx=1)]  # A
+        self.polarization = [c.value for c in ws.col(3, start_rowx=1)] / self.area  # C/cm^2
+        self.time = [c.value for c in ws.col(4, start_rowx=1)]  # s
+        self.freq = 1 / float(wb.sheet_by_name('Settings').cell_value(13, 3))  # Hz
+
+
+
 
     def tsv_read(self, filename, col_nums={'time': 0, 'voltage':1,'current':3, 'polarization':4}, verbose=False):
         """
