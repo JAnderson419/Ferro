@@ -390,7 +390,7 @@ class HysteresisData(SampleData):
 
         self.time = np.asfarray(self.time)/1000  # change from ms to s
         self.voltage = np.asfarray(self.voltage)
-        self.polarization = np.asfarray(self.polarization)
+        self.polarization = np.asfarray(self.polarization)*1E-6 # C/cm^2
 
         # Get current
         self.current.append(0)
