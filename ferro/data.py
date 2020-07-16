@@ -388,15 +388,17 @@ class HysteresisData(SampleData):
                     datapoint = line.split(':')
                     self.vdd = float(datapoint[1])
 
-        self.time = [float(i) / 1000 for i in self.time]  # change from ms to s
-        self.voltage = [float(i) for i in self.voltage]
-        self.polarization = [float(i) for i in self.polarization]
-        self.current.append(0)
+        self.time = np.asfarray(self.time)/1000  # change from ms to s
+        self.voltage = np.asfarray(self.voltage)
+        self.polarization = np.asfarray(self.polarization)
 
-        #Get current
+        # Get current
+        self.current.append(0)
         for i in range(len(self.time)):
             if i > 0:
                 self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1]))  # dP/dt
+        self.current = np.asfarray(self.current)
+
 
     def read_k4200(self, filename):
         """
