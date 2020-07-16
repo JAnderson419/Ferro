@@ -398,7 +398,7 @@ class HysteresisData(SampleData):
             if i > 0:
                 self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1])) #dP/dt
 
-    def tsv_read(self, filename, verbose=False):
+    def tsv_read(self, filename, col_nums={'time': 0, 'voltage':1,'current':3, 'polarization':4}, verbose=False):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
         For use with TF-1000 hysteresis measurement data.
@@ -445,10 +445,10 @@ class HysteresisData(SampleData):
 
             for row in data:
                 if row:  # ignores blank lines
-                    self.time.append(row[0])
-                    self.voltage.append(row[1])
-                    self.current.append(row[3])
-                    self.polarization.append(row[4])
+                    self.time.append(row[col_nums['time']])
+                    self.voltage.append(row[col_nums['voltage']])
+                    self.current.append(row[col_nums['current']])
+                    self.polarization.append(row[col_nums['polarization']])
 
         self.time = np.asfarray(self.time)
         self.voltage = np.asfarray(self.voltage)
