@@ -349,7 +349,7 @@ class HysteresisData(SampleData):
         #TXdir = join(testdatadir, "Typical_AB_Data_RT")
         #TXHyst = join(abdir, txfile)
 
-        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+\s+-?\d+.\d+')
+        p = re.compile(r'\s*\d+\s+\d.\d+(e[-+])?\d+\s+-?\d.\d+\s+-?\d+.\d+')
         freq = re.compile(r'^Hysteresis Period.')
         field = re.compile(r'^Field.')
         thick = re.compile(r'Sample Thickness.')
@@ -396,7 +396,9 @@ class HysteresisData(SampleData):
         self.current.append(0)
         for i in range(len(self.time)):
             if i > 0:
-                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1]))  # dP/dt
+                self.current.append(
+                    (self.polarization[i] - self.polarization[i-1]) * self.area / (self.time[i] - self.time[i-1])
+                )   # dP/dt
         self.current = np.asfarray(self.current)
 
 
