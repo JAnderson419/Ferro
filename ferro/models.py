@@ -9,12 +9,18 @@ Created on Mon Apr 10 14:53:15 2017
 import copy  # used for creating C/Ilkg compensated copies of exp data
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
+import scipy.stats as rv_discrete
+import scipy.stats as ss
 import scipy.constants as sc
 # from scipy.stats import skew
 # from scipy.stats import skewnorm
 from scipy.optimize import fsolve, minimize, basinhopping, fmin_slsqp
 import numpy as np
 from mpldatacursor import datacursor
+import csv
+import math
+import os
+import random
 # from ferro import data as hd
 # from mpl_toolkits.mplot3d import Axes3D
 
@@ -251,11 +257,11 @@ class LandauFilm:
         else:
             state = init_state
 
-        sweepDir = np.gradient(esweep)
+        sweepDir = np.gradient(esweep) #sweep direction
 
-        p = np.zeros(len(esweep))
+        p = np.zeros(len(esweep)) #esweep = applied electric field
         for j, e in enumerate(esweep):
-            for i, d in enumerate(domains):
+            for i, d in enumerate(domains): #domains in ferroelectric film
                 if sweepDir[j] > 0:
                     if e >= d.ec + d.ebias:
                         state[i] = 1
@@ -263,8 +269,8 @@ class LandauFilm:
                     if e <= -d.ec + d.ebias:
                         state[i] = -1
                 # Need to sum actual charge rather than charge density
-                p[j] = p[j] + d.pr * d.area * state[i]
-
+                p[j] = p[j] + d.pr * d.area * state[i] #total charge at the certain electric field
+                #pr is remmenant polarization (charge/area)
                 # convert back into charge density
         if c_add:
             p = (p + esweep * self.thickness * self.c) / self.area
@@ -707,6 +713,166 @@ class LandauDomain:
         )
 
 
+class DuChenDomain():
+    def __init__(self, t0=None, alpha=None):
+        self.alpha = alpha
+        self.tao = 0
+        self.phi = 0
+        self.t0 = t0
+        self.n = 0
+        self.lamb = 0
+        self.pol_state = []
+
+    def fit_t0_alpha(self, filename, vsw):
+        """
+        Find t0 and alpha based on temperature data
+        Parameters
+        ----------
+        filename: 
+            The temperature data with average switching time
+        vsw:
+            Signal amplitude
+        Returns
+        -------
+        """ 
+        with open(filename) as f:
+            csv_reader = csv.reader(f, delimiter=',')
+            vsw_pow_neg2 = []
+            tsw_pow_neg1 = []
+            for row in csv_reader:
+                vsw_pow_neg2.append(float(row[0]))
+                tsw_pow_neg1.append(float(row[1]))
+            self.t0 = 1 / (np.polyfit(tsw_pow_neg1, vsw_pow_neg2, 1))[1]
+            self.alpha = pow(vsw, 2) * 1.38e-23 * np.log(self.tao / self.t0)
+
+    def fit_n_lambda(self, stdev, mean):
+        """
+        Find lambda and n based on average and standard deviation switching time
+        Parameters
+        ----------
+        stdev:
+            Standard Deviation of switching time
+        mean:
+            Average switching time
+
+        Returns
+        -------
+        """
+        self.lamb = mean / pow(stdev, 2)
+        self.n = mean * self.lamb
+        self.tao = 1/self.lamb
+
+class DuChenFilm():
+    def __init__(self, vsw):
+        #self.temperature = temp
+        #self.area = area
+        self.polarization = []
+        self.vsw = vsw
+        self.voltage = []
+        self.t = []
+        self.tpw = []
+        self.domains = []
+        self.tpw_avg = 0
+        self.tpw_stdev = 0
+        self.cdf = []
+        self.pdf =[]
+        self.prob = []
+
+    def probability_calc(self, mean, stdev, n, lamb):
+        """
+        Getting cumulative, probability, and gamma distribution based on given parameters
+        Parameters
+        ----------
+        mean:
+            average switching time
+        stdev:
+            standard deviation of switching time
+        n:
+            number of nucleation (n)
+        lamb:
+            rate of nucleation (lambda)
+
+        Returns
+        -------
+
+        """
+        self.prob = lamb * np.exp(-lamb * self.t) * (lamb * self.t) ** (n - 1) / math.factorial(int(n - 1))
+        self.cdf = ss.norm.cdf(self.t, mean, stdev)
+        self.pdf = ss.norm.pdf(self.t, mean, stdev)
+
+    def switching_sim(self, state):
+        """
+        Simulate domain switching based on gamma distribution stored in film class
+        Parameters
+        ----------
+        state:
+            domain state
+        Returns
+        -------
+        """
+        initial_state = -1
+        tsw = np.random.choice(self.t, p=self.prob)
+        for i, time in enumerate(self.t):
+            if self.t[i] < tsw:
+                state.append(initial_state)
+                continue
+            state.append(1)
+    #Multidomain films: bias to film
+    #Each domain in film have different tsw and vsw relationship
+
+    def read_exp_data(self, expdir):
+        """
+        Read experimental data (voltage, time, and polarization changes)
+        Parameters
+        ----------
+        expdir: experiment data directory
+
+        Returns
+        -------
+        """
+        entries = os.listdir(expdir)
+        for entry in entries:
+            csv_reader = csv.reader(f, delimiter=',')
+            with open(entry) as f:
+                i = 0
+                time = []
+                voltage = []
+                polarization = []
+                for row in csv_reader:
+                    if i != 0:
+                        time.append(float(row[0]))
+                        voltage.append(float(row[1]))
+                        polarization.append(float(row[2]))
+                    i += 1
+                self.t.append(time)
+                self.voltage.append(voltage)
+                self.polarization.append(polarization)
+                time.clear()
+                voltage.clear()
+                polarization.clear()
+
+    def extract_tpw(self):
+        """
+        Get switching time based on ideal signal and polarization (need more works)
+        Returns
+        -------
+
+        """
+        for i, element in enumerate(self.polarization):
+            dx = self.t[i][1] - self.t[i][0]
+            dy = np.diff(element) / dx
+            tsw = self.t[i][dy.index(max(dy))]
+            index = self.t[i](tsw)
+            k = index
+            while self.voltage[i][k] == self.voltage[i][index]:
+                k -= 1
+            self.tpw.append(self.t[i][index] - self.t[i][k+1])
+        self.tpw_avg = sum(self.tpw) / len(self.tpw)
+        self.tpw_stdev = np.std(self.tpw)
+
+# 10uC/cm^2 = polarization/area)
+# Polarization =
+# Initial polariza
 def main():
     plt.close("all")
 
