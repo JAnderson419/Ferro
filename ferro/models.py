@@ -725,6 +725,7 @@ class DuChenDomain():
 
     def fit_t0_alpha(self, filename, vsw):
         """
+        *TESTING REQUIRED*
         Find t0 and alpha based on temperature data
         Parameters
         ----------
@@ -822,6 +823,7 @@ class DuChenFilm():
 
     def read_exp_data(self, expdir):
         """
+        *TESTING REQUIRED*
         Read experimental data (voltage, time, and polarization changes)
         Parameters
         ----------
@@ -853,6 +855,7 @@ class DuChenFilm():
 
     def extract_tpw(self):
         """
+        *TESTING REQUIRED*
         Get switching time based on ideal signal and polarization (need more works)
         Returns
         -------
