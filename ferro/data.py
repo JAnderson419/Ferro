@@ -349,7 +349,7 @@ class HysteresisData(SampleData):
         #TXdir = join(testdatadir, "Typical_AB_Data_RT")
         #TXHyst = join(abdir, txfile)
 
-        p = re.compile(r'\s+\d+\s+\d.\d+e[-+]\d+\s+-?\d.\d+\s+-?\d+.\d+')
+        p = re.compile(r'\s*\d+\s+\d+.\d+(e[-+])?\d+\s+-?\d+.\d+\s+-?\d+.\d+')
         freq = re.compile(r'^Hysteresis Period.')
         field = re.compile(r'^Field.')
         thick = re.compile(r'Sample Thickness.')
@@ -370,15 +370,15 @@ class HysteresisData(SampleData):
 
                 elif freq.match(line):
                     datapoint = line.split(':')
-                    self.freq = 1 / (float(datapoint[1]) / 1000)  #get frequency
+                    self.freq = 1 / (float(datapoint[1]) / 1000)  # get frequency
 
                 elif field.match(line):
                     datapoint = line.split()
-                    self.efield = float(datapoint[1]) #get field
+                    self.efield = float(datapoint[1])  # get field
 
                 elif thick.match(line):
                     datapoint = line.split(':')
-                    self.thickness = float(datapoint[1]) #get thickness
+                    self.thickness = float(datapoint[1])*1E-4  # get thickness in cm
 
                 elif area.match(line):
                     datapoint = line.split(':')
@@ -388,17 +388,51 @@ class HysteresisData(SampleData):
                     datapoint = line.split(':')
                     self.vdd = float(datapoint[1])
 
-        self.time = [float(i) / 1000 for i in self.time] # change from ms to s
-        self.voltage = [float(i) for i in self.voltage]
-        self.polarization = [float(i) for i in self.polarization]
-        self.current.append(0)
+        self.time = np.asfarray(self.time)/1000  # change from ms to s
+        self.voltage = np.asfarray(self.voltage)
+        self.polarization = np.asfarray(self.polarization)*1E-6 # C/cm^2
 
-        #Get current
+        # Get current
+        self.current.append(0)
         for i in range(len(self.time)):
             if i > 0:
-                self.current.append((self.polarization[i] - self.polarization[i-1]) / (self.time[i] - self.time[i-1])) #dP/dt
+                self.current.append(
+                    (self.polarization[i] - self.polarization[i-1]) * self.area / (self.time[i] - self.time[i-1])
+                )   # dP/dt
+        self.current = np.asfarray(self.current)
 
-    def tsv_read(self, filename, verbose=False):
+
+    def read_k4200(self, filename):
+        """
+        Imports xls measurement data output by the double SweepSeg routine from a Keithley 4200-SCS.
+
+        Parameters
+        ----------
+        filename : str
+            xls file (with path) to open and parse. Stores data as
+            the associated HysteresisData object's attributes
+        Returns
+        -------
+
+        """
+        try:
+            from xlrd import open_workbook
+        except ImportError:
+            raise ImportError('Optional dependency xlrd not found. Run \'pip install xlrd\' to be able to read xls files')
+
+        self.sample_name = basename(filename)  # unlike tsv_read, file naming format not known - save whole filename
+        wb = open_workbook(filename)
+        ws = wb.sheet_by_name('Data')
+        self.voltage = np.asfarray([c.value for c in ws.col(1, start_rowx=1)])  # V
+        self.current = np.asfarray([c.value for c in ws.col(2, start_rowx=1)])  # A
+        self.polarization = np.asfarray([c.value for c in ws.col(3, start_rowx=1)]) / self.area  # C/cm^2
+        self.time = np.asfarray([c.value for c in ws.col(4, start_rowx=1)])  # s
+        self.freq = 1 / float(wb.sheet_by_name('Settings').cell_value(13, 3))  # Hz
+
+
+
+
+    def tsv_read(self, filename, col_nums={'time': 0, 'voltage':1,'current':3, 'polarization':4}, verbose=False):
         """
         Imports TSV measurement data previously parsed by tfDataTSV_v4.pl. 
         For use with TF-1000 hysteresis measurement data.
@@ -445,10 +479,10 @@ class HysteresisData(SampleData):
 
             for row in data:
                 if row:  # ignores blank lines
-                    self.time.append(row[0])
-                    self.voltage.append(row[1])
-                    self.current.append(row[3])
-                    self.polarization.append(row[4])
+                    self.time.append(row[col_nums['time']])
+                    self.voltage.append(row[col_nums['voltage']])
+                    self.current.append(row[col_nums['current']])
+                    self.polarization.append(row[col_nums['polarization']])
 
         self.time = np.asfarray(self.time)
         self.voltage = np.asfarray(self.voltage)
@@ -737,7 +771,9 @@ class HysteresisData(SampleData):
         er_forc = np.asfarray(vr_forc) / (self.thickness)  # V/cm
 
         uniform_e = np.linspace(e_forc.min(), e_forc.max(), 200)
-        uniform_er = np.unique(np.sort(er_forc))
+        uniform_er = np.linspace(e_forc.min(), e_forc.max(), 200)
+        #print('test')
+        #uniform_er = np.unique(np.sort(er_forc))
         uniform_v = np.linspace(
             np.asfarray(v_forc).min(), np.asfarray(v_forc).max(), 200
         )

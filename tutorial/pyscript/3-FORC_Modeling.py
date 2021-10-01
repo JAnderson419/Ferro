@@ -79,10 +79,10 @@ hfo2_forc.time_plot()
 # This will be passed to a model object to model the film.
 
 # %% pycharm={"name": "#%%\n"}
-e, er, probs = hfo2_forc.forc_calc(plot = True)
+e, er, probs = hfo2_forc.forc_calc(filt_iter=0, filt_dim=[5,5], plot=True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
-# It is not time to create a model. Currently, this must be done through a LandauFull model object.
+# It is now time to create a model. Currently, this must be done through a LandauFull model object.
 # The modeling interface of ferro is less mature than the data handling and can be expected to undergo future change.
 #
 # Since data is available for this sample, we will use hysteresis measurements taken at several frequencies
@@ -94,7 +94,8 @@ e, er, probs = hfo2_forc.forc_calc(plot = True)
 # %% pycharm={"name": "#%%\n"}
 hfo2 = lf.LandauFull(thickness = 13E-7, area=6579E-8)
 hfo2.c = hfo2.c_calc(freqData, plot=1)
-compensatedData, hfo2.pr = hfo2.c_compensation(freqData[0])
+compensatedData, hfo2.pr = hfo2.c_compensation(freqData[1])
+
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # With all this in place, it is now possible to generate the domains. For this sample, 100 domains are chosen
@@ -103,7 +104,7 @@ compensatedData, hfo2.pr = hfo2.c_compensation(freqData[0])
 # Stay tuned for future improvements in domain probability interpolation, allowing some of this challenge to be overcome.
 
 # %% pycharm={"name": "#%%\n"}
-domains = hfo2.domain_gen(e, er, probs, n=100, plot = True)
+domains = hfo2.domain_gen(e, er, probs, n=500, plot = True)
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # Finally, a field can be applied to the model to see the domain response:
@@ -112,7 +113,11 @@ domains = hfo2.domain_gen(e, er, probs, n=100, plot = True)
 esweep = np.linspace(-4.5E6,4.5E6,num=1000)
 esweep = np.append(esweep,esweep[::-1])
 plt.plot(esweep)
+
+
 polarization, final_domain_state = hfo2.calc_efe_preisach(esweep, domains, plot=1)
+plt.gca().plot(compensatedData.field*1E-6, compensatedData.polarization*1E6)
+compensatedData.hyst_plot()
 
 # %% [markdown] pycharm={"name": "#%% md\n"}
 # The returned polarization array gives polarization values for the film corresponding
@@ -120,3 +125,46 @@ polarization, final_domain_state = hfo2.calc_efe_preisach(esweep, domains, plot=
 # state of the domains. This array can be passed to future `calc_efe_preisach()`
 # function calls to provide an initial value for polarization for minor loop studies
 #  (if not specified, domains default to -1 state).
+#
+#
+
+# %% pycharm={"name": "#%%\n"}
+# from scipy.interpolate import interpn
+# 
+# num_pts = 100
+# interpE = np.linspace(min(e), max(e), num_pts)
+# interpEr = np.linspace(min(er), max(er), num_pts)
+# interp_prob = interpn(points=(e,er), values=probs, xi=np.meshgrid(interpE, interpEr))
+# print(interp_prob)
+t = 255E-7
+a = 1E-4 # mask defined area that was used in measurement
+
+forcFile = join(DATA_ROOT, r"hfo2_MFM", "H9_x9y4_1e4_forc",
+                "H9 die (9,4) 0Hz 4V 1Average Table1.tsv")
+freqdir = join(DATA_ROOT, 'RT WhiteA', 'RTWhiteAFreq')
+freqfiles = hd.dir_read(freqdir)
+freqData = hd.list_read(freqfiles, thickness=t, area=a)
+
+forcFile = join(DATA_ROOT, 'RT WhiteA', 'RTWhiteAFORC',
+                 'RT WhiteA 0Hz 7V 1Average Table2.tsv')
+
+
+forc1 = hd.HysteresisData(thickness=t, area=a)
+forc1.tsv_read(forcFile)
+forc1.hyst_plot(plot_e=True)
+forc1.time_plot()
+e, er, probs = forc1.forc_calc(filt_iter=3, filt_dim=[3,3], plot=True)
+#hfo2_forc.forc_calc(filt_iter=0, filt_dim=[5,5], plot=True)
+pzt = lf.LandauFull(thickness=t, area=a)
+pzt.c = pzt.c_calc(freqData, plot=1)
+compensatedData, pzt.pr = pzt.c_compensation(freqData[1])
+compensatedData.hyst_plot()
+pzt.pr = 15E-6
+pzt.c = 1.3E-10
+domains = pzt.domain_gen(e, er, probs, n=500, plot=False)
+esweep = np.linspace(-3E5,3E5,num=1000)
+esweep = np.append(esweep,esweep[::-1])
+polarization, final_domain_state = pzt.calc_efe_preisach(esweep, domains, plot=0, c_add=True)
+#plt.gca().plot(freqData[1].field*1E-6, freqData[1].polarization*1E6, color='r')
+freqData[1].hyst_plot(plot_e=True)
+hd.hyst_plot(freqData, plot_e=True)
