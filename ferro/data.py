@@ -349,7 +349,8 @@ class HysteresisData(SampleData):
         #TXdir = join(testdatadir, "Typical_AB_Data_RT")
         #TXHyst = join(abdir, txfile)
 
-        p = re.compile(r'\s*\d+\s+\d+.\d+(e[-+])?\d+\s+-?\d+.\d+\s+-?\d+.\d+')
+
+        p = re.compile(r'\s+\d+\s+\d.\d+([eE][-+])?\d+\s+-?\d.\d+\s+-?\d+.\d+')
         freq = re.compile(r'^Hysteresis Period.')
         field = re.compile(r'^Field.')
         thick = re.compile(r'Sample Thickness.')
