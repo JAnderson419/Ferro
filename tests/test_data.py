@@ -49,15 +49,15 @@ def file_input():
 
 def test_meta(file_input):
     assert file_input.freq == 100
-    assert file_input.thickness == 0.26
+    assert file_input.thickness == 0.26*1E-4
     assert file_input.cap_number == 0
-    assert file_input.area == 1.00*pow(10,-4)
+    assert file_input.area == 1.00*pow(10, -4)
     assert file_input.temp == 300
 
 def test_data(file_input):
     assert file_input.efield == 346.15
     assert (file_input.voltage[0] == 0.0006) & (file_input.voltage[500] == -0.0006)
-    assert (file_input.polarization[0] == -28.230775) & (file_input.polarization[500] == -29.763441)
+    assert (file_input.polarization[0] == -28.230775*1E-6) & (file_input.polarization[500] == -29.763441*1E-6)
     assert file_input.vdd == 9.00
 
 

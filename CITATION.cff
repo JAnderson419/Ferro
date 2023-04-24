@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Anderson"
+  given-names: "Jackson"
+  orcid: "https://orcid.org/0000-0001-8898-6967"
+- family-names: "Tran"
+  given-names: "Huy Minh"
+title: "Ferro"
+date-released: 2021
+url: "https://github.com/JAnderson419/Ferro"
